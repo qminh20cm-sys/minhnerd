@@ -16,9 +16,9 @@
 
 *{box-sizing:border-box}
 
-body{margin:0;background:radial-gradient(circle at top,#203746,#0c131b 70%);color:#eaf3ed;font-family:ui-monospace,Consolas,monospace}
+body{font-size:var(--game-font,inherit);margin:0;background:radial-gradient(circle at top,#203746,#0c131b 70%);color:#eaf3ed;font-family:ui-monospace,Consolas,monospace}
 
-button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;font:inherit;color:#f5f3df;background:#304653;border:2px solid #58717a;border-bottom-width:4px;padding:9px 12px;cursor:pointer;border-radius:7px}
+button{font-size:var(--button-font,inherit);touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;font:inherit;color:#f5f3df;background:#304653;border:2px solid #58717a;border-bottom-width:4px;padding:9px 12px;cursor:pointer;border-radius:7px}
 
 button:hover{filter:brightness(1.2)}
 
@@ -587,7 +587,7 @@ function drawWorld(){
 
  }
 
- const t=performance.now()/1000;if(settings.effects)for(let i=0;i<12;i++){const lx=(i*97+Math.sin(t*.7+i)*18+W)%W,ly=(i*53+((t*13+i*31)%(H+20)));ctx.save();ctx.translate(lx,ly);ctx.rotate(Math.sin(t*1.4+i)*.8);ctx.fillStyle=i%2?'#c6d78a':'#d6b77a';ctx.globalAlpha=.3;ctx.beginPath();ctx.ellipse(0,0,3,6,0,0,Math.PI*2);ctx.fill();ctx.restore();ctx.globalAlpha=1;}for(let i=0;i<20;i++){
+ const t=performance.now()/1000;if(settings.effects)for(let i=0;i<12;i++){const lx=(i*97+Math.sin(t*.7+i)*18+W)%W,ly=(i*53+((t*13+i*31)%(H+20)));ctx.save();ctx.translate(lx,ly);ctx.rotate(Math.sin(t*1.4+i)*.8);ctx.fillStyle=i%2?'#c6d78a':'#d6b77a';ctx.globalAlpha=.3;ctx.beginPath();ctx.ellipse(0,0,3,6,0,0,Math.PI*2);ctx.fill();ctx.restore();ctx.globalAlpha=1;}for(let i=0;i<(settings.highGraphics?20:8);i++){
 
   let x=(i*67+23)%W,y=(i*83+17)%H;
 
@@ -846,7 +846,7 @@ $('startBtn').onclick=start;$('mpPotionBtn').onclick=drinkMp;document.addEventLi
 $('respawnBtn').onclick=()=>{
  state.dead=false;state.paused=false;state.hp=Math.max(1,Math.round(state.maxHp*.65));
  state.player.x=240;state.player.y=360;state.pendingAction=null;state.target=null;
- $('deathScreen').classList.remove('show');$('pauseBtn').textContent='Ⅱ TẠM DỪNG';
+ $('deathScreen').classList.remove('show');
  for(let i=0;i<7;i++)if(state.mobs.filter(m=>!m.boss).length<7)spawnMob();
  log('Bạn đã hồi sinh và có thể tiếp tục chiến đấu.');save();ui();
 };
