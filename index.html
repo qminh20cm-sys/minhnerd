@@ -1,52 +1,1038 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="vi">
+
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>AFK Adventure</title>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+<title>AFK Adventure — Pixel RPG</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;background:#101827;color:#eef5ff;font:16px system-ui;display:flex;justify-content:center}
-#app{width:min(100vw,760px);padding:12px}h2{margin:4px 0 8px;text-align:center}
-#stats{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;background:#1d2b40;padding:10px;border-radius:12px;font-size:14px}
-canvas{display:block;width:100%;height:auto;background:#83b95b;border:4px solid #304d37;border-radius:12px;margin:10px 0;touch-action:none}
-.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-button{border:0;border-radius:12px;padding:13px 8px;background:#2b4666;color:white;font-weight:700;font-size:15px}
-button:active{filter:brightness(1.3)}#hint{text-align:center;color:#c5d3e6;font-size:12px;margin:8px}
-</style></head>
-<body><main id="app"><h2>⚔️ AFK ADVENTURE</h2>
-<div id="stats"><span id="lv">Lv. 1</span><span id="hp">❤️ 100/100</span><span id="xp">EXP 0/20</span><span id="gold">🪙 0</span></div>
-<canvas id="game" width="640" height="420"></canvas>
-<div class="buttons">
-<button id="auto">🤖 Auto: ON</button><button id="skill">✨ Kỹ năng</button><button id="potion">🧪 Hồi máu</button>
-<button id="up">▲</button><button id="attack">⚔️ Đánh</button><button id="pause">⏸ Tạm dừng</button>
-<button id="left">◀</button><button id="down">▼</button><button id="right">▶</button>
-</div><div id="hint">Dùng các nút điều hướng hoặc chạm lên bản đồ. Bật Auto để tự tìm và đánh quái.</div></main>
+
+:root{--bg:#101820;--panel:#182733;--line:#38505d;--gold:#ffd36a;--mint:#72e0ad;--red:#ff7373;--blue:#77c8ff}
+
+*{box-sizing:border-box}
+
+body{margin:0;background:radial-gradient(circle at top,#203746,#0c131b 70%);color:#eaf3ed;font-family:ui-monospace,Consolas,monospace}
+
+button{font:inherit;color:#f5f3df;background:#304653;border:2px solid #58717a;border-bottom-width:4px;padding:9px 12px;cursor:pointer;border-radius:7px}
+
+button:hover{filter:brightness(1.2)}
+
+button:active{transform:translateY(2px);border-bottom-width:2px}
+
+button.active{background:#28684e;border-color:#72e0ad;color:#dffff0}
+
+.wrap{max-width:1180px;margin:auto;padding:16px}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+
+.logo{font-weight:900;letter-spacing:2px;color:var(--gold);font-size:clamp(18px,3vw,27px);text-shadow:3px 3px #573e28}
+
+.sub{font-size:11px;color:#a8bdc4;margin-top:4px}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:12px}
+
+.panel{background:linear-gradient(180deg,#1c303c,#14232d);border:2px solid var(--line);border-radius:10px;padding:12px;box-shadow:0 8px 24px #0005}
+
+.gamebox{padding:8px;position:relative}
+
+.canvas-wrap{position:relative;background:#182b2c;border:3px solid #526c69;border-radius:6px;overflow:hidden}
+
+canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
+
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#08131bd9;z-index:4;text-align:center;padding:22px}
+
+.overlay.hidden{display:none}
+
+.modal{max-width:420px}
+
+.modal h1{color:var(--gold);font-size:clamp(24px,5vw,38px);margin:0 0 8px}
+
+.modal p{color:#c3d4d2;line-height:1.6;font-size:13px}
+
+.hud{display:flex;gap:10px;flex-wrap:wrap;padding:10px 4px 2px}
+
+.stat{font-size:12px;color:#c2d2d0}
+
+.bar{height:9px;background:#0b141a;border:1px solid #52616a;border-radius:10px;overflow:hidden;margin-top:4px;width:130px}
+
+.fill{height:100%;width:100%;transition:width .2s}
+
+.hp{background:#e35e66}.mp{background:#58aee8}.xp{background:#e9bd4c}
+
+.side{display:flex;flex-direction:column;gap:12px}
+
+.heading{font-size:13px;color:var(--gold);font-weight:bold;letter-spacing:1px;margin-bottom:10px}
+
+.row{display:flex;justify-content:space-between;gap:8px;font-size:12px;margin:7px 0;color:#c9d9d6}
+
+.muted{color:#91a8ad}.value{color:#fff}
+
+.controls{display:flex;gap:7px;flex-wrap:wrap}
+
+.small{font-size:11px;padding:7px 9px}
+
+.log{height:118px;overflow:auto;font-size:11px;line-height:1.55;color:#afc5c0;background:#0e1a21;border:1px solid #304650;padding:8px;border-radius:6px}
+
+.log div{border-bottom:1px solid #263943;padding:2px 0}
+
+.badge{display:inline-block;padding:3px 7px;border-radius:5px;background:#263f48;color:#9de7c2;font-size:10px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+
+.item{background:#102029;border:1px solid #344d56;border-radius:6px;padding:8px;font-size:11px}
+
+.item strong{display:block;color:#f3d27b;margin-bottom:4px}
+
+.footer{font-size:10px;color:#7e969b;text-align:center;padding:14px}
+
+.mobile-controls{display:none;justify-content:space-between;align-items:center;gap:12px;margin-top:10px}
+
+.joystick{width:116px;height:116px;flex:0 0 116px;border:2px solid #66838a;border-radius:50%;background:radial-gradient(circle,#28444e,#14232d);position:relative;touch-action:none;user-select:none}
+
+.stick{width:48px;height:48px;position:absolute;left:32px;top:32px;border-radius:50%;background:linear-gradient(145deg,#83c9d4,#376878);border:2px solid #a5e5e5;box-shadow:0 3px 10px #0008;pointer-events:none}
+
+.map-select{width:100%;margin-top:8px;background:#102029;color:#f5f3df;border:1px solid #58717a;border-radius:6px;padding:9px;font:inherit}
+
+.map-info{font-size:11px;color:#b8ceca;line-height:1.5;margin-top:7px}
+
+@media(max-width:850px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}
+
+@media(max-width:520px){.wrap{padding:8px}.side{grid-template-columns:1fr}.side .wide{grid-column:auto}.mobile-controls{display:flex}.bar{width:105px}.panel{padding:10px}}
+
+</style>
+
+</head>
+<body>
+
+<div class="wrap">
+
+ <div class="top">
+
+  <div>
+
+   <div class="logo">✦ AFK ADVENTURE</div>
+
+   <div class="sub">Pixel RPG • Map & Joystick Update v1.1</div>
+
+  </div>
+
+  <div><span class="badge" id="saveState">● ĐÃ SẴN SÀNG</span></div>
+
+ </div>
+
+ <div class="layout">
+
+  <main class="panel gamebox">
+
+   <div class="canvas-wrap">
+
+    <canvas id="game" width="800" height="480" aria-label="Game Pixel RPG"></canvas>
+
+    <div class="overlay" id="startScreen">
+
+     <div class="modal">
+
+      <h1>AFK ADVENTURE</h1>
+
+      <p>Một thế giới pixel nhỏ đang chờ được khám phá. Hạ Slime, tích lũy EXP, nâng cấp nhân vật và thử sức với Guardian.</p>
+
+      <button id="startBtn">▶ BẮT ĐẦU PHIÊU LƯU</button>
+
+      <p style="font-size:10px">Dùng joystick hoặc WASD để di chuyển • Space để đánh • Chọn ải để khám phá</p>
+
+     </div>
+
+    </div>
+
+   </div>
+
+   <div class="hud">
+
+    <div class="stat">❤️ HP <b id="hpText">100/100</b><div class="bar"><div class="fill hp" id="hpBar"></div></div></div>
+
+    <div class="stat">💧 MP <b id="mpText">40/40</b><div class="bar"><div class="fill mp" id="mpBar"></div></div></div>
+
+    <div class="stat">⭐ EXP <b id="xpText">0/50</b><div class="bar"><div class="fill xp" id="xpBar"></div></div></div>
+
+   </div>
+
+   <div class="mobile-controls">
+
+    <div class="joystick" id="joystick" aria-label="Joystick di chuyển">
+
+     <div class="stick" id="stick"></div>
+
+    </div>
+
+    <div class="controls">
+
+     <button class="small" id="mobileAttack">⚔ ĐÁNH</button>
+
+     <button class="small" id="mobileAuto">AUTO</button>
+
+    </div>
+
+   </div>
+
+   <div class="controls" style="margin-top:10px">
+
+    <button id="autoBtn" class="active">⚡ AUTO: BẬT</button>
+
+    <button id="skillBtn">✧ KỸ NĂNG (10 MP)</button>
+
+    <button id="potionBtn">♥ UỐNG POTION</button>
+
+    <button id="pauseBtn">Ⅱ TẠM DỪNG</button>
+
+   </div>
+
+  </main>
+
+  <aside class="side">
+
+   <section class="panel">
+
+    <div class="heading">✦ NHÂN VẬT</div>
+
+    <div class="row"><span>Tên</span><b class="value">Wanderer</b></div>
+
+    <div class="row"><span>Cấp độ</span><b class="value" id="level">Lv. 1</b></div>
+
+    <div class="row"><span>Sức mạnh</span><b class="value" id="attack">12</b></div>
+
+    <div class="row"><span>Phòng thủ</span><b class="value" id="defense">2</b></div>
+
+    <div class="row"><span>Vàng</span><b class="value" id="gold">0 G</b></div>
+
+    <div class="row"><span>Khu vực</span><b class="value" id="zone">Đồng cỏ xanh</b></div>
+
+   </section>
+
+   <section class="panel">
+
+    <div class="heading">🗺️ CHỌN ẢI / BẢN ĐỒ</div>
+
+    <select class="map-select" id="mapSelect" aria-label="Chọn bản đồ"></select>
+
+    <div class="map-info" id="mapInfo">Đồng cỏ xanh • Dễ • Thưởng cơ bản</div>
+
+    <div class="row"><span>Tiến độ ải</span><b class="value" id="mapProgress">0/10 quái</b></div>
+
+   </section>
+
+   <section class="panel">
+
+    <div class="heading">⚙ AUTO FARMING</div>
+
+    <div class="row"><span>Trạng thái</span><b class="value" id="autoStatus">Đang tự săn</b></div>
+
+    <div class="row"><span>Thời gian chơi</span><b class="value" id="duration">00:00</b></div>
+
+    <div class="row"><span>Quái đã hạ</span><b class="value" id="kills">0</b></div>
+
+    <div class="row"><span>EXP nhận được</span><b class="value" id="earned">0</b></div>
+
+    <div class="row"><span>Vật phẩm</span><b class="value" id="loot">0</b></div>
+
+    <div class="muted" style="font-size:10px;line-height:1.5;margin-top:8px">
+
+     Auto tự tìm mục tiêu trong tầm nhìn, tiến lại gần và tấn công. Offline reward được tính khi mở lại game.
+
+    </div>
+
+   </section>
+
+   <section class="panel">
+
+    <div class="heading">🎒 TÚI ĐỒ</div>
+
+    <div class="grid2">
+
+     <div class="item"><strong>🧪 Potion</strong><span id="potions">3 bình</span></div>
+
+     <div class="item"><strong>🪙 Slime Gel</strong><span id="gels">0 cái</span></div>
+
+     <div class="item"><strong>🗡 Kiếm gỗ</strong><span>ATK +2</span></div>
+
+     <div class="item"><strong>🛡 Áo vải</strong><span>DEF +2</span></div>
+
+    </div>
+
+   </section>
+
+   <section class="panel wide">
+
+    <div class="heading">📜 NHẬT KÝ PHIÊU LƯU</div>
+
+    <div class="log" id="log">
+
+     <div>Chào mừng đến với Đồng cỏ xanh!</div>
+
+     <div>Bật Auto để nhân vật tự động săn Slime.</div>
+
+    </div>
+
+   </section>
+
+  </aside>
+
+ </div>
+
+ <div class="footer">AFK Adventure • Tiến trình được lưu trên thiết bị này • Offline rewards tối đa 8 giờ</div>
+
+</div>
 <script>
-const c=document.getElementById('game'),ctx=c.getContext('2d');
-let p={x:320,y:210,hp:100,max:100,lv:1,xp:0,need:20,gold:0}, mobs=[],auto=true,paused=false,kills=0,move={x:0,y:0},last=0,toast='';
-function spawn(){mobs.push({x:40+Math.random()*560,y:35+Math.random()*350,hp:24,max:24,hit:0})}
-for(let i=0;i<5;i++)spawn();
-function stats(){document.getElementById('lv').textContent='Lv. '+p.lv;document.getElementById('hp').textContent=`❤️ ${p.hp}/${p.max}`;document.getElementById('xp').textContent=`EXP ${p.xp}/${p.need}`;document.getElementById('gold').textContent='🪙 '+p.gold}
-function say(t){toast=t;setTimeout(()=>{if(toast===t)toast=''},1300)}
-function attack(){let m=mobs.filter(m=>Math.hypot(m.x-p.x,m.y-p.y)<65).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0];if(!m){say('Không có quái gần đây');return}m.hp-=12+p.lv*2;m.hit=10;if(m.hp<=0){mobs.splice(mobs.indexOf(m),1);p.xp+=8;p.gold+=3;kills++;if(p.xp>=p.need){p.xp-=p.need;p.lv++;p.need=Math.round(p.need*1.45);p.max+=15;p.hp=p.max;say('LÊN CẤP!')}if(kills%12===0){mobs.push({x:500,y:100,hp:120,max:120,boss:true,hit:0});say('BOSS XUẤT HIỆN!')}spawn()}stats()}
-function tick(dt){if(paused)return;
- if(auto&&mobs.length){let m=mobs[0];for(const a of mobs)if(Math.hypot(a.x-p.x,a.y-p.y)<Math.hypot(m.x-p.x,m.y-p.y))m=a;let d=Math.hypot(m.x-p.x,m.y-p.y);if(d>45){p.x+=(m.x-p.x)/d*55*dt;p.y+=(m.y-p.y)/d*55*dt}else if(Math.random()<dt*2)attack()}
- p.x+=move.x*130*dt;p.y+=move.y*130*dt;p.x=Math.max(18,Math.min(622,p.x));p.y=Math.max(18,Math.min(402,p.y));
- mobs.forEach(m=>{let d=Math.hypot(p.x-m.x,p.y-m.y);if(d>30){m.x+=(p.x-m.x)/d*18*dt;m.y+=(p.y-m.y)/d*18*dt}else{m.hit-=dt*10;if(m.hit<=0){p.hp=Math.max(0,p.hp-3);m.hit=8;if(p.hp===0){p.hp=p.max;say('Bạn đã hồi sinh!')}}}});stats()
+
+(()=>{
+
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+
+ctx.imageSmoothingEnabled=false;
+
+const W=800,H=480,keys={};
+
+const $=id=>document.getElementById(id);
+
+const maps=[
+
+{name:'Đồng cỏ xanh',difficulty:'Dễ',mob:'Slime',hp:32,atk:5,xp:12,gold:4,color:'#477d52',path:'#9b875c',water:'#397c83',boss:'Forest Guardian',bossHp:260,bossAtk:14,bossXp:120,bossGold:80},
+
+{name:'Hang động đá',difficulty:'Trung bình',mob:'Thạch quái',hp:62,atk:10,xp:25,gold:9,color:'#4d5966',path:'#8b8175',water:'#344f67',boss:'Cave Golem',bossHp:520,bossAtk:23,bossXp:260,bossGold:180},
+
+{name:'Thung lũng tro',difficulty:'Khó',mob:'Hỏa linh',hp:105,atk:18,xp:45,gold:17,color:'#704b42',path:'#b17b52',water:'#69434b',boss:'Ash Warden',bossHp:900,bossAtk:36,bossXp:520,bossGold:360}
+
+];
+
+const joystick={x:0,y:0,active:false};
+
+const state={
+
+started:false,paused:false,auto:true,mapIndex:0,unlockedMaps:1,
+
+mapKills:0,respawnTimer:0,level:1,xp:0,nextXp:50,
+
+hp:100,maxHp:100,mp:40,maxMp:40,atk:12,def:2,
+
+gold:0,potions:3,gels:0,kills:0,earned:0,loot:0,
+
+elapsed:0,lastSave:Date.now(),lastAttack:0,lastPotion:0,lastSkill:0,
+
+player:{x:400,y:250,face:1},mobs:[],particles:[],floating:[],
+
+bossSpawned:false,bossDefeated:false
+
+};
+
+function currentMap(){
+
+ return maps[Math.min(state.mapIndex,maps.length-1)];
+
 }
-function draw(){ctx.clearRect(0,0,640,420);ctx.fillStyle='#83b95b';ctx.fillRect(0,0,640,420);
- for(let i=0;i<90;i++){let x=(i*83)%640,y=(i*47)%420;ctx.fillStyle=i%2?'#76ad50':'#91c66a';ctx.fillRect(x,y,3,3)}
- ctx.fillStyle='#d7b56d';ctx.fillRect(270,0,90,420);ctx.fillRect(0,175,640,55);
- mobs.forEach(m=>{ctx.fillStyle=m.boss?'#7538a8':'#4c9d55';ctx.beginPath();ctx.arc(m.x,m.y,m.boss?19:12,0,7);ctx.fill();ctx.fillStyle='#202020';ctx.fillRect(m.x-15,m.y-22,30,4);ctx.fillStyle='#e84b4b';ctx.fillRect(m.x-15,m.y-22,30*m.hp/m.max,4);ctx.fillStyle='white';ctx.fillRect(m.x-5,m.y-4,3,3);ctx.fillRect(m.x+4,m.y-4,3,3)});
- ctx.fillStyle='#3157b7';ctx.fillRect(p.x-9,p.y-12,18,24);ctx.fillStyle='#f2c49b';ctx.fillRect(p.x-7,p.y-19,14,10);ctx.fillStyle='#17243b';ctx.fillRect(p.x-5,p.y-15,3,2);ctx.fillRect(p.x+3,p.y-15,3,2);
- if(toast){ctx.fillStyle='#142033';ctx.fillRect(180,12,280,32);ctx.fillStyle='white';ctx.textAlign='center';ctx.fillText(toast,320,34)}
- if(paused){ctx.fillStyle='#0009';ctx.fillRect(0,0,640,420);ctx.fillStyle='white';ctx.textAlign='center';ctx.font='28px system-ui';ctx.fillText('TẠM DỪNG',320,215)}
+
+function updateMapUI(){
+
+ const sel=$('mapSelect');
+
+ if(!sel)return;
+
+ sel.innerHTML='';
+
+ maps.forEach((m,i)=>{
+
+  const o=document.createElement('option');
+
+  o.value=i;
+
+  o.textContent=(i<state.unlockedMaps?'':'🔒 ')+`Ải ${i+1}: ${m.name} (${m.difficulty})`;
+
+  o.disabled=i>=state.unlockedMaps;
+
+  sel.appendChild(o);
+
+ });
+
+ sel.value=state.mapIndex;
+
+ $('mapInfo').textContent=`${currentMap().name} • ${currentMap().difficulty} • Quái: ${currentMap().mob} • Thưởng: ${currentMap().xp} EXP / ${currentMap().gold} vàng`;
+
+ $('mapProgress').textContent=`${state.mapKills}/10 quái`;
+
 }
-function loop(t){let dt=Math.min((t-last)/1000,.05)||0;last=t;tick(dt);draw();requestAnimationFrame(loop)}requestAnimationFrame(loop);
-document.getElementById('auto').onclick=e=>{auto=!auto;e.target.textContent='🤖 Auto: '+(auto?'ON':'OFF')};
-document.getElementById('attack').onclick=attack;
-document.getElementById('skill').onclick=()=>{mobs.forEach(m=>m.hp-=35);mobs=mobs.filter(m=>m.hp>0);say('Bùng nổ kỹ năng!');stats()};
-document.getElementById('potion').onclick=()=>{p.hp=Math.min(p.max,p.hp+40);say('Đã hồi máu');stats()};
-document.getElementById('pause').onclick=()=>{paused=!paused;document.getElementById('pause').textContent=paused?'▶ Tiếp tục':'⏸ Tạm dừng'};
-[['up',0,-1],['down',0,1],['left',-1,0],['right',1,0]].forEach(([id,x,y])=>{let b=document.getElementById(id);b.addEventListener('pointerdown',e=>{e.preventDefault();move={x,y}});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>move={x:0,y:0}))});
-c.addEventListener('pointerdown',e=>{let r=c.getBoundingClientRect();p.x=(e.clientX-r.left)/r.width*640;p.y=(e.clientY-r.top)/r.height*420});
-</script></body></html>
+
+function selectMap(i){
+
+ if(i<0||i>=state.unlockedMaps)return;
+
+ state.mapIndex=i;
+
+ state.mapKills=0;
+
+ state.bossSpawned=false;
+
+ state.bossDefeated=false;
+
+ state.mobs=[];
+
+ state.respawnTimer=0;
+
+ state.player.x=400;
+
+ state.player.y=250;
+
+ for(let n=0;n<7;n++)spawnMob();
+
+ log('Đã vào '+currentMap().name+' ('+currentMap().difficulty+').');
+
+ updateMapUI();
+
+ save();
+
+}
+
+function log(s){
+
+ const el=$('log'),d=document.createElement('div');
+
+ d.textContent='› '+s;
+
+ el.prepend(d);
+
+ while(el.children.length>18)el.lastChild.remove();
+
+}
+
+function save(){
+
+ const data={...state,player:state.player,mobs:[],particles:[],floating:[],savedAt:Date.now()};
+
+ localStorage.setItem('afkAdventureSave',JSON.stringify(data));
+
+ $('saveState').textContent='● ĐÃ LƯU';
+
+}
+
+function load(){
+
+ try{
+
+  const d=JSON.parse(localStorage.getItem('afkAdventureSave'));
+
+  if(!d)return;
+
+  const offline=Math.min(8*3600,Math.max(0,(Date.now()-(d.savedAt||Date.now()))/1000));
+
+  Object.assign(state,d);
+
+  state.mapIndex=Number.isFinite(state.mapIndex)?state.mapIndex:0;
+
+  state.unlockedMaps=Math.max(1,state.unlockedMaps||1);
+
+  state.mapKills=state.mapKills||0;
+
+  state.respawnTimer=0;
+
+  state.mobs=[];
+
+  state.particles=[];
+
+  state.floating=[];
+
+  state.started=false;
+
+  state.paused=false;
+
+  state.lastSave=Date.now();
+
+  if(offline>60){
+
+   const rate=Math.min(.65,offline/3600*.12);
+
+   const gain=Math.floor(offline/12*rate*(5+state.level));
+
+   state.xp+=gain;
+
+   state.earned+=gain;
+
+   while(state.xp>=state.nextXp){
+
+    state.xp-=state.nextXp;
+
+    state.level++;
+
+    state.nextXp=Math.floor(state.nextXp*1.35);
+
+    state.maxHp+=12;
+
+    state.atk+=3;
+
+    state.hp=state.maxHp;
+
+    log('Offline: đạt cấp '+state.level+'!');
+
+   }
+
+   log('Offline '+Math.floor(offline/60)+' phút: nhận '+gain+' EXP.');
+
+  }
+
+  log('Đã tải dữ liệu phiêu lưu.');
+
+ }catch(e){console.warn(e)}
+
+}
+
+function rand(a,b){return Math.random()*(b-a)+a}
+
+function spawnMob(boss=false){
+
+ const map=currentMap();
+
+ let x,y,tries=0;
+
+ do{
+
+  x=rand(35,W-35);
+
+  y=rand(55,H-35);
+
+  tries++;
+
+ }while(Math.hypot(x-state.player.x,y-state.player.y)<110&&tries<30);
+
+ const hp=boss?map.bossHp:Math.round(map.hp*rand(.85,1.15));
+
+ state.mobs.push({
+
+  x,y,hp,max:hp,boss,
+
+  spd:boss?24+state.mapIndex*7:rand(18,27)+state.mapIndex*5,
+
+  atk:boss?map.bossAtk:map.atk,
+
+  hit:0,attackAt:0,dead:false
+
+ });
+
+}
+
+function drawWorld(){
+
+ const map=currentMap();
+
+ ctx.fillStyle=map.color;
+
+ ctx.fillRect(0,0,W,H);
+
+ for(let y=0;y<H;y+=32){
+
+  for(let x=0;x<W;x+=32){
+
+   let n=(Math.sin(x*12.9898+y*78.233)*43758.5453)%1;
+
+   ctx.fillStyle=n>.15?map.color:map.path;
+
+   ctx.fillRect(x,y,32,32);
+
+   if(n>.82){
+
+    ctx.fillStyle='#6ba15f';
+
+    ctx.fillRect(x+7,y+9,3,3);
+
+    ctx.fillRect(x+21,y+22,2,2);
+
+   }
+
+  }
+
+ }
+
+ ctx.fillStyle=map.path;
+
+ ctx.beginPath();
+
+ ctx.moveTo(0,350);ctx.lineTo(210,300);
+
+ ctx.lineTo(360,330);ctx.lineTo(520,260);
+
+ ctx.lineTo(800,300);ctx.lineTo(800,355);
+
+ ctx.lineTo(530,315);ctx.lineTo(360,385);
+
+ ctx.lineTo(200,350);ctx.lineTo(0,400);
+
+ ctx.fill();
+
+ ctx.fillStyle=map.water;
+
+ ctx.fillRect(640,35,130,78);
+
+ ctx.fillStyle='#64aeb0';
+
+ for(let i=0;i<5;i++)ctx.fillRect(650+i*22,50+(i%2)*25,12,3);
+
+ for(const [x,y] of [[45,70],[105,125],[730,170],[690,400],[170,430],[560,75],[300,90],[770,440]]){
+
+  ctx.fillStyle='#573d2d';ctx.fillRect(x+11,y+20,9,19);
+
+  ctx.fillStyle='#24583f';ctx.fillRect(x,y+5,31,25);
+
+  ctx.fillStyle='#36764a';ctx.fillRect(x+5,y-5,22,23);
+
+  ctx.fillStyle='#4b9256';ctx.fillRect(x+10,y,7,6);
+
+ }
+
+ for(let i=0;i<20;i++){
+
+  let x=(i*97+23)%W,y=(i*61+17)%H;
+
+  ctx.fillStyle=i%2?'#e7c56b':'#e6a8b4';
+
+  ctx.fillRect(x,y,3,3);
+
+ }
+
+}
+
+function pixelPerson(x,y,main='#5a9be8',isPlayer=false){
+
+ ctx.fillStyle='#20312d';ctx.fillRect(x-8,y+10,16,5);
+
+ ctx.fillStyle='#3c2b28';ctx.fillRect(x-6,y+6,5,8);ctx.fillRect(x+2,y+6,5,8);
+
+ ctx.fillStyle=main;ctx.fillRect(x-8,y-5,16,14);
+
+ ctx.fillRect(x-11,y-3,4,9);ctx.fillRect(x+7,y-3,4,9);
+
+ ctx.fillStyle='#f0c69b';ctx.fillRect(x-6,y-16,12,12);
+
+ ctx.fillStyle='#533b2d';ctx.fillRect(x-7,y-19,14,5);ctx.fillRect(x-8,y-15,3,5);
+
+ ctx.fillStyle='#17242a';ctx.fillRect(x+2,y-11,2,2);
+
+ if(isPlayer){
+
+  ctx.fillStyle='#e8d48b';ctx.fillRect(x-2,y-2,4,7);
+
+  ctx.fillStyle='#d9e8ee';ctx.fillRect(x+10,y-9,3,17);
+
+ }
+
+}
+
+function drawMob(m){
+
+ if(m.boss){
+
+  ctx.fillStyle='#35234b';ctx.fillRect(m.x-17,m.y-19,34,34);
+
+  ctx.fillStyle='#8755a8';ctx.fillRect(m.x-13,m.y-24,26,30);
+
+  ctx.fillStyle='#ffdb77';ctx.fillRect(m.x-8,m.y-13,5,5);ctx.fillRect(m.x+4,m.y-13,5,5);
+
+  ctx.fillStyle='#c7a0e6';ctx.fillRect(m.x-20,m.y-27,9,8);ctx.fillRect(m.x+11,m.y-27,9,8);
+
+ }else{
+
+  ctx.fillStyle=state.mapIndex===0?'#2a5146':state.mapIndex===1?'#444c59':'#673b32';
+
+  ctx.fillRect(m.x-12,m.y-5,24,15);
+
+  ctx.fillStyle=state.mapIndex===0?'#77d68d':state.mapIndex===1?'#aeb7c4':'#ff8a52';
+
+  ctx.fillRect(m.x-10,m.y-10,20,17);
+
+  ctx.fillStyle='#f4f1cf';
+
+  ctx.fillRect(m.x-5,m.y-4,3,4);ctx.fillRect(m.x+4,m.y-4,3,4);
+
+ }
+
+ ctx.fillStyle='#172329';
+
+ ctx.fillRect(m.x-15,m.y-(m.boss?36:23),30,4);
+
+ ctx.fillStyle='#e45e67';
+
+ ctx.fillRect(m.x-14,m.y-(m.boss?35:22),28*Math.max(0,m.hp/m.max),2);
+
+}
+
+function particle(x,y,color){
+
+ for(let i=0;i<7;i++)state.particles.push({x,y,vx:rand(-55,55),vy:rand(-65,20),life:rand(.25,.55),color});
+
+}
+
+function floatText(x,y,t,c){
+
+ state.floating.push({x,y,text:t,color:c,life:.8});
+
+}
+
+function nearest(){
+
+ let best=null,dist=1e9;
+
+ for(const m of state.mobs){
+
+  if(m.dead)continue;
+
+  let d=Math.hypot(m.x-state.player.x,m.y-state.player.y);
+
+  if(d<dist){dist=d;best=m}
+
+ }
+
+ return best;
+
+}
+function attack(skill=false){
+ const p=state.player,now=performance.now();
+
+ if(skill){
+  if(state.mp<10||now-state.lastSkill<1600)return;
+  state.mp-=10;
+  state.lastSkill=now;
+ }else{
+  if(now-state.lastAttack<500)return;
+  state.lastAttack=now;
+ }
+
+ const m=nearest();
+ if(!m||Math.hypot(m.x-p.x,m.y-p.y)>(skill?100:43)){
+  if(!state.auto)log('Không có quái vật trong tầm đánh.');
+  return;
+ }
+
+ const dmg=state.atk+(skill?18:0)+Math.floor(rand(-2,4));
+ m.hp-=dmg;
+ m.hit=.12;
+ particle(m.x,m.y,skill?'#9be7ff':'#ffe08a');
+ floatText(m.x,m.y-20,'-'+dmg,skill?'#9be7ff':'#fff0a8');
+
+ if(m.hp<=0&&!m.dead){
+  m.dead=true;
+  state.kills++;
+
+  if(!m.boss){
+   state.mapKills++;
+   state.respawnTimer=Math.max(state.respawnTimer,.8);
+  }
+
+  const map=currentMap();
+  let xp=m.boss?map.bossXp:map.xp;
+  state.xp+=xp;
+  state.earned+=xp;
+  state.gold+=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));
+  state.loot++;
+
+  if(!m.boss)state.gels++;
+
+  floatText(m.x,m.y-32,'+'+xp+' EXP','#ffe27a');
+  log((m.boss?'Guardian bị đánh bại! ':'Hạ Slime! ')+'+'+xp+' EXP');
+
+  if(m.boss){
+   state.bossDefeated=true;
+   state.unlockedMaps=Math.max(state.unlockedMaps,Math.min(maps.length,state.mapIndex+2));
+   log('CHIẾN THẮNG! Hoàn thành '+map.name+'. Ải mới đã được mở khóa nếu còn.');
+   updateMapUI();
+  }else if(state.mapKills>=10&&!state.bossSpawned){
+   state.bossSpawned=true;
+   spawnMob(true);
+   log('Thủ lĩnh '+map.boss+' đã xuất hiện!');
+  }
+
+  while(state.xp>=state.nextXp){
+   state.xp-=state.nextXp;
+   state.level++;
+   state.nextXp=Math.floor(state.nextXp*1.35);
+   state.maxHp+=12;
+   state.maxMp+=4;
+   state.atk+=3;
+   state.def+=1;
+   state.hp=state.maxHp;
+   state.mp=state.maxMp;
+   log('LÊN CẤP! Bạn đạt Lv.'+state.level);
+  }
+ }
+}
+
+function update(dt){
+ if(!state.started||state.paused)return;
+ state.elapsed+=dt;
+
+ const p=state.player;
+ let dx=joystick.x,dy=joystick.y;
+
+ if(keys.KeyA||keys.ArrowLeft)dx--;
+ if(keys.KeyD||keys.ArrowRight)dx++;
+ if(keys.KeyW||keys.ArrowUp)dy--;
+ if(keys.KeyS||keys.ArrowDown)dy++;
+
+ dx=Math.max(-1,Math.min(1,dx));
+ dy=Math.max(-1,Math.min(1,dy));
+
+ if(dx||dy){
+  let l=Math.hypot(dx,dy);
+  p.x+=dx/l*145*dt;
+  p.y+=dy/l*145*dt;
+  p.face=dx<0?-1:dx>0?1:p.face;
+ }
+
+ if(state.auto){
+  let m=nearest();
+  if(m){
+   let d=Math.hypot(m.x-p.x,m.y-p.y);
+   if(d>37){
+    p.x+=(m.x-p.x)/d*90*dt;
+    p.y+=(m.y-p.y)/d*90*dt;
+   }else attack(false);
+  }
+ }
+
+ p.x=Math.max(20,Math.min(W-20,p.x));
+ p.y=Math.max(35,Math.min(H-20,p.y));
+
+ for(const m of state.mobs){
+  if(m.dead)continue;
+  let d=Math.hypot(p.x-m.x,p.y-m.y);
+
+  if(d>29&&d<220){
+   m.x+=(p.x-m.x)/d*m.spd*dt;
+   m.y+=(p.y-m.y)/d*m.spd*dt;
+  }else if(d<=29&&performance.now()-m.attackAt>1100){
+   m.attackAt=performance.now();
+   state.hp=Math.max(0,state.hp-Math.max(1,m.atk-state.def));
+   floatText(p.x,p.y-24,'-'+Math.max(1,m.atk-state.def),'#ff8585');
+
+   if(state.hp<=0){
+    state.hp=state.maxHp;
+    state.player.x=400;
+    state.player.y=250;
+    log('Bạn đã được đưa về điểm hồi sinh.');
+   }
+  }
+ }
+
+ state.mobs=state.mobs.filter(m=>!m.dead);
+ state.respawnTimer=Math.max(0,state.respawnTimer-dt);
+
+ if(state.respawnTimer<=0&&state.mobs.filter(m=>!m.boss).length<7){
+  spawnMob();
+  state.respawnTimer=.65;
+ }
+
+ if(state.mapKills>=10&&!state.bossSpawned){
+  state.bossSpawned=true;
+  spawnMob(true);
+  log('Thủ lĩnh '+currentMap().boss+' đã xuất hiện!');
+ }
+
+ state.hp=Math.min(state.maxHp,state.hp+1.1*dt);
+ state.mp=Math.min(state.maxMp,state.mp+.8*dt);
+
+ if(state.hp<state.maxHp*.38&&state.potions>0&&performance.now()-state.lastPotion>4000){
+  state.potions--;
+  state.hp=Math.min(state.maxHp,state.hp+45);
+  state.lastPotion=performance.now();
+  log('Tự dùng Potion hồi máu.');
+ }
+
+ state.particles.forEach(a=>{
+  a.x+=a.vx*dt;a.y+=a.vy*dt;a.life-=dt;
+ });
+ state.particles=state.particles.filter(a=>a.life>0);
+
+ state.floating.forEach(a=>{
+  a.y-=24*dt;a.life-=dt;
+ });
+ state.floating=state.floating.filter(a=>a.life>0);
+
+ if(Date.now()-state.lastSave>10000){
+  save();
+  state.lastSave=Date.now();
+ }
+}
+
+function draw(){
+ drawWorld();
+
+ for(const m of state.mobs)drawMob(m);
+ pixelPerson(state.player.x,state.player.y,'#4d8fd1',true);
+
+ for(const a of state.particles){
+  ctx.globalAlpha=Math.max(0,a.life*2);
+  ctx.fillStyle=a.color;
+  ctx.fillRect(a.x,a.y,3,3);
+ }
+ ctx.globalAlpha=1;
+
+ for(const a of state.floating){
+  ctx.globalAlpha=Math.min(1,a.life*2);
+  ctx.fillStyle=a.color;
+  ctx.font='bold 13px monospace';
+  ctx.fillText(a.text,a.x,a.y);
+ }
+ ctx.globalAlpha=1;
+
+ ctx.fillStyle='#ffffffbb';
+ ctx.font='11px monospace';
+ ctx.fillText(currentMap().name.toUpperCase(),12,18);
+
+ if(state.bossSpawned&&!state.bossDefeated){
+  ctx.fillStyle='#25152c';
+  ctx.fillRect(275,26,250,8);
+  ctx.fillStyle='#bd6bd4';
+  let b=state.mobs.find(m=>m.boss);
+  if(b)ctx.fillRect(276,27,248*Math.max(0,b.hp/b.max),6);
+  ctx.fillStyle='#f1d8ff';
+  ctx.textAlign='center';
+  ctx.fillText(currentMap().boss.toUpperCase(),400,22);
+  ctx.textAlign='left';
+ }
+}
+
+function ui(){
+ $('hpText').textContent=Math.ceil(state.hp)+'/'+state.maxHp;
+ $('hpBar').style.width=state.hp/state.maxHp*100+'%';
+
+ $('mpText').textContent=Math.floor(state.mp)+'/'+state.maxMp;
+ $('mpBar').style.width=state.mp/state.maxMp*100+'%';
+
+ $('xpText').textContent=state.xp+'/'+state.nextXp;
+ $('xpBar').style.width=state.xp/state.nextXp*100+'%';
+
+ $('level').textContent='Lv. '+state.level;
+ $('attack').textContent=state.atk;
+ $('defense').textContent=state.def;
+ $('gold').textContent=state.gold+' G';
+
+ $('potions').textContent=state.potions+' bình';
+ $('gels').textContent=state.gels+' cái';
+
+ $('kills').textContent=state.kills;
+ $('earned').textContent=state.earned;
+ $('loot').textContent=state.loot;
+
+ $('autoStatus').textContent=state.auto?'Đang tự săn':'Đã tắt';
+ $('autoBtn').textContent=state.auto?'⚡ AUTO: BẬT':'⚡ AUTO: TẮT';
+ $('autoBtn').classList.toggle('active',state.auto);
+ $('mobileAuto').textContent=state.auto?'AUTO: ON':'AUTO: OFF';
+
+ $('duration').textContent=new Date(state.elapsed*1000).toISOString().slice(14,19);
+ $('zone').textContent=currentMap().name;
+ $('mapProgress').textContent=state.mapKills+'/10 quái';
+}
+
+let last=performance.now(),uiTick=0;
+
+function loop(now){
+ let dt=Math.min(.04,(now-last)/1000);
+ last=now;
+ update(dt);
+ draw();
+ uiTick+=dt;
+ if(uiTick>.15){ui();uiTick=0}
+ requestAnimationFrame(loop);
+}
+
+window.addEventListener('keydown',e=>{
+ keys[e.code]=true;
+ if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();
+ if(e.code==='Space'&&state.started)attack(false);
+});
+
+window.addEventListener('keyup',e=>keys[e.code]=false);
+
+$('startBtn').onclick=start;
+
+function start(){
+ state.started=true;
+ $('startScreen').classList.add('hidden');
+ if(!state.mobs.length)for(let i=0;i<7;i++)spawnMob();
+ updateMapUI();
+ log('Bắt đầu hành trình tại '+currentMap().name+'!');
+}
+
+$('autoBtn').onclick=()=>{
+ state.auto=!state.auto;
+ log('Auto Attack '+(state.auto?'đã bật.':'đã tắt.'));
+};
+
+$('mobileAuto').onclick=()=>$('autoBtn').click();
+$('skillBtn').onclick=()=>attack(true);
+$('mobileAttack').onclick=()=>attack(false);
+
+$('potionBtn').onclick=()=>{
+ if(state.potions>0&&state.hp<state.maxHp){
+  state.potions--;
+  state.hp=Math.min(state.maxHp,state.hp+45);
+  log('Đã dùng Potion.');
+ }else log('Không thể dùng Potion lúc này.');
+};
+
+$('pauseBtn').onclick=()=>{
+ state.paused=!state.paused;
+ $('pauseBtn').textContent=state.paused?'▶ TIẾP TỤC':'Ⅱ TẠM DỪNG';
+ log(state.paused?'Đã tạm dừng.':'Tiếp tục phiêu lưu.');
+};
+
+$('mapSelect').addEventListener('change',e=>selectMap(Number(e.target.value)));
+
+const joy=$('joystick'),stick=$('stick');
+
+function moveJoy(e){
+ const r=joy.getBoundingClientRect();
+ const cx=r.left+r.width/2,cy=r.top+r.height/2;
+ let dx=e.clientX-cx,dy=e.clientY-cy,lim=34,len=Math.hypot(dx,dy);
+
+ if(len>lim){
+  dx=dx/len*lim;
+  dy=dy/len*lim;
+ }
+
+ joystick.x=dx/lim;
+ joystick.y=dy/lim;
+ stick.style.transform=`translate(${dx}px,${dy}px)`;
+}
+
+function stopJoy(){
+ joystick.x=0;
+ joystick.y=0;
+ joystick.active=false;
+ stick.style.transform='translate(0,0)';
+}
+
+joy.addEventListener('pointerdown',e=>{
+ e.preventDefault();
+ joystick.active=true;
+ joy.setPointerCapture(e.pointerId);
+ moveJoy(e);
+});
+
+joy.addEventListener('pointermove',e=>{
+ if(joystick.active)moveJoy(e);
+});
+
+['pointerup','pointercancel','lostpointercapture'].forEach(ev=>joy.addEventListener(ev,stopJoy));
+
+window.addEventListener('beforeunload',save);
+
+load();
+state.mapIndex=Math.min(state.mapIndex||0,maps.length-1);
+state.unlockedMaps=Math.max(1,Math.min(state.unlockedMaps||1,maps.length));
+updateMapUI();
+ui();
+requestAnimationFrame(loop);
+
+})();
+</script>
+</body>
+</html>
