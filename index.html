@@ -567,27 +567,23 @@ function drawWorld(){
 
  ctx.beginPath();
 
- ctx.moveTo(0,350);ctx.lineTo(210,300);
-
- ctx.lineTo(360,330);ctx.lineTo(520,260);
-
- ctx.lineTo(800,300);ctx.lineTo(800,355);
-
- ctx.lineTo(530,315);ctx.lineTo(360,385);
-
- ctx.lineTo(200,350);ctx.lineTo(0,400);
+ ctx.moveTo(0,H*.58);ctx.lineTo(W*.28,H*.48);
+ ctx.lineTo(W*.48,H*.53);ctx.lineTo(W*.68,H*.43);
+ ctx.lineTo(W,H*.49);ctx.lineTo(W,H*.58);
+ ctx.lineTo(W*.67,H*.53);ctx.lineTo(W*.46,H*.64);
+ ctx.lineTo(W*.25,H*.58);ctx.lineTo(0,H*.67);
 
  ctx.fill();
 
  ctx.fillStyle=map.water;
 
- ctx.fillRect(640,35,130,78);
+ ctx.fillRect(W-112,35,95,70);
 
  ctx.fillStyle='#64aeb0';
 
- for(let i=0;i<5;i++)ctx.fillRect(650+i*22,50+(i%2)*25,12,3);
+ for(let i=0;i<4;i++)ctx.fillRect(W-102+i*21,50+(i%2)*25,12,3);
 
- for(const [x,y] of [[45,70],[105,125],[730,170],[690,400],[170,430],[560,75],[300,90],[770,440]]){
+ for(const [x,y] of [[35,95],[W-55,145],[W-48,H-125],[40,H-105],[W*.72,H*.72],[W*.25,H*.18],[W*.78,H*.25],[W*.35,H*.86]]){
 
   ctx.fillStyle='#573d2d';ctx.fillRect(x+11,y+20,9,19);
 
@@ -601,7 +597,7 @@ function drawWorld(){
 
  for(let i=0;i<20;i++){
 
-  let x=(i*97+23)%W,y=(i*61+17)%H;
+  let x=(i*67+23)%W,y=(i*83+17)%H;
 
   ctx.fillStyle=i%2?'#e7c56b':'#e6a8b4';
 
