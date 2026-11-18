@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>AFK Adventure</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101827;color:#eef5ff;font:16px system-ui;display:flex;justify-content:center}
+#app{width:min(100vw,760px);padding:12px}h2{margin:4px 0 8px;text-align:center}
+#stats{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;background:#1d2b40;padding:10px;border-radius:12px;font-size:14px}
+canvas{display:block;width:100%;height:auto;background:#83b95b;border:4px solid #304d37;border-radius:12px;margin:10px 0;touch-action:none}
+.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+button{border:0;border-radius:12px;padding:13px 8px;background:#2b4666;color:white;font-weight:700;font-size:15px}
+button:active{filter:brightness(1.3)}#hint{text-align:center;color:#c5d3e6;font-size:12px;margin:8px}
+</style></head>
+<body><main id="app"><h2>⚔️ AFK ADVENTURE</h2>
+<div id="stats"><span id="lv">Lv. 1</span><span id="hp">❤️ 100/100</span><span id="xp">EXP 0/20</span><span id="gold">🪙 0</span></div>
+<canvas id="game" width="640" height="420"></canvas>
+<div class="buttons">
+<button id="auto">🤖 Auto: ON</button><button id="skill">✨ Kỹ năng</button><button id="potion">🧪 Hồi máu</button>
+<button id="up">▲</button><button id="attack">⚔️ Đánh</button><button id="pause">⏸ Tạm dừng</button>
+<button id="left">◀</button><button id="down">▼</button><button id="right">▶</button>
+</div><div id="hint">Dùng các nút điều hướng hoặc chạm lên bản đồ. Bật Auto để tự tìm và đánh quái.</div></main>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+let p={x:320,y:210,hp:100,max:100,lv:1,xp:0,need:20,gold:0}, mobs=[],auto=true,paused=false,kills=0,move={x:0,y:0},last=0,toast='';
+function spawn(){mobs.push({x:40+Math.random()*560,y:35+Math.random()*350,hp:24,max:24,hit:0})}
+for(let i=0;i<5;i++)spawn();
+function stats(){document.getElementById('lv').textContent='Lv. '+p.lv;document.getElementById('hp').textContent=`❤️ ${p.hp}/${p.max}`;document.getElementById('xp').textContent=`EXP ${p.xp}/${p.need}`;document.getElementById('gold').textContent='🪙 '+p.gold}
+function say(t){toast=t;setTimeout(()=>{if(toast===t)toast=''},1300)}
+function attack(){let m=mobs.filter(m=>Math.hypot(m.x-p.x,m.y-p.y)<65).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0];if(!m){say('Không có quái gần đây');return}m.hp-=12+p.lv*2;m.hit=10;if(m.hp<=0){mobs.splice(mobs.indexOf(m),1);p.xp+=8;p.gold+=3;kills++;if(p.xp>=p.need){p.xp-=p.need;p.lv++;p.need=Math.round(p.need*1.45);p.max+=15;p.hp=p.max;say('LÊN CẤP!')}if(kills%12===0){mobs.push({x:500,y:100,hp:120,max:120,boss:true,hit:0});say('BOSS XUẤT HIỆN!')}spawn()}stats()}
+function tick(dt){if(paused)return;
+ if(auto&&mobs.length){let m=mobs[0];for(const a of mobs)if(Math.hypot(a.x-p.x,a.y-p.y)<Math.hypot(m.x-p.x,m.y-p.y))m=a;let d=Math.hypot(m.x-p.x,m.y-p.y);if(d>45){p.x+=(m.x-p.x)/d*55*dt;p.y+=(m.y-p.y)/d*55*dt}else if(Math.random()<dt*2)attack()}
+ p.x+=move.x*130*dt;p.y+=move.y*130*dt;p.x=Math.max(18,Math.min(622,p.x));p.y=Math.max(18,Math.min(402,p.y));
+ mobs.forEach(m=>{let d=Math.hypot(p.x-m.x,p.y-m.y);if(d>30){m.x+=(p.x-m.x)/d*18*dt;m.y+=(p.y-m.y)/d*18*dt}else{m.hit-=dt*10;if(m.hit<=0){p.hp=Math.max(0,p.hp-3);m.hit=8;if(p.hp===0){p.hp=p.max;say('Bạn đã hồi sinh!')}}}});stats()
+}
+function draw(){ctx.clearRect(0,0,640,420);ctx.fillStyle='#83b95b';ctx.fillRect(0,0,640,420);
+ for(let i=0;i<90;i++){let x=(i*83)%640,y=(i*47)%420;ctx.fillStyle=i%2?'#76ad50':'#91c66a';ctx.fillRect(x,y,3,3)}
+ ctx.fillStyle='#d7b56d';ctx.fillRect(270,0,90,420);ctx.fillRect(0,175,640,55);
+ mobs.forEach(m=>{ctx.fillStyle=m.boss?'#7538a8':'#4c9d55';ctx.beginPath();ctx.arc(m.x,m.y,m.boss?19:12,0,7);ctx.fill();ctx.fillStyle='#202020';ctx.fillRect(m.x-15,m.y-22,30,4);ctx.fillStyle='#e84b4b';ctx.fillRect(m.x-15,m.y-22,30*m.hp/m.max,4);ctx.fillStyle='white';ctx.fillRect(m.x-5,m.y-4,3,3);ctx.fillRect(m.x+4,m.y-4,3,3)});
+ ctx.fillStyle='#3157b7';ctx.fillRect(p.x-9,p.y-12,18,24);ctx.fillStyle='#f2c49b';ctx.fillRect(p.x-7,p.y-19,14,10);ctx.fillStyle='#17243b';ctx.fillRect(p.x-5,p.y-15,3,2);ctx.fillRect(p.x+3,p.y-15,3,2);
+ if(toast){ctx.fillStyle='#142033';ctx.fillRect(180,12,280,32);ctx.fillStyle='white';ctx.textAlign='center';ctx.fillText(toast,320,34)}
+ if(paused){ctx.fillStyle='#0009';ctx.fillRect(0,0,640,420);ctx.fillStyle='white';ctx.textAlign='center';ctx.font='28px system-ui';ctx.fillText('TẠM DỪNG',320,215)}
+}
+function loop(t){let dt=Math.min((t-last)/1000,.05)||0;last=t;tick(dt);draw();requestAnimationFrame(loop)}requestAnimationFrame(loop);
+document.getElementById('auto').onclick=e=>{auto=!auto;e.target.textContent='🤖 Auto: '+(auto?'ON':'OFF')};
+document.getElementById('attack').onclick=attack;
+document.getElementById('skill').onclick=()=>{mobs.forEach(m=>m.hp-=35);mobs=mobs.filter(m=>m.hp>0);say('Bùng nổ kỹ năng!');stats()};
+document.getElementById('potion').onclick=()=>{p.hp=Math.min(p.max,p.hp+40);say('Đã hồi máu');stats()};
+document.getElementById('pause').onclick=()=>{paused=!paused;document.getElementById('pause').textContent=paused?'▶ Tiếp tục':'⏸ Tạm dừng'};
+[['up',0,-1],['down',0,1],['left',-1,0],['right',1,0]].forEach(([id,x,y])=>{let b=document.getElementById(id);b.addEventListener('pointerdown',e=>{e.preventDefault();move={x,y}});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>move={x:0,y:0}))});
+c.addEventListener('pointerdown',e=>{let r=c.getBoundingClientRect();p.x=(e.clientX-r.left)/r.width*640;p.y=(e.clientY-r.top)/r.height*420});
+</script></body></html>
