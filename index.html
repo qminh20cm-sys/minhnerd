@@ -441,6 +441,12 @@ function load(){
 
   Object.assign(state,d);
 
+  // Timestamp performance.now() không tồn tại qua lần tải trang mới.
+  // Reset cooldown cũ để người chơi không bị khóa đánh/kỹ năng.
+  state.lastAttack=0;state.lastSkill=0;state.lastPotion=0;
+  state.dead=false;state.paused=false;state.pendingAction=null;
+  if(state.hp<=0){state.hp=Math.ceil(state.maxHp*.65);state.player.x=240;state.player.y=360;}
+
   state.mapIndex=Number.isFinite(state.mapIndex)?state.mapIndex:0;
 
   state.unlockedMaps=Math.max(1,state.unlockedMaps||1);
