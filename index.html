@@ -104,6 +104,17 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 
 @media(max-width:520px){.wrap{padding:8px}.side{grid-template-columns:1fr}.side .wide{grid-column:auto}.mobile-controls{display:flex}.bar{width:105px}.panel{padding:10px}}
 
+
+.menu-bar{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 10px}
+.menu-bar button{flex:1;min-width:92px;font-size:11px;padding:9px 6px}
+.side{display:none}
+.side.open{display:flex;position:fixed;z-index:20;left:10px;right:10px;top:12%;max-height:76svh;overflow:auto;padding:10px;background:#101d26;border:2px solid #64818a;border-radius:12px;box-shadow:0 12px 50px #000c}
+.side section{display:none}.side section.menu-active{display:block}
+.menu-close{position:sticky;top:0;align-self:flex-end;z-index:2;background:#743f49;border-color:#b96c75}
+.layout{display:block}.gamebox{width:100%;padding:6px}
+.canvas-wrap{height:min(66svh,680px);display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+canvas{width:auto;height:100%;max-width:100%;object-fit:contain}.hud{justify-content:space-around}
+@media(max-width:520px){.wrap{padding:6px}.top{margin-bottom:7px}.gamebox{padding:5px}.canvas-wrap{height:min(66svh,620px)}.mobile-controls{display:flex}.side.open{left:6px;right:6px;top:9%;max-height:82svh}.controls button{flex:1}.bar{width:90px}}
 </style>
 
 </head>
@@ -125,13 +136,13 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 
  </div>
 
- <div class="layout">
+ <nav class="menu-bar" aria-label="Menu game"><button data-menu="0">👤 Nhân vật</button><button data-menu="1">🗺️ Bản đồ</button><button data-menu="2">⚙ Auto</button><button data-menu="3">🎒 Túi đồ</button><button data-menu="4">📜 Nhật ký</button></nav><div class="layout">
 
   <main class="panel gamebox">
 
    <div class="canvas-wrap">
 
-    <canvas id="game" width="800" height="480" aria-label="Game Pixel RPG"></canvas>
+    <canvas id="game" width="480" height="720" aria-label="Game Pixel RPG"></canvas>
 
     <div class="overlay" id="startScreen">
 
@@ -294,7 +305,7 @@ const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
 
 ctx.imageSmoothingEnabled=false;
 
-const W=800,H=480,keys={};
+const W=480,H=720,keys={};
 
 const $=id=>document.getElementById(id);
 
@@ -322,7 +333,7 @@ gold:0,potions:3,gels:0,kills:0,earned:0,loot:0,
 
 elapsed:0,lastSave:Date.now(),lastAttack:0,lastPotion:0,lastSkill:0,
 
-player:{x:400,y:250,face:1},mobs:[],particles:[],floating:[],
+player:{x:240,y:360,face:1},mobs:[],particles:[],floating:[],target:null,attackAnim:0,skillFlash:0,
 
 bossSpawned:false,bossDefeated:false
 
@@ -380,9 +391,9 @@ function selectMap(i){
 
  state.respawnTimer=0;
 
- state.player.x=400;
+ state.player.x=240;
 
- state.player.y=250;
+ state.player.y=360;
 
  for(let n=0;n<7;n++)spawnMob();
 
@@ -498,7 +509,7 @@ function spawnMob(boss=false){
 
   x=rand(35,W-35);
 
-  y=rand(55,H-35);
+  y=rand(70,H-35);
 
   tries++;
 
@@ -678,6 +689,7 @@ function floatText(x,y,t,c){
 
 function nearest(){
 
+ if(state.target&&!state.target.dead&&state.mobs.includes(state.target))return state.target;
  let best=null,dist=1e9;
 
  for(const m of state.mobs){
@@ -698,8 +710,6 @@ function attack(skill=false){
 
  if(skill){
   if(state.mp<10||now-state.lastSkill<1600)return;
-  state.mp-=10;
-  state.lastSkill=now;
  }else{
   if(now-state.lastAttack<500)return;
   state.lastAttack=now;
@@ -711,6 +721,8 @@ function attack(skill=false){
   return;
  }
 
+ if(skill){state.mp-=10;state.lastSkill=now;state.skillFlash=.32;}
+ state.attackAnim=.22;
  const dmg=state.atk+(skill?18:0)+Math.floor(rand(-2,4));
  m.hp-=dmg;
  m.hit=.12;
@@ -767,6 +779,8 @@ function attack(skill=false){
 function update(dt){
  if(!state.started||state.paused)return;
  state.elapsed+=dt;
+ state.attackAnim=Math.max(0,state.attackAnim-dt);
+ state.skillFlash=Math.max(0,state.skillFlash-dt);
 
  const p=state.player;
  let dx=joystick.x,dy=joystick.y;
@@ -814,14 +828,15 @@ function update(dt){
 
    if(state.hp<=0){
     state.hp=state.maxHp;
-    state.player.x=400;
-    state.player.y=250;
+    state.player.x=240;
+    state.player.y=360;
     log('Bạn đã được đưa về điểm hồi sinh.');
    }
   }
  }
 
  state.mobs=state.mobs.filter(m=>!m.dead);
+ if(state.target&&state.target.dead)state.target=null;
  state.respawnTimer=Math.max(0,state.respawnTimer-dt);
 
  if(state.respawnTimer<=0&&state.mobs.filter(m=>!m.boss).length<7){
@@ -865,7 +880,12 @@ function draw(){
  drawWorld();
 
  for(const m of state.mobs)drawMob(m);
+ if(state.target&&!state.target.dead&&state.mobs.includes(state.target)){
+  ctx.strokeStyle='#ffe36b';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(state.target.x,state.target.y+8,22,9,0,0,Math.PI*2);ctx.stroke();
+ }
+ if(state.skillFlash>0){ctx.globalAlpha=state.skillFlash/.32*.4;ctx.fillStyle='#7de8ff';ctx.fillRect(0,0,W,H);ctx.globalAlpha=1;}
  pixelPerson(state.player.x,state.player.y,'#4d8fd1',true);
+ if(state.attackAnim>0){const p=state.player;ctx.save();ctx.translate(p.x,p.y-7);ctx.rotate((.22-state.attackAnim)*13*(p.face||1));ctx.strokeStyle='#fff0a8';ctx.lineWidth=5;ctx.beginPath();ctx.arc(19,0,25,-1.15,.9);ctx.stroke();ctx.restore();}
 
  for(const a of state.particles){
   ctx.globalAlpha=Math.max(0,a.life*2);
@@ -1023,6 +1043,17 @@ joy.addEventListener('pointermove',e=>{
 
 ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>joy.addEventListener(ev,stopJoy));
 
+canvas.addEventListener('pointerdown',e=>{
+ const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;
+ let picked=null,best=42;
+ for(const m of state.mobs){if(m.dead)continue;const d=Math.hypot(m.x-x,m.y-y);if(d<best){best=d;picked=m;}}
+ if(picked){state.target=picked;log('Đã chọn mục tiêu: '+(picked.boss?currentMap().boss:currentMap().mob)+'.');}
+});
+document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('click',()=>{
+ const side=document.querySelector('.side'),index=Number(btn.dataset.menu),sections=[...side.querySelectorAll('section')];
+ sections.forEach((el,i)=>el.classList.toggle('menu-active',i===index));side.classList.add('open');
+ if(!side.querySelector('.menu-close')){const close=document.createElement('button');close.className='menu-close';close.textContent='✕ ĐÓNG';close.onclick=()=>side.classList.remove('open');side.prepend(close);}
+}));
 window.addEventListener('beforeunload',save);
 
 load();
