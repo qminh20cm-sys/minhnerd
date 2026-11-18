@@ -44,6 +44,7 @@ button.active{background:#28684e;border-color:#72e0ad;color:#dffff0}
 
 canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
 
+ .death-screen{position:absolute;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:#050b10dd;padding:20px}.death-screen.show{display:flex}.death-card{max-width:310px;width:100%;padding:24px;text-align:center;background:#243744;border:2px solid #ff7777;border-radius:14px;box-shadow:0 0 35px #ff555566}.death-card h2{color:#ff8585;margin:0 0 12px}.death-card button{margin-top:12px;width:100%}
 .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#08131bd9;z-index:4;text-align:center;padding:22px}
 
 .overlay.hidden{display:none}
@@ -114,7 +115,7 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 .layout{display:block}.gamebox{width:100%;padding:6px}
 .canvas-wrap{height:min(66svh,680px);display:flex;align-items:center;justify-content:center;touch-action:manipulation}
 canvas{width:auto;height:100%;max-width:100%;object-fit:contain;touch-action:manipulation}.hud{justify-content:space-around}
-html,body{overscroll-behavior:none;touch-action:pan-y}.controls,.menu-bar,.joystick{touch-action:manipulation}
+html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%;width:100%}body{position:fixed;inset:0}.wrap{height:100dvh;overflow:hidden;overscroll-behavior:none}.canvas-wrap,.gamebox,.mobile-controls,.controls,.menu-bar,.joystick,canvas{touch-action:none;overscroll-behavior:none}.side.open{overflow-y:auto;touch-action:pan-y}
 @media(max-width:520px){.wrap{padding:6px}.top{margin-bottom:7px}.gamebox{padding:5px}.canvas-wrap{height:min(66svh,620px)}.mobile-controls{display:flex}.side.open{left:6px;right:6px;top:9%;max-height:82svh}.controls button{flex:1}.bar{width:90px}}
 </style>
 
@@ -129,7 +130,7 @@ html,body{overscroll-behavior:none;touch-action:pan-y}.controls,.menu-bar,.joyst
 
    <div class="logo">✦ AFK ADVENTURE</div>
 
-   <div class="sub">Pixel RPG • Combat & World Update v1.1.3</div>
+   <div class="sub">Pixel RPG • Combat & Animation Update v1.1.4</div>
 
   </div>
 
@@ -160,7 +161,7 @@ html,body{overscroll-behavior:none;touch-action:pan-y}.controls,.menu-bar,.joyst
      </div>
 
     </div>
-
+    <div class="death-screen" id="deathScreen"><div class="death-card"><h2>☠ BẠN ĐÃ BỊ HẠ</h2><p>Hành trình tạm dừng. Hãy hồi sinh để tiếp tục cuộc phiêu lưu.</p><button id="respawnBtn">↻ HỒI SINH</button></div></div>
    </div>
 
    <div class="hud">
@@ -336,7 +337,7 @@ elapsed:0,lastSave:Date.now(),lastAttack:0,lastPotion:0,lastSkill:0,
 
 player:{x:240,y:360,face:1},mobs:[],particles:[],floating:[],target:null,attackAnim:0,skillFlash:0,
 
-bossSpawned:false,bossDefeated:false,pendingAction:null,lastHitSkill:false
+bossSpawned:false,bossDefeated:false,pendingAction:null,lastHitSkill:false,walkTime:0,moveBlend:0,hitFlash:0,levelUpFx:0,dead:false
 
 };
 
@@ -667,178 +668,72 @@ function nearest(){
 
 }
 function attack(skill=false,arrived=false){
- const p=state.player,now=performance.now();
- if(skill){if(state.mp<10||now-state.lastSkill<1600)return;}
- else if(now-state.lastAttack<420)return;
- const m=nearest();
- if(!m||m.dead){if(!state.auto)log('Chưa có mục tiêu hợp lệ.');return;}
- const range=skill?72:43,dist=Math.hypot(m.x-p.x,m.y-p.y);
- if(dist>range&&!arrived){state.pendingAction={target:m,skill};return;}
- if(dist>range+3)return;
- if(skill){state.mp-=10;state.lastSkill=now;state.skillFlash=.42;}
- else state.lastAttack=now;
- state.pendingAction=null;p.face=m.x<p.x?-1:1;
- state.attackAnim=skill?.52:.34;state.lastHitSkill=skill;
- const dmg=Math.max(1,state.atk+(skill?Math.round(state.atk*1.8)+18:0)+Math.floor(rand(-2,4)));
- m.hp-=dmg;
- m.hit=.12;
- particle(m.x,m.y,skill?'#9be7ff':'#ffe08a');
- floatText(m.x,m.y-20,'-'+dmg,skill?'#9be7ff':'#fff0a8');
-
+ if(state.dead||!state.started||state.paused)return;
+ const now=performance.now(),p=state.player;
+ if(skill){if(state.mp<10||now-state.lastSkill<1600)return;}else if(now-state.lastAttack<420)return;
+ const m=(state.target&&!state.target.dead&&state.mobs.includes(state.target))?state.target:nearest();
+ if(!m||m.dead){log('Hãy chạm chọn một mục tiêu trước.');return;}
+ state.target=m;
+ const range=skill?68:42,dist=Math.hypot(m.x-p.x,m.y-p.y);
+ if(dist>range){state.pendingAction={target:m,skill};return;}
+ if(skill){state.mp-=10;state.lastSkill=now;state.skillFlash=.55;}else state.lastAttack=now;
+ state.pendingAction=null;p.face=m.x<p.x?-1:1;state.attackAnim=skill?.62:.42;state.lastHitSkill=skill;
+ const dmg=Math.max(1,Math.round(state.atk+(skill?state.atk*1.8+18:0)+rand(-2,4)));
+ m.hp=Math.max(0,m.hp-dmg);m.hit=.24;
+ particle(m.x,m.y,skill?'#9be7ff':'#ffe08a');floatText(m.x,m.y-20,'-'+dmg,skill?'#9be7ff':'#fff0a8');
  if(m.hp<=0&&!m.dead){
-  m.dead=true;
-  state.kills++;
-
-  if(!m.boss){
-   state.mapKills++;
-   state.respawnTimer=Math.max(state.respawnTimer,.8);
-  }
-
-  const map=currentMap();
-  let xp=m.boss?map.bossXp:map.xp;
-  state.xp+=xp;
-  state.earned+=xp;
-  state.gold+=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));
-  state.loot++;
-
-  if(!m.boss)state.gels++;
-
-  floatText(m.x,m.y-32,'+'+xp+' EXP','#ffe27a');
-  log((m.boss?'Guardian bị đánh bại! ':'Hạ Slime! ')+'+'+xp+' EXP');
-
-  if(m.boss){
-   state.bossDefeated=true;
-   state.unlockedMaps=Math.max(state.unlockedMaps,Math.min(maps.length,state.mapIndex+2));
-   log('CHIẾN THẮNG! Hoàn thành '+map.name+'. Ải mới đã được mở khóa nếu còn.');
-   updateMapUI();
-  }else if(state.mapKills>=10&&!state.bossSpawned){
-   state.bossSpawned=true;
-   spawnMob(true);
-   log('Thủ lĩnh '+map.boss+' đã xuất hiện!');
-  }
-
-  while(state.xp>=state.nextXp){
-   state.xp-=state.nextXp;
-   state.level++;
-   state.nextXp=Math.floor(state.nextXp*1.35);
-   state.maxHp+=12;
-   state.maxMp+=4;
-   state.atk+=3;
-   state.def+=1;
-   state.hp=state.maxHp;
-   state.mp=state.maxMp;
-   log('LÊN CẤP! Bạn đạt Lv.'+state.level);
-  }
+  m.dead=true;state.kills++;if(!m.boss){state.mapKills++;state.respawnTimer=Math.max(state.respawnTimer,.8);}
+  const map=currentMap(),xp=m.boss?map.bossXp:map.xp;
+  state.xp+=xp;state.earned+=xp;state.gold+=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));state.loot++;if(!m.boss)state.gels++;
+  floatText(m.x,m.y-32,'+'+xp+' EXP','#ffe27a');log((m.boss?'Guardian bị đánh bại! ':'Hạ '+map.mob+'! ')+'+'+xp+' EXP');
+  if(m.boss){state.bossDefeated=true;state.unlockedMaps=Math.max(state.unlockedMaps,Math.min(maps.length,state.mapIndex+2));log('CHIẾN THẮNG! Đã mở khóa ải mới nếu còn.');updateMapUI();}
+  else if(state.mapKills>=10&&!state.bossSpawned){state.bossSpawned=true;spawnMob(true);log('Thủ lĩnh '+map.boss+' đã xuất hiện!');}
+  while(state.xp>=state.nextXp){state.xp-=state.nextXp;state.level++;state.nextXp=Math.floor(state.nextXp*1.35);state.maxHp+=12;state.maxMp+=4;state.atk+=3;state.def+=1;state.hp=state.maxHp;state.mp=state.maxMp;state.levelUpFx=1.5;log('✨ LÊN CẤP! Bạn đạt Lv.'+state.level);}
  }
 }
 
 function update(dt){
- if(!state.started||state.paused)return;
- state.elapsed+=dt;
- state.attackAnim=Math.max(0,state.attackAnim-dt);
- state.skillFlash=Math.max(0,state.skillFlash-dt);
-
- const p=state.player;
- let dx=joystick.x,dy=joystick.y;
-
- if(keys.KeyA||keys.ArrowLeft)dx--;
- if(keys.KeyD||keys.ArrowRight)dx++;
- if(keys.KeyW||keys.ArrowUp)dy--;
- if(keys.KeyS||keys.ArrowDown)dy++;
-
- dx=Math.max(-1,Math.min(1,dx));
- dy=Math.max(-1,Math.min(1,dy));
-
- if(dx||dy){
-  let l=Math.hypot(dx,dy);
-  p.x+=dx/l*145*dt;
-  p.y+=dy/l*145*dt;
-  p.face=dx<0?-1:dx>0?1:p.face;
- }
-
+ if(!state.started||state.paused||state.dead)return;
+ state.elapsed+=dt;state.attackAnim=Math.max(0,state.attackAnim-dt);state.skillFlash=Math.max(0,state.skillFlash-dt);
+ state.hitFlash=Math.max(0,state.hitFlash-dt);state.levelUpFx=Math.max(0,state.levelUpFx-dt);
+ const p=state.player;let dx=joystick.x,dy=joystick.y;
+ if(keys.KeyA||keys.ArrowLeft)dx--;if(keys.KeyD||keys.ArrowRight)dx++;if(keys.KeyW||keys.ArrowUp)dy--;if(keys.KeyS||keys.ArrowDown)dy++;
+ dx=Math.max(-1,Math.min(1,dx));dy=Math.max(-1,Math.min(1,dy));let moving=false;
+ if(dx||dy){const l=Math.hypot(dx,dy);p.x+=dx/l*150*dt;p.y+=dy/l*150*dt;p.face=dx<0?-1:dx>0?1:p.face;moving=true;}
  if(state.pendingAction){
   const a=state.pendingAction,m=a.target;
   if(!m||m.dead||!state.mobs.includes(m))state.pendingAction=null;
-  else{const d=Math.hypot(m.x-p.x,m.y-p.y),r=a.skill?72:43;
-   if(d>r){p.x+=(m.x-p.x)/d*185*dt;p.y+=(m.y-p.y)/d*185*dt;p.face=m.x<p.x?-1:1;}
+  else{const d=Math.hypot(m.x-p.x,m.y-p.y),r=a.skill?68:42;
+   if(d>r-2){const step=Math.min(d-r+2,210*dt);p.x+=(m.x-p.x)/d*step;p.y+=(m.y-p.y)/d*step;p.face=m.x<p.x?-1:1;moving=true;}
    else attack(a.skill,true);
   }
  }
  if(state.auto&&!state.pendingAction){
-  let m=nearest();
-  if(m){
-   let d=Math.hypot(m.x-p.x,m.y-p.y);
-   if(d>37){
-    p.x+=(m.x-p.x)/d*90*dt;
-    p.y+=(m.y-p.y)/d*90*dt;
-   }else attack(false);
-  }
+  const m=(state.target&&!state.target.dead&&state.mobs.includes(state.target))?state.target:nearest();
+  if(m){state.target=m;const d=Math.hypot(m.x-p.x,m.y-p.y);if(d>42){p.x+=(m.x-p.x)/d*100*dt;p.y+=(m.y-p.y)/d*100*dt;moving=true;}else attack(false);}
  }
-
- p.x=Math.max(20,Math.min(W-20,p.x));
- p.y=Math.max(35,Math.min(H-20,p.y));
-
+ p.x=Math.max(20,Math.min(W-20,p.x));p.y=Math.max(35,Math.min(H-20,p.y));
+ state.moveBlend+=( (moving?1:0)-state.moveBlend)*Math.min(1,dt*12);if(moving)state.walkTime+=dt*12;
  for(const m of state.mobs){
-  if(m.dead)continue;
-  let d=Math.hypot(p.x-m.x,p.y-m.y);
-
-  if(d>29&&d<220){
-   m.x+=(p.x-m.x)/d*m.spd*dt;
-   m.y+=(p.y-m.y)/d*m.spd*dt;
-  }else if(d<=29&&performance.now()-m.attackAt>1100){
-   m.attackAt=performance.now();
-   state.hp=Math.max(0,state.hp-Math.max(1,m.atk-state.def));
-   floatText(p.x,p.y-24,'-'+Math.max(1,m.atk-state.def),'#ff8585');
-
-   if(state.hp<=0){
-    state.hp=state.maxHp;
-    state.player.x=240;
-    state.player.y=360;
-    log('Bạn đã được đưa về điểm hồi sinh.');
-   }
+  if(m.dead)continue;const d=Math.hypot(p.x-m.x,p.y-m.y);
+  if(state.pendingAction&&state.pendingAction.target===m)continue;
+  if(d>29&&d<220){m.x+=(p.x-m.x)/d*m.spd*dt;m.y+=(p.y-m.y)/d*m.spd*dt;}
+  else if(d<=29&&performance.now()-m.attackAt>1100){
+   m.attackAt=performance.now();const hit=Math.max(1,m.atk-state.def);state.hp=Math.max(0,state.hp-hit);state.hitFlash=.32;
+   floatText(p.x,p.y-24,'-'+hit,'#ff8585');particle(p.x,p.y,'#ff7777');
+   if(state.hp<=0){state.hp=0;state.dead=true;state.pendingAction=null;state.paused=true;joystick.x=joystick.y=0;$('deathScreen').classList.add('show');log('Bạn đã bị hạ gục.');save();break;}
   }
  }
-
- state.mobs=state.mobs.filter(m=>!m.dead);
- if(state.target&&state.target.dead)state.target=null;
+ state.mobs=state.mobs.filter(m=>!m.dead);if(state.target&&state.target.dead)state.target=null;
  if(state.pendingAction&&state.pendingAction.target.dead)state.pendingAction=null;
  state.respawnTimer=Math.max(0,state.respawnTimer-dt);
-
- if(state.respawnTimer<=0&&state.mobs.filter(m=>!m.boss).length<7){
-  spawnMob();
-  state.respawnTimer=.65;
- }
-
- if(state.mapKills>=10&&!state.bossSpawned){
-  state.bossSpawned=true;
-  spawnMob(true);
-  log('Thủ lĩnh '+currentMap().boss+' đã xuất hiện!');
- }
-
- state.hp=Math.min(state.maxHp,state.hp+1.1*dt);
- state.mp=Math.min(state.maxMp,state.mp+.8*dt);
-
- if(state.hp<state.maxHp*.38&&state.potions>0&&performance.now()-state.lastPotion>4000){
-  state.potions--;
-  state.hp=Math.min(state.maxHp,state.hp+45);
-  state.lastPotion=performance.now();
-  log('Tự dùng Potion hồi máu.');
- }
-
- state.particles.forEach(a=>{
-  a.x+=a.vx*dt;a.y+=a.vy*dt;a.life-=dt;
- });
- state.particles=state.particles.filter(a=>a.life>0);
-
- state.floating.forEach(a=>{
-  a.y-=24*dt;a.life-=dt;
- });
- state.floating=state.floating.filter(a=>a.life>0);
-
- if(Date.now()-state.lastSave>10000){
-  save();
-  state.lastSave=Date.now();
- }
+ if(state.respawnTimer<=0&&state.mobs.filter(m=>!m.boss).length<7){spawnMob();state.respawnTimer=.65;}
+ if(state.mapKills>=10&&!state.bossSpawned){state.bossSpawned=true;spawnMob(true);log('Thủ lĩnh '+currentMap().boss+' đã xuất hiện!');}
+ state.hp=Math.min(state.maxHp,state.hp+1.1*dt);state.mp=Math.min(state.maxMp,state.mp+.8*dt);
+ if(state.hp<state.maxHp*.38&&state.potions>0&&performance.now()-state.lastPotion>4000){state.potions--;state.hp=Math.min(state.maxHp,state.hp+45);state.lastPotion=performance.now();log('Tự dùng Potion hồi máu.');}
+ state.particles.forEach(a=>{a.x+=a.vx*dt;a.y+=a.vy*dt;a.life-=dt;});state.particles=state.particles.filter(a=>a.life>0);
+ state.floating.forEach(a=>{a.y-=24*dt;a.life-=dt;});state.floating=state.floating.filter(a=>a.life>0);
+ if(Date.now()-state.lastSave>10000){save();state.lastSave=Date.now();}
 }
 
 function draw(){
