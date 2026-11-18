@@ -486,10 +486,12 @@ function load(){
 
     state.nextXp=Math.floor(state.nextXp*1.35);
 
-    state.maxHp+=12;
-
-    state.atk+=3;
-
+    state.baseMaxHp=(state.baseMaxHp||state.maxHp)+12;
+    state.baseMaxMp=(state.baseMaxMp||state.maxMp);
+    state.baseAtk=(state.baseAtk||state.atk)+3;
+    state.baseDef=state.baseDef||state.def;
+    state.potential=(state.potential||0)+5;
+    derive();
     state.hp=state.maxHp;
 
     log('Offline: đạt cấp '+state.level+'!');
@@ -677,7 +679,7 @@ function nearest(){
 function attack(skill=false,arrived=false){
  if(state.dead||!state.started||state.paused)return;
  const now=performance.now(),p=state.player;
- if(skill){if(state.mp<10||now-state.lastSkill<1600)return;}else if(now-state.lastAttack<420)return;
+ if(skill){if(state.mp<10||now-state.lastSkill<1600*(1-(state.cooldownReduction||0)))return;}else if(now-state.lastAttack<420/Math.max(.25,state.attackSpeed||1))return;
  const m=(state.target&&!state.target.dead&&state.mobs.includes(state.target))?state.target:nearest();
  if(!m||m.dead){log('Hãy chạm chọn một mục tiêu trước.');return;}
  state.target=m;
@@ -706,18 +708,18 @@ function update(dt){
  const p=state.player;let dx=joystick.x,dy=joystick.y;
  if(keys.KeyA||keys.ArrowLeft)dx--;if(keys.KeyD||keys.ArrowRight)dx++;if(keys.KeyW||keys.ArrowUp)dy--;if(keys.KeyS||keys.ArrowDown)dy++;
  dx=Math.max(-1,Math.min(1,dx));dy=Math.max(-1,Math.min(1,dy));let moving=false;
- if(dx||dy){const l=Math.hypot(dx,dy);p.x+=dx/l*150*dt;p.y+=dy/l*150*dt;p.face=dx<0?-1:dx>0?1:p.face;moving=true;}
+ if(dx||dy){const l=Math.hypot(dx,dy);p.x+=dx/l*(state.moveSpeed||150)*dt;p.y+=dy/l*(state.moveSpeed||150)*dt;p.face=dx<0?-1:dx>0?1:p.face;moving=true;}
  if(state.pendingAction){
   const a=state.pendingAction,m=a.target;
   if(!m||m.dead||!state.mobs.includes(m))state.pendingAction=null;
   else{const d=Math.hypot(m.x-p.x,m.y-p.y),r=a.skill?68:42;
-   if(d>r-2){const step=Math.min(d-r+2,210*dt);p.x+=(m.x-p.x)/d*step;p.y+=(m.y-p.y)/d*step;p.face=m.x<p.x?-1:1;moving=true;}
+   if(d>r-2){const step=Math.min(d-r+2,(state.moveSpeed||150)*1.4*dt);p.x+=(m.x-p.x)/d*step;p.y+=(m.y-p.y)/d*step;p.face=m.x<p.x?-1:1;moving=true;}
    else attack(a.skill,true);
   }
  }
  if(state.auto&&!state.pendingAction){
   const m=(state.target&&!state.target.dead&&state.mobs.includes(state.target))?state.target:nearest();
-  if(m){state.target=m;const d=Math.hypot(m.x-p.x,m.y-p.y);if(d>42){p.x+=(m.x-p.x)/d*100*dt;p.y+=(m.y-p.y)/d*100*dt;moving=true;}else attack(false);}
+  if(m){state.target=m;const d=Math.hypot(m.x-p.x,m.y-p.y);if(d>42){p.x+=(m.x-p.x)/d*(state.moveSpeed||150)*.67*dt;p.y+=(m.y-p.y)/d*(state.moveSpeed||150)*.67*dt;moving=true;}else attack(false);}
  }
  p.x=Math.max(20,Math.min(W-20,p.x));p.y=Math.max(35,Math.min(H-20,p.y));
  state.moveBlend+=( (moving?1:0)-state.moveBlend)*Math.min(1,dt*12);if(moving)state.walkTime+=dt*12;
