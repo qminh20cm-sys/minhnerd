@@ -107,16 +107,16 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 
 
 .menu-bar{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 10px}
-.menu-bar button{flex:1;min-width:92px;font-size:11px;padding:9px 6px}
+.menu-bar button{flex:1;min-width:42px;font-size:22px;padding:5px 6px;line-height:1.2}
 .side{display:none}
 .side.open{display:flex;position:fixed;z-index:20;left:10px;right:10px;top:12%;max-height:76svh;overflow:auto;padding:10px;background:#101d26;border:2px solid #64818a;border-radius:12px;box-shadow:0 12px 50px #000c}
-.side section{display:none}.side section.menu-active{display:block}
+ .side section{display:none}.side section.menu-active{display:block}.side .settings-panel{display:none}.side .settings-panel.menu-active{display:block}.settings-group{display:grid;gap:7px;padding:9px;margin:7px 0;background:#102029;border:1px solid #344d56;border-radius:7px;font-size:12px}.settings-group label{display:flex;align-items:center;justify-content:space-between;gap:10px}.settings-group input[type=range]{max-width:48%}.settings-group input:not([type=checkbox]){max-width:55%;background:#172b35;color:#fff;border:1px solid #58717a;border-radius:5px;padding:6px}.settings-group small{color:#9bb0b4;font-size:10px}
 .menu-close{position:sticky;top:0;align-self:flex-end;z-index:2;background:#743f49;border-color:#b96c75}
-.layout{display:block}.gamebox{width:100%;padding:6px}
-  .canvas-wrap{position:relative;height:clamp(245px,37dvh,390px);display:flex;align-items:center;justify-content:center;touch-action:manipulation;flex:none}
+ .layout{display:flex;flex:1;min-height:0}.gamebox{width:100%;padding:5px;display:flex;flex-direction:column;min-height:0;gap:4px}
+  .canvas-wrap{position:relative;height:auto;min-height:150px;max-height:42dvh;flex:1;display:flex;align-items:center;justify-content:center;touch-action:manipulation;min-width:0}
 canvas{width:auto;height:100%;max-width:100%;object-fit:contain;touch-action:manipulation}.hud{justify-content:space-around}
 html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%;width:100%}body{position:fixed;inset:0}.wrap{height:100dvh;overflow:hidden;overscroll-behavior:none}.canvas-wrap,.gamebox,.mobile-controls,.controls,.menu-bar,.joystick,canvas{touch-action:none;overscroll-behavior:none}.side.open{overflow-y:auto;touch-action:pan-y}
-@media(max-width:520px){.wrap{padding:5px;padding-bottom:env(safe-area-inset-bottom)}.top{margin-bottom:4px}.logo{font-size:17px}.sub{font-size:9px}.menu-bar{gap:4px;margin-bottom:5px}.menu-bar button{padding:6px 2px;min-width:0;font-size:10px}.gamebox{padding:4px}.canvas-wrap{height:clamp(235px,35dvh,360px)}.hud{padding:4px 2px;gap:4px}.stat{font-size:10px}.bar{width:72px;height:7px}.mobile-controls{margin-top:3px}.joystick{width:78px;height:78px;flex-basis:78px}.stick{width:36px;height:36px;left:19px;top:19px}.controls{gap:4px}.controls button{flex:1;padding:5px 3px;font-size:10px}.side.open{left:6px;right:6px;top:max(7%,env(safe-area-inset-top));max-height:84dvh;padding:8px}.panel{padding:7px}}
+@media(max-width:520px){.wrap{padding:calc(4px + env(safe-area-inset-top)) 5px calc(4px + env(safe-area-inset-bottom));display:flex;flex-direction:column;height:100dvh;min-height:0}.top{margin-bottom:3px;flex:none}.logo{font-size:16px}.sub{font-size:9px}.menu-bar{gap:4px;margin-bottom:4px;flex:none}.menu-bar button{padding:4px 2px;min-width:0;font-size:21px}.layout{flex:1;min-height:0}.gamebox{padding:4px;gap:3px}.canvas-wrap{height:auto;min-height:130px;max-height:40dvh;flex:1}.hud{padding:3px 1px;gap:3px;flex:none}.stat{font-size:9px}.bar{width:68px;height:6px}.mobile-controls{margin-top:2px;gap:5px;flex:none}.joystick{width:76px;height:76px;flex-basis:76px}.stick{width:36px;height:36px;left:18px;top:18px}.controls{gap:4px;flex:none}.controls button{flex:1;padding:5px 3px;font-size:10px}.side.open{left:6px;right:6px;top:max(6%,env(safe-area-inset-top));max-height:86dvh;padding:8px}.panel{padding:7px}.footer{display:none}}
 </style>
 
 </head>
@@ -130,7 +130,7 @@ html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%
 
    <div class="logo">✦ AFK ADVENTURE</div>
 
-   <div class="sub">Pixel RPG • Equipment & Character Progression v1.1.5</div>
+   <div class="sub">Pixel RPG • Settings & Mobile UI Update v1.1.6</div>
 
   </div>
 
@@ -138,7 +138,7 @@ html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%
 
  </div>
 
- <nav class="menu-bar" aria-label="Menu game"><button data-menu="0">👤 Nhân vật</button><button data-menu="1">🗺️ Bản đồ</button><button data-menu="2">⚙ Auto</button><button data-menu="3">🎒 Túi đồ</button><button data-menu="4">📜 Nhật ký</button></nav><div class="layout">
+ <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Auto" title="Auto">⚙️</button><button data-menu="3" aria-label="Túi đồ" title="Túi đồ">🎒</button><button data-menu="4" aria-label="Nhật ký" title="Nhật ký">📜</button><button data-menu="5" aria-label="Cài đặt" title="Cài đặt">⚙</button></nav><div class="layout">
 
   <main class="panel gamebox">
 
@@ -186,7 +186,7 @@ html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%
 
      <button class="small" id="mobileAttack">⚔ ĐÁNH</button>
 
-     <button class="small" id="mobileAuto">AUTO</button>
+     <button class="small" id="fullscreenBtn" aria-label="Toàn màn hình">⛶</button>
 
     </div>
 
@@ -200,7 +200,7 @@ html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%
 
     <button id="potionBtn">♥ UỐNG POTION</button>
 
-    <button id="pauseBtn">Ⅱ TẠM DỪNG</button>
+    <button id="fullscreenMainBtn" aria-label="Toàn màn hình">⛶ TOÀN MÀN HÌNH</button>
 
    </div>
 
@@ -282,6 +282,8 @@ html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%
 
    </section>
 
+   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label><label><input type="checkbox" id="settingSound"> Âm thanh (sắp hỗ trợ)</label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
+
   </aside>
 
  </div>
@@ -341,12 +343,12 @@ const SLOTS=[['helm','Mũ'],['armor','Áo giáp'],['pants','Quần'],['gloves','
 function norm(){state.potentialStats=state.potentialStats||{attack:0,defense:0,agility:0,intelligence:0};state.potential=state.potential||0;state.equipped=state.equipped||{};state.inventory=state.inventory||[];state.mpPotions=state.mpPotions||0;state.baseAtk=state.baseAtk??state.atk??12;state.baseDef=state.baseDef??state.def??2;state.baseMaxHp=state.baseMaxHp??state.maxHp??100;state.baseMaxMp=state.baseMaxMp??state.maxMp??40;state.baseMagic=state.baseMagic??6;}
 function derive(){norm();const p=state.potentialStats,b={atk:0,magic:0,hp:0,mp:0,armor:0,magicArmor:0,attackSpeed:0,crit:0,critDamage:0,moveSpeed:0,lifesteal:0,omnivamp:0,range:0};Object.values(state.equipped).forEach(it=>{if(it&&it.stats)Object.keys(b).forEach(k=>b[k]+=it.stats[k]||0)});const oh=state.maxHp,om=state.maxMp;state.atk=state.baseAtk+p.attack*2+b.atk;state.magicDamage=state.baseMagic+p.attack*2+b.magic;state.maxHp=state.baseMaxHp+p.defense*20+b.hp;state.maxMp=state.baseMaxMp+p.intelligence*2+b.mp;state.def=state.baseDef+p.defense+b.armor;state.magicArmor=p.defense+b.magicArmor;state.attackSpeed=1+p.agility*.003+b.attackSpeed;state.critChance=5+p.agility*.1+b.crit;state.critDamage=150+b.critDamage;state.moveSpeed=150+b.moveSpeed;state.lifesteal=b.lifesteal;state.omnivamp=b.omnivamp;state.attackRange=42+b.range;state.cooldownReduction=Math.min(.5,p.intelligence*.001);state.hp=Math.min(state.maxHp,state.hp+state.maxHp-oh);state.mp=Math.min(state.maxMp,state.mp+state.maxMp-om);}
 function itemDesc(it){const n={atk:'VL',magic:'Phép',hp:'HP',mp:'MP',armor:'Giáp',magicArmor:'Giáp phép',attackSpeed:'Tốc đánh',crit:'Chí mạng',critDamage:'ST chí mạng',moveSpeed:'Tốc chạy',lifesteal:'Hút máu',omnivamp:'Hút máu toàn phần',range:'Tầm đánh'};return Object.entries(it.stats||{}).map(([k,v])=>n[k]+' +'+v).join(' · ');}
-function renderCharacter(){derive();$('equipmentSlots').innerHTML=SLOTS.map(([k,n])=>{const it=state.equipped[k];return '<div class="equip-slot"><b>'+n+'</b>'+(it?it.name:'Chưa trang bị')+'<button data-unequip="'+k+'" '+(!it?'disabled':'')+'>Tháo</button></div>'}).join('');const rows=[['Song công VL',state.atk],['Song công phép',state.magicDamage],['Máu',state.maxHp],['Song giáp VL',state.def],['Song giáp phép',state.magicArmor],['Tốc đánh',state.attackSpeed.toFixed(2)+'x'],['Tỉ lệ chí mạng',state.critChance.toFixed(1)+'%'],['Sát thương chí mạng',state.critDamage+'%'],['Tốc độ di chuyển',state.moveSpeed],['Hút máu',state.lifesteal+'%'],['Hút máu toàn phần',state.omnivamp+'%'],['Tầm đánh',state.attackRange],['Mana',state.maxMp],['Hồi chiêu',state.cooldownReduction*100+'%']];$('combatStats').innerHTML=rows.map(x=>'<div>'+x[0]+'<br><b>'+x[1]+'</b></div>').join('');$('potentialPoints').textContent=state.potential;$('potentialControls').innerHTML=POTS.map(([k,n,d])=>'<div class="equip-slot"><b>'+n+'</b>'+d+' / điểm<button data-potential="'+k+'" '+(!state.potential?'disabled':'')+'>+ Cộng</button></div>').join('');$('inventoryList').innerHTML=state.inventory.length?state.inventory.map((it,i)=>'<div class="item"><strong>'+it.name+'</strong>'+itemDesc(it)+'<button data-equip-index="'+i+'">Trang bị</button></div>').join(''):'<div class="muted">Chưa có trang bị. Hạ quái để tìm đồ.</div>';$('mpPotions').textContent=state.mpPotions+' bình';$('bagGold').textContent=state.gold+' G';}
+function renderCharacter(){derive();$('equipmentSlots').innerHTML=SLOTS.map(([k,n])=>{const it=state.equipped[k];return '<div class="equip-slot"><b>'+n+'</b>'+(it?it.name:'Chưa trang bị')+'<button data-unequip="'+k+'" '+(!it?'disabled':'')+'>Tháo</button></div>'}).join('');const rows=[['Sức mạnh công kích',state.atk],['Sức mạnh phép thuật',state.magicDamage],['Máu',state.maxHp],['Giáp',state.def],['Giáp phép',state.magicArmor],['Tốc đánh',state.attackSpeed.toFixed(2)+'x'],['Tỉ lệ chí mạng',state.critChance.toFixed(1)+'%'],['Sát thương chí mạng',state.critDamage+'%'],['Tốc độ di chuyển',state.moveSpeed],['Hút máu',state.lifesteal+'%'],['Hút máu toàn phần',state.omnivamp+'%'],['Tầm đánh',state.attackRange],['Mana',state.maxMp],['Hồi chiêu',state.cooldownReduction*100+'%']];$('combatStats').innerHTML=rows.map(x=>'<div>'+x[0]+'<br><b>'+x[1]+'</b></div>').join('');$('potentialPoints').textContent=state.potential;$('potentialControls').innerHTML=POTS.map(([k,n,d])=>'<div class="equip-slot"><b>'+n+'</b>'+d+' / điểm<button data-potential="'+k+'" '+(!state.potential?'disabled':'')+'>+ Cộng</button></div>').join('');$('inventoryList').innerHTML=state.inventory.length?state.inventory.map((it,i)=>'<div class="item"><strong>'+it.name+'</strong>'+itemDesc(it)+'<button data-equip-index="'+i+'">Trang bị</button></div>').join(''):'<div class="muted">Chưa có trang bị. Hạ quái để tìm đồ.</div>';$('mpPotions').textContent=state.mpPotions+' bình';$('bagGold').textContent=state.gold+' G';}
 function equip(i){const it=state.inventory[i];if(!it)return;const old=state.equipped[it.slot];if(old)state.inventory.push(old);state.equipped[it.slot]=it;state.inventory.splice(i,1);derive();renderCharacter();save();}
 function unequip(k){const it=state.equipped[k];if(it){state.inventory.push(it);state.equipped[k]=null;renderCharacter();save();}}
 function spendPoint(k){if(!state.potential)return;state.potential--;state.potentialStats[k]=(state.potentialStats[k]||0)+1;renderCharacter();save();}
 function rollGear(){const slots=['helm','armor','pants','gloves','boots','main','off','relic'],slot=slots[Math.floor(Math.random()*8)],lv=state.level,names={helm:'Mũ',armor:'Áo giáp',pants:'Quần',gloves:'Găng tay',boots:'Giày',main:'Vũ khí',off:'Khiên',relic:'Tạo vật'},opts=[['atk',lv+1],['magic',lv+1],['hp',8+lv*3],['armor',1+Math.floor(lv/3)],['magicArmor',1+Math.floor(lv/3)],['attackSpeed',.03],['crit',.5],['critDamage',5],['moveSpeed',3],['lifesteal',.5],['omnivamp',.3],['mp',5+lv]],c=opts[Math.floor(Math.random()*opts.length)];return {slot,name:['Thô','Tinh xảo','Cổ','Huyền bí'][Math.floor(Math.random()*4)]+' '+names[slot],stats:{[c[0]]:c[1]}};}
-function lootDrop(){const r=Math.random();if(r<.22){state.potions++;log('🎁 Rơi dược phẩm HP!')}else if(r<.38){state.mpPotions++;log('🎁 Rơi dược phẩm MP!')}else if(r<.62){const n=Math.floor(rand(3,9+state.mapIndex*5));state.gold+=n;log('🪙 Rơi '+n+' vàng!')}else if(r<.82){const it=rollGear();state.inventory.push(it);log('⚔ Rơi '+it.name+'!')}else{const n=Math.floor(rand(2,6));state.gold+=n;log('🪙 Rơi '+n+' vàng!')}}
+function lootDrop(x,y){const r=Math.random();if(r<.22){state.potions++;dropNotice(x,y,'🧪','Dược phẩm HP','+1');log('🎁 Rơi dược phẩm HP!')}else if(r<.38){state.mpPotions++;dropNotice(x,y,'💧','Dược phẩm MP','+1');log('🎁 Rơi dược phẩm MP!')}else if(r<.62){const n=Math.floor(rand(3,9+state.mapIndex*5));state.gold+=n;dropNotice(x,y,'🪙','Vàng','+'+n);log('🪙 Rơi '+n+' vàng!')}else if(r<.82){const it=rollGear();state.inventory.push(it);dropNotice(x,y,'🎁',it.name,itemDesc(it));log('⚔ Rơi '+it.name+'!')}else{const n=Math.floor(rand(2,6));state.gold+=n;dropNotice(x,y,'🪙','Vàng','+'+n);log('🪙 Rơi '+n+' vàng!')}}
 function drinkMp(){if(state.mpPotions&&state.mp<state.maxMp){state.mpPotions--;state.mp=Math.min(state.maxMp,state.mp+45);save();ui();log('Đã dùng dược phẩm MP.')}else log('Không thể dùng lúc này.')}
 function updateMapUI(){
 
@@ -585,7 +587,7 @@ function drawWorld(){
 
  }
 
- const t=performance.now()/1000;for(let i=0;i<12;i++){const lx=(i*97+Math.sin(t*.7+i)*18+W)%W,ly=(i*53+((t*13+i*31)%(H+20)));ctx.save();ctx.translate(lx,ly);ctx.rotate(Math.sin(t*1.4+i)*.8);ctx.fillStyle=i%2?'#c6d78a':'#d6b77a';ctx.globalAlpha=.3;ctx.beginPath();ctx.ellipse(0,0,3,6,0,0,Math.PI*2);ctx.fill();ctx.restore();ctx.globalAlpha=1;}for(let i=0;i<20;i++){
+ const t=performance.now()/1000;if(settings.effects)for(let i=0;i<12;i++){const lx=(i*97+Math.sin(t*.7+i)*18+W)%W,ly=(i*53+((t*13+i*31)%(H+20)));ctx.save();ctx.translate(lx,ly);ctx.rotate(Math.sin(t*1.4+i)*.8);ctx.fillStyle=i%2?'#c6d78a':'#d6b77a';ctx.globalAlpha=.3;ctx.beginPath();ctx.ellipse(0,0,3,6,0,0,Math.PI*2);ctx.fill();ctx.restore();ctx.globalAlpha=1;}for(let i=0;i<20;i++){
 
   let x=(i*67+23)%W,y=(i*83+17)%H;
 
@@ -652,11 +654,8 @@ function particle(x,y,color){
 
 }
 
-function floatText(x,y,t,c){
-
- state.floating.push({x,y,text:t,color:c,life:.8});
-
-}
+function floatText(x,y,t,c){if(settings.damage)state.floating.push({x,y,text:t,color:c,life:.8});}
+function dropNotice(x,y,icon,name,detail){if(!settings.combatNames)return;state.floating.push({x,y,text:icon+' '+name+(detail?' '+detail:''),color:'#ffe18a',life:1.8,drop:true});}
 
 function nearest(){
 
@@ -693,7 +692,7 @@ function attack(skill=false,arrived=false){
  if(m.hp<=0&&!m.dead){
   m.dead=true;state.kills++;if(!m.boss){state.mapKills++;state.respawnTimer=Math.max(state.respawnTimer,.8);}
   const map=currentMap(),xp=m.boss?map.bossXp:map.xp;
-  state.xp+=xp;state.earned+=xp;state.gold+=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));state.loot++;if(!m.boss)state.gels++;lootDrop();
+  state.xp+=xp;state.earned+=xp;state.gold+=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));state.loot++;if(!m.boss)state.gels++;lootDrop(m.x,m.y);
   floatText(m.x,m.y-32,'+'+xp+' EXP','#ffe27a');log((m.boss?'Guardian bị đánh bại! ':'Hạ '+map.mob+'! ')+'+'+xp+' EXP');
   if(m.boss){state.bossDefeated=true;state.unlockedMaps=Math.max(state.unlockedMaps,Math.min(maps.length,state.mapIndex+2));log('CHIẾN THẮNG! Đã mở khóa ải mới nếu còn.');updateMapUI();}
   else if(state.mapKills>=10&&!state.bossSpawned){state.bossSpawned=true;spawnMob(true);log('Thủ lĩnh '+map.boss+' đã xuất hiện!');}
@@ -771,17 +770,12 @@ function draw(){
  }
  ctx.globalAlpha=1;
 
- for(const a of state.floating){
-  ctx.globalAlpha=Math.min(1,a.life*2);
-  ctx.fillStyle=a.color;
-  ctx.font='bold 13px monospace';
-  ctx.fillText(a.text,a.x,a.y);
- }
+ for(const a of state.floating){ctx.globalAlpha=Math.min(1,a.life/(a.drop?1.8:.8));ctx.fillStyle=a.color;ctx.font=a.drop?'bold 11px monospace':'bold 13px monospace';ctx.textAlign='center';ctx.shadowColor='#08131b';ctx.shadowBlur=4;ctx.fillText(a.text,a.x,a.y);}ctx.textAlign='left';ctx.shadowBlur=0;
  ctx.globalAlpha=1;
 
  ctx.fillStyle='#ffffffbb';
  ctx.font='11px monospace';
- ctx.fillText(currentMap().name.toUpperCase(),12,18);
+ ctx.fillText(currentMap().name.toUpperCase(),12,18);if(settings.fps){ctx.textAlign='right';ctx.fillStyle='#fff';ctx.fillText(fpsValue+' FPS',W-10,18);ctx.textAlign='left';}
 
  if(state.bossSpawned&&!state.bossDefeated){
   ctx.fillStyle='#25152c';
@@ -821,17 +815,17 @@ function ui(){
  $('autoStatus').textContent=state.auto?'Đang tự săn':'Đã tắt';
  $('autoBtn').textContent=state.auto?'⚡ AUTO: BẬT':'⚡ AUTO: TẮT';
  $('autoBtn').classList.toggle('active',state.auto);
- $('mobileAuto').textContent=state.auto?'AUTO: ON':'AUTO: OFF';
+ 
 
  $('duration').textContent=new Date(state.elapsed*1000).toISOString().slice(14,19);
  $('zone').textContent=currentMap().name;
  $('mapProgress').textContent=state.mapKills+'/10 quái';
 }
 
-let last=performance.now(),uiTick=0;
+let last=performance.now(),uiTick=0,fpsFrames=0,fpsTime=0,fpsValue=0;
 
 function loop(now){
- let dt=Math.min(.04,(now-last)/1000);
+ let dt=Math.min(.04,(now-last)/1000);fpsFrames++;fpsTime+=dt;if(fpsTime>=.5){fpsValue=Math.round(fpsFrames/fpsTime);fpsFrames=0;fpsTime=0;}
  last=now;
  update(dt);
  draw();
@@ -857,6 +851,13 @@ $('respawnBtn').onclick=()=>{
  log('Bạn đã hồi sinh và có thể tiếp tục chiến đấu.');save();ui();
 };
 
+const settings={damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,sound:false,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'};
+function applySettings(){document.documentElement.style.setProperty('--game-font',settings.fontSize+'px');document.documentElement.style.setProperty('--button-font',settings.buttonSize+'px');const j=$('joystick'),st=$('stick');j.style.width=settings.joySize+'px';j.style.height=settings.joySize+'px';j.style.flexBasis=settings.joySize+'px';const z=settings.joySize*.46;st.style.width=z+'px';st.style.height=z+'px';st.style.left=(settings.joySize-z)/2+'px';st.style.top=(settings.joySize-z)/2+'px';}
+function saveSettings(){localStorage.setItem('afkSettings',JSON.stringify(settings));applySettings();}
+function loadSettingsUI(){const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(el){if(el.type==='checkbox')el.checked=!!settings[k];else el.value=settings[k];}}}
+function initSettings(){try{Object.assign(settings,JSON.parse(localStorage.getItem('afkSettings')||'{}'));}catch{}applySettings();const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(!el)continue;el.addEventListener('input',()=>{settings[k]=el.type==='checkbox'?el.checked:(el.type==='range'?Number(el.value):el.value);saveSettings();});} $('settingsReset').onclick=()=>{Object.assign(settings,{damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,sound:false,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'});saveSettings();loadSettingsUI();};}
+async function toggleFullscreen(){const root=document.documentElement;try{if(document.fullscreenElement){await document.exitFullscreen();}else if(root.requestFullscreen){await root.requestFullscreen();}else{log('Safari iPhone chưa hỗ trợ bật toàn màn hình bằng nút này. Hãy chọn Chia sẻ → Thêm vào MH chính để mở như ứng dụng.');}}catch(e){log('Trình duyệt không cho phép bật toàn màn hình.');}}
+$('fullscreenBtn').onclick=toggleFullscreen;$('fullscreenMainBtn').onclick=toggleFullscreen;
 function start(){
  state.started=true;
  $('startScreen').classList.add('hidden');
@@ -870,7 +871,7 @@ $('autoBtn').onclick=()=>{
  log('Auto Attack '+(state.auto?'đã bật.':'đã tắt.'));
 };
 
-$('mobileAuto').onclick=()=>$('autoBtn').click();
+
 $('skillBtn').onclick=()=>attack(true);
 $('mobileAttack').onclick=()=>attack(false);
 
@@ -882,11 +883,7 @@ $('potionBtn').onclick=()=>{
  }else log('Không thể dùng Potion lúc này.');
 };
 
-$('pauseBtn').onclick=()=>{
- state.paused=!state.paused;
- $('pauseBtn').textContent=state.paused?'▶ TIẾP TỤC':'Ⅱ TẠM DỪNG';
- log(state.paused?'Đã tạm dừng.':'Tiếp tục phiêu lưu.');
-};
+
 
 $('mapSelect').addEventListener('change',e=>selectMap(Number(e.target.value)));
 
@@ -935,11 +932,11 @@ canvas.addEventListener('pointerdown',e=>{
 });
 document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('click',()=>{
  const side=document.querySelector('.side'),index=Number(btn.dataset.menu),sections=[...side.querySelectorAll('section')];
- sections.forEach((el,i)=>el.classList.toggle('menu-active',i===index));side.classList.add('open');
+ sections.forEach((el,i)=>el.classList.toggle('menu-active',i===index));side.classList.add('open');if(index===5)loadSettingsUI();
  if(!side.querySelector('.menu-close')){const close=document.createElement('button');close.className='menu-close';close.textContent='✕ ĐÓNG';close.onclick=()=>side.classList.remove('open');side.prepend(close);}
 }));
 window.addEventListener('beforeunload',save);
-
+initSettings();
 load();
 state.mapIndex=Math.min(state.mapIndex||0,maps.length-1);
 state.unlockedMaps=Math.max(1,Math.min(state.unlockedMaps||1,maps.length));
