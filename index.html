@@ -6,7 +6,7 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
 <title>AFK Adventure — Pixel RPG</title>
 
@@ -18,7 +18,7 @@
 
 body{margin:0;background:radial-gradient(circle at top,#203746,#0c131b 70%);color:#eaf3ed;font-family:ui-monospace,Consolas,monospace}
 
-button{font:inherit;color:#f5f3df;background:#304653;border:2px solid #58717a;border-bottom-width:4px;padding:9px 12px;cursor:pointer;border-radius:7px}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;font:inherit;color:#f5f3df;background:#304653;border:2px solid #58717a;border-bottom-width:4px;padding:9px 12px;cursor:pointer;border-radius:7px}
 
 button:hover{filter:brightness(1.2)}
 
@@ -113,7 +113,8 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 .menu-close{position:sticky;top:0;align-self:flex-end;z-index:2;background:#743f49;border-color:#b96c75}
 .layout{display:block}.gamebox{width:100%;padding:6px}
 .canvas-wrap{height:min(66svh,680px);display:flex;align-items:center;justify-content:center;touch-action:manipulation}
-canvas{width:auto;height:100%;max-width:100%;object-fit:contain}.hud{justify-content:space-around}
+canvas{width:auto;height:100%;max-width:100%;object-fit:contain;touch-action:manipulation}.hud{justify-content:space-around}
+html,body{overscroll-behavior:none;touch-action:pan-y}.controls,.menu-bar,.joystick{touch-action:manipulation}
 @media(max-width:520px){.wrap{padding:6px}.top{margin-bottom:7px}.gamebox{padding:5px}.canvas-wrap{height:min(66svh,620px)}.mobile-controls{display:flex}.side.open{left:6px;right:6px;top:9%;max-height:82svh}.controls button{flex:1}.bar{width:90px}}
 </style>
 
@@ -128,7 +129,7 @@ canvas{width:auto;height:100%;max-width:100%;object-fit:contain}.hud{justify-con
 
    <div class="logo">✦ AFK ADVENTURE</div>
 
-   <div class="sub">Pixel RPG • Map & Joystick Update v1.1</div>
+   <div class="sub">Pixel RPG • Combat & World Update v1.1.3</div>
 
   </div>
 
@@ -335,7 +336,7 @@ elapsed:0,lastSave:Date.now(),lastAttack:0,lastPotion:0,lastSkill:0,
 
 player:{x:240,y:360,face:1},mobs:[],particles:[],floating:[],target:null,attackAnim:0,skillFlash:0,
 
-bossSpawned:false,bossDefeated:false
+bossSpawned:false,bossDefeated:false,pendingAction:null,lastHitSkill:false
 
 };
 
@@ -539,29 +540,11 @@ function drawWorld(){
 
  ctx.fillRect(0,0,W,H);
 
- for(let y=0;y<H;y+=32){
-
-  for(let x=0;x<W;x+=32){
-
-   let n=(Math.sin(x*12.9898+y*78.233)*43758.5453)%1;
-
-   ctx.fillStyle=n>.15?map.color:map.path;
-
-   ctx.fillRect(x,y,32,32);
-
-   if(n>.82){
-
-    ctx.fillStyle='#6ba15f';
-
-    ctx.fillRect(x+7,y+9,3,3);
-
-    ctx.fillRect(x+21,y+22,2,2);
-
-   }
-
-  }
-
- }
+ ctx.fillStyle=map.color;ctx.fillRect(0,0,W,H);
+ for(let i=0;i<520;i++){const x=(i*137.51)%W,y=(i*83.17)%H,n=Math.sin(i*91.7)*.5+.5;ctx.fillStyle=n>.55?'#75a65b':n>.25?'#315f42':'#a1a66a';ctx.globalAlpha=.12+n*.16;ctx.beginPath();ctx.ellipse(x,y,1.2+n*2.8,2+n*3.2,(i%7)*.4,0,Math.PI*2);ctx.fill();}
+ ctx.globalAlpha=1;ctx.fillStyle=map.path;ctx.beginPath();ctx.moveTo(-20,H*.57);ctx.bezierCurveTo(W*.2,H*.47,W*.28,H*.65,W*.48,H*.54);ctx.bezierCurveTo(W*.7,H*.42,W*.78,H*.58,W+20,H*.48);ctx.lineTo(W+20,H*.61);ctx.bezierCurveTo(W*.75,H*.72,W*.65,H*.55,W*.46,H*.68);ctx.bezierCurveTo(W*.22,H*.77,W*.15,H*.59,-20,H*.72);ctx.closePath();ctx.fill();
+ ctx.globalAlpha=.18;ctx.strokeStyle='#e0c58a';ctx.lineWidth=10;ctx.stroke();ctx.globalAlpha=1;
+ for(let i=0;i<150;i++){const x=(i*71.3+19)%W,y=(i*113.7+31)%H;ctx.strokeStyle=i%3?'#9ac56a':'#c0c879';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x,y+4);ctx.quadraticCurveTo(x-4,y-3,x-3,y-7);ctx.moveTo(x,y+4);ctx.quadraticCurveTo(x+4,y-4,x+5,y-6);ctx.stroke();}
 
  ctx.fillStyle=map.path;
 
@@ -585,13 +568,10 @@ function drawWorld(){
 
  for(const [x,y] of [[35,95],[W-55,145],[W-48,H-125],[40,H-105],[W*.72,H*.72],[W*.25,H*.18],[W*.78,H*.25],[W*.35,H*.86]]){
 
-  ctx.fillStyle='#573d2d';ctx.fillRect(x+11,y+20,9,19);
-
-  ctx.fillStyle='#24583f';ctx.fillRect(x,y+5,31,25);
-
-  ctx.fillStyle='#36764a';ctx.fillRect(x+5,y-5,22,23);
-
-  ctx.fillStyle='#4b9256';ctx.fillRect(x+10,y,7,6);
+  ctx.fillStyle='#352f28';ctx.beginPath();ctx.ellipse(x+15,y+34,10,4,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#765039';ctx.fillRect(x+12,y+17,7,22);
+  const canopy=ctx.createRadialGradient(x+10,y+5,2,x+15,y+12,24);canopy.addColorStop(0,'#6da85b');canopy.addColorStop(.55,'#36764a');canopy.addColorStop(1,'#1c4937');
+  ctx.fillStyle=canopy;ctx.beginPath();ctx.arc(x+15,y+10,19,0,Math.PI*2);ctx.fill();ctx.fillStyle='#8abf68';ctx.globalAlpha=.6;ctx.beginPath();ctx.arc(x+9,y+2,7,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
 
  }
 
@@ -608,14 +588,14 @@ function drawWorld(){
 }
 
 function pixelPerson(x,y,main='#5a9be8',isPlayer=false){
- ctx.fillStyle='#17252a';ctx.fillRect(x-11,y+12,22,5);
- ctx.fillStyle='#3c2b28';ctx.fillRect(x-7,y+7,5,9);ctx.fillRect(x+3,y+7,5,9);
- ctx.fillStyle=isPlayer?'#315b88':'#3c4c55';ctx.fillRect(x-10,y-7,20,17);
- ctx.fillStyle=main;ctx.fillRect(x-8,y-6,16,13);ctx.fillRect(x-13,y-4,4,10);ctx.fillRect(x+9,y-4,4,10);
- ctx.fillStyle='#f0c69b';ctx.fillRect(x-6,y-18,12,12);
- ctx.fillStyle='#533b2d';ctx.fillRect(x-8,y-21,16,6);ctx.fillRect(x-9,y-17,3,6);
- ctx.fillStyle='#17242a';ctx.fillRect(x+2,y-13,2,3);
- ctx.fillStyle='#d7e7ed';ctx.fillRect(x-3,y-3,6,8);
+ ctx.fillStyle='#17252a88';ctx.beginPath();ctx.ellipse(x,y+15,14,5,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#49362d';ctx.beginPath();ctx.roundRect(x-8,y+5,6,12,3);ctx.roundRect(x+2,y+5,6,12,3);ctx.fill();
+ const armor=ctx.createLinearGradient(x-10,y-9,x+10,y+10);armor.addColorStop(0,'#b9d7e2');armor.addColorStop(.35,main);armor.addColorStop(1,'#263e67');
+ ctx.fillStyle=armor;ctx.beginPath();ctx.moveTo(x-8,y-8);ctx.quadraticCurveTo(x,y-13,x+8,y-8);ctx.lineTo(x+11,y+7);ctx.quadraticCurveTo(x,y+13,x-11,y+7);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#f0c69b';ctx.beginPath();ctx.arc(x,y-14,7,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#533b2d';ctx.beginPath();ctx.arc(x,y-17,8,Math.PI,Math.PI*2);ctx.quadraticCurveTo(x+7,y-12,x+4,y-11);ctx.lineTo(x-7,y-12);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#17242a';ctx.beginPath();ctx.arc(x+3,y-14,1.2,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#e8d48b';ctx.fillRect(x-3,y-2,6,9);ctx.fillStyle='#d9e8ee';ctx.beginPath();ctx.moveTo(x+11,y-11);ctx.lineTo(x+15,y-17);ctx.lineTo(x+15,y+10);ctx.lineTo(x+11,y+8);ctx.closePath();ctx.fill();
  if(isPlayer){
   ctx.fillStyle='#e8d48b';ctx.fillRect(x-2,y-1,4,7);
   ctx.fillStyle='#d9e8ee';ctx.fillRect(x+12,y-11,3,20);
@@ -639,19 +619,11 @@ function drawMob(m){
   ctx.fillStyle='#c7a0e6';ctx.fillRect(m.x-20,m.y-27,9,8);ctx.fillRect(m.x+11,m.y-27,9,8);
 
  }else{
-
-  ctx.fillStyle=state.mapIndex===0?'#2a5146':state.mapIndex===1?'#444c59':'#673b32';
-
-  ctx.fillRect(m.x-12,m.y-5,24,15);
-
-  ctx.fillStyle=state.mapIndex===0?'#77d68d':state.mapIndex===1?'#aeb7c4':'#ff8a52';
-
-  ctx.fillRect(m.x-10,m.y-10,20,17);
-
-  ctx.fillStyle='#f4f1cf';
-
-  ctx.fillRect(m.x-5,m.y-4,3,4);ctx.fillRect(m.x+4,m.y-4,3,4);
-
+  const base=state.mapIndex===0?'#77d68d':state.mapIndex===1?'#aeb7c4':'#ff8a52',shade=state.mapIndex===0?'#2a7658':state.mapIndex===1?'#596979':'#9c4938';
+  const blob=ctx.createRadialGradient(m.x-5,m.y-12,2,m.x,m.y,22);blob.addColorStop(0,base);blob.addColorStop(.7,base);blob.addColorStop(1,shade);
+  ctx.fillStyle=blob;ctx.beginPath();ctx.moveTo(m.x-17,m.y+8);ctx.quadraticCurveTo(m.x-20,m.y-7,m.x-9,m.y-13);ctx.quadraticCurveTo(m.x,m.y-22,m.x+10,m.y-12);ctx.quadraticCurveTo(m.x+21,m.y-5,m.x+16,m.y+9);ctx.quadraticCurveTo(m.x,m.y+16,m.x-17,m.y+8);ctx.fill();
+  ctx.fillStyle='#ffffff88';ctx.beginPath();ctx.ellipse(m.x-6,m.y-10,5,2,-.5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#18342f';ctx.beginPath();ctx.ellipse(m.x-5,m.y-3,2.2,3,0,0,Math.PI*2);ctx.ellipse(m.x+6,m.y-3,2.2,3,0,0,Math.PI*2);ctx.fill();
  }
 
  ctx.fillStyle='#172329';
@@ -694,25 +666,20 @@ function nearest(){
  return best;
 
 }
-function attack(skill=false){
+function attack(skill=false,arrived=false){
  const p=state.player,now=performance.now();
-
- if(skill){
-  if(state.mp<10||now-state.lastSkill<1600)return;
- }else{
-  if(now-state.lastAttack<500)return;
-  state.lastAttack=now;
- }
-
+ if(skill){if(state.mp<10||now-state.lastSkill<1600)return;}
+ else if(now-state.lastAttack<420)return;
  const m=nearest();
- if(!m||Math.hypot(m.x-p.x,m.y-p.y)>(skill?100:43)){
-  if(!state.auto)log('Không có quái vật trong tầm đánh.');
-  return;
- }
-
- if(skill){state.mp-=10;state.lastSkill=now;state.skillFlash=.32;}
- state.attackAnim=.22;
- const dmg=state.atk+(skill?18:0)+Math.floor(rand(-2,4));
+ if(!m||m.dead){if(!state.auto)log('Chưa có mục tiêu hợp lệ.');return;}
+ const range=skill?72:43,dist=Math.hypot(m.x-p.x,m.y-p.y);
+ if(dist>range&&!arrived){state.pendingAction={target:m,skill};return;}
+ if(dist>range+3)return;
+ if(skill){state.mp-=10;state.lastSkill=now;state.skillFlash=.42;}
+ else state.lastAttack=now;
+ state.pendingAction=null;p.face=m.x<p.x?-1:1;
+ state.attackAnim=skill?.52:.34;state.lastHitSkill=skill;
+ const dmg=Math.max(1,state.atk+(skill?Math.round(state.atk*1.8)+18:0)+Math.floor(rand(-2,4)));
  m.hp-=dmg;
  m.hit=.12;
  particle(m.x,m.y,skill?'#9be7ff':'#ffe08a');
@@ -789,7 +756,15 @@ function update(dt){
   p.face=dx<0?-1:dx>0?1:p.face;
  }
 
- if(state.auto){
+ if(state.pendingAction){
+  const a=state.pendingAction,m=a.target;
+  if(!m||m.dead||!state.mobs.includes(m))state.pendingAction=null;
+  else{const d=Math.hypot(m.x-p.x,m.y-p.y),r=a.skill?72:43;
+   if(d>r){p.x+=(m.x-p.x)/d*185*dt;p.y+=(m.y-p.y)/d*185*dt;p.face=m.x<p.x?-1:1;}
+   else attack(a.skill,true);
+  }
+ }
+ if(state.auto&&!state.pendingAction){
   let m=nearest();
   if(m){
    let d=Math.hypot(m.x-p.x,m.y-p.y);
@@ -826,6 +801,7 @@ function update(dt){
 
  state.mobs=state.mobs.filter(m=>!m.dead);
  if(state.target&&state.target.dead)state.target=null;
+ if(state.pendingAction&&state.pendingAction.target.dead)state.pendingAction=null;
  state.respawnTimer=Math.max(0,state.respawnTimer-dt);
 
  if(state.respawnTimer<=0&&state.mobs.filter(m=>!m.boss).length<7){
@@ -872,9 +848,12 @@ function draw(){
  if(state.target&&!state.target.dead&&state.mobs.includes(state.target)){
   ctx.strokeStyle='#ffe36b';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(state.target.x,state.target.y+8,22,9,0,0,Math.PI*2);ctx.stroke();
  }
- if(state.skillFlash>0){ctx.globalAlpha=state.skillFlash/.32*.4;ctx.fillStyle='#7de8ff';ctx.fillRect(0,0,W,H);ctx.globalAlpha=1;}
+ if(state.skillFlash>0){const k=state.skillFlash/.42;ctx.globalAlpha=k*.2;ctx.fillStyle='#6deaff';ctx.fillRect(0,0,W,H);ctx.globalAlpha=1;ctx.strokeStyle='#9cf4ff';ctx.lineWidth=4;ctx.beginPath();ctx.arc(state.player.x,state.player.y,28+(1-k)*80,0,Math.PI*2);ctx.stroke();}
  pixelPerson(state.player.x,state.player.y,'#4d8fd1',true);
- if(state.attackAnim>0){const p=state.player;ctx.save();ctx.translate(p.x,p.y-7);ctx.rotate((.22-state.attackAnim)*13*(p.face||1));ctx.strokeStyle='#fff0a8';ctx.lineWidth=5;ctx.beginPath();ctx.arc(19,0,25,-1.15,.9);ctx.stroke();ctx.restore();}
+ if(state.attackAnim>0){const p=state.player,k=state.attackAnim/(state.lastHitSkill?.52:.34);ctx.save();ctx.translate(p.x,p.y-5);ctx.scale(p.face||1,1);
+ if(state.lastHitSkill){ctx.strokeStyle='#9ef4ff';ctx.lineWidth=8;ctx.shadowColor='#59dfff';ctx.shadowBlur=18;ctx.beginPath();ctx.arc(8,0,35+(1-k)*42,-1.5,1.45);ctx.stroke();ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(8,0,22+(1-k)*28,-1.4,1.35);ctx.stroke();}
+ else{ctx.strokeStyle='#fff0a8';ctx.lineWidth=8;ctx.shadowColor='#ffc95e';ctx.shadowBlur=12;ctx.beginPath();ctx.arc(12,0,34,-1.25+(1-k)*.25,.95+(1-k)*.4);ctx.stroke();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(12,0,26,-1.2,.8);ctx.stroke();}
+ ctx.restore();}
 
  for(const a of state.particles){
   ctx.globalAlpha=Math.max(0,a.life*2);
@@ -897,13 +876,13 @@ function draw(){
 
  if(state.bossSpawned&&!state.bossDefeated){
   ctx.fillStyle='#25152c';
-  ctx.fillRect(275,26,250,8);
+  ctx.fillRect(115,26,250,8);
   ctx.fillStyle='#bd6bd4';
   let b=state.mobs.find(m=>m.boss);
-  if(b)ctx.fillRect(276,27,248*Math.max(0,b.hp/b.max),6);
+  if(b)ctx.fillRect(116,27,248*Math.max(0,b.hp/b.max),6);
   ctx.fillStyle='#f1d8ff';
   ctx.textAlign='center';
-  ctx.fillText(currentMap().boss.toUpperCase(),400,22);
+  ctx.fillText(currentMap().boss.toUpperCase(),240,22);
   ctx.textAlign='left';
  }
 }
