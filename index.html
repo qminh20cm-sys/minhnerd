@@ -1054,7 +1054,7 @@ try{updateMapUI();showMapBanner(inTown()?TOWN.name:currentMap().name);}catch(e){
 try{ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.clearRect(0,0,canvas.width,canvas.height);draw();}catch(e){console.error('Initial render error:',e);const box=$('runtimeError');if(box){box.style.display='block';box.textContent='LỖI KHỞI TẠO HIỂN THỊ: '+(e&&e.stack?e.stack:e&&e.message?e.message:String(e));}}
 requestAnimationFrame(loop);
 try{ui();}catch(e){console.error('Initial UI error:',e);}
-if(!hadSave){document.body.appendChild($("introModal"));$("introModal").classList.add("show");}
+document.body.appendChild($("introModal"));document.body.appendChild($("creationModal"));document.body.appendChild($("welcomeModal"));if(!hadSave)$("introModal").classList.add("show");
 let creationClass="Chiến binh";
 function drawCreationClasses(){$("creationClasses").innerHTML=CLASS_DATA.map(c=>'<button type="button" data-create-class="'+c.name+'" class="'+(c.name===creationClass?"selected":"")+'">'+c.icon+" "+c.name+'<small style="display:block;color:#b6c8c8;font-size:10px;margin-top:4px">'+c.desc+"</small></button>").join("");}
 function continueFromIntro(){$("introModal").classList.remove("show");drawCreationClasses();$("creationModal").classList.add("show");}
