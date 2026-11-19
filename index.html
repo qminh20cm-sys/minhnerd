@@ -467,6 +467,7 @@ function selectMap(i){
  log('Đã vào '+currentMap().name+' ('+currentMap().difficulty+').');
 
  updateMapUI();
+ showMapBanner(currentMap().name);
 
  save();
 
@@ -937,7 +938,6 @@ $('potionBtn').onclick=()=>{if(state.potions>0&&state.hp<state.maxHp){state.poti
 
 
 $('mapSelect').addEventListener('change',e=>selectMap(Number(e.target.value)));
-$('townStoryAction').addEventListener('click',storyAction);$('townHeal').addEventListener('click',townHeal);$('townBuyHp').addEventListener('click',()=>townBuy("hp"));$('townBuyMp').addEventListener('click',()=>townBuy("mp"));
 
 const joy=$('joystick'),stick=$('stick');
 
