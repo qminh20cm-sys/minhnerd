@@ -132,6 +132,39 @@ canvas{max-height:100%;max-width:100%;width:auto;height:100%;object-fit:contain}
  .menu-bar{margin:0 0 3px}
 }
 
+
+html,body{width:100%;height:100%;margin:0;overflow:hidden}
+.wrap{width:100%;height:100dvh;max-width:none;padding:0;margin:0;display:block}
+.top,.footer{display:none!important}
+.layout{display:block!important;width:100%;height:100dvh;margin:0;padding:0}
+.gamebox{position:fixed;inset:0;width:100vw;height:100dvh;min-height:0;padding:0!important;margin:0;border:0;border-radius:0;overflow:hidden;display:block;background:#101820;z-index:1}
+.canvas-wrap{position:absolute;inset:0;width:100%;height:100%;max-height:none;min-height:0;border:0;border-radius:0;display:block;overflow:hidden}
+canvas{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;object-fit:fill}
+.menu-bar{position:absolute;z-index:12;top:calc(env(safe-area-inset-top) + 5px);left:8px;right:8px;width:auto;margin:0;display:flex;gap:5px}
+.menu-bar button{min-width:0;padding:7px 3px;font-size:20px;flex:1;background:#172a35dd}
+.hud{position:absolute;z-index:11;top:calc(env(safe-area-inset-top) + 52px);left:8px;right:8px;padding:4px 7px;background:#08131bbd;border:1px solid #597078;border-radius:8px;justify-content:space-around;pointer-events:none}
+.stat{font-size:10px}.bar{width:clamp(48px,16vw,100px);height:6px}
+.mobile-controls{display:flex!important;position:absolute;z-index:13;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 12px);margin:0;align-items:flex-end;pointer-events:none}
+.joystick,.controls button{pointer-events:auto}
+.joystick{width:94px;height:94px;flex-basis:94px;background:#142a35d9}
+.stick{width:42px;height:42px;left:24px;top:24px}
+.mobile-controls .controls{margin-left:auto;display:grid;grid-template-columns:repeat(2,minmax(58px,auto));gap:7px}
+.mobile-controls .controls button{min-height:44px;font-size:13px;padding:8px}
+.action-controls{position:absolute;z-index:13;right:12px;bottom:calc(env(safe-area-inset-bottom) + 122px);display:flex;gap:6px;flex-wrap:wrap;max-width:58%;justify-content:flex-end}
+.action-controls button{font-size:11px;padding:7px 8px;background:#172a35e8}
+.side.open{position:fixed;z-index:30;left:8px;right:8px;top:calc(env(safe-area-inset-top) + 58px);max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 75px);overflow:auto;display:flex;flex-direction:column}
+.item-modal{display:none;position:fixed;inset:0;z-index:50;background:#02080ddd;align-items:center;justify-content:center;padding:18px}
+.item-modal.show{display:flex}
+.item-modal-card{position:relative;width:min(100%,360px);max-height:82dvh;overflow:auto;padding:20px;background:linear-gradient(180deg,#263c4b,#101e28);border:2px solid #718a91;border-radius:14px;text-align:center}
+.item-modal-card h3{margin:8px 0;color:#f6d98b}
+.item-modal-card p{font-size:12px;line-height:1.6;color:#d0dfdf}
+.item-art{width:82px;height:82px;margin:auto;border:1px solid #718a91;border-radius:12px;background:#0d1a22;display:grid;place-items:center;font-size:42px}
+.modal-close{position:absolute;right:8px;top:8px;padding:5px 9px}
+.item-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:14px}
+.inventory-entry{display:grid;grid-template-columns:1fr auto;gap:5px;align-items:center}
+.inventory-entry button{grid-column:1/-1}
+@media(max-width:520px){.menu-bar button{font-size:18px;padding:6px 1px}.hud{top:calc(env(safe-area-inset-top) + 47px)}.mobile-controls{bottom:calc(env(safe-area-inset-bottom) + 9px)}.joystick{width:82px;height:82px;flex-basis:82px}.stick{width:38px;height:38px;left:20px;top:20px}.action-controls{bottom:calc(env(safe-area-inset-bottom) + 104px);right:10px;max-width:64%}}
+
 </style>
 
 </head>
@@ -203,23 +236,25 @@ canvas{max-height:100%;max-width:100%;width:auto;height:100%;object-fit:contain}
 
      <button class="small" id="mobileAttack">⚔ ĐÁNH</button>
 
-     <button class="small" id="fullscreenBtn" aria-label="Toàn màn hình">⛶</button>
+     
 
     </div>
 
    </div>
 
-   <div class="controls" style="margin-top:10px">
+   <div class="controls action-controls">
 
     <button id="autoBtn" class="active">⚡ AUTO: BẬT</button>
 
     <button id="skillBtn">✧ KỸ NĂNG (10 MP)</button>
 
-    <button id="potionBtn">♥ UỐNG POTION</button>
+    <button id="potionBtn" title="Dược phẩm HP">🧪</button>
 
-    <button id="fullscreenMainBtn" aria-label="Toàn màn hình">⛶ TOÀN MÀN HÌNH</button>
+    <button id="mpPotionBtn" title="Dược phẩm MP">💧</button>
 
    </div>
+
+   <div class="item-modal" id="itemModal"><div class="item-modal-card"><button class="modal-close" id="itemModalClose">✕</button><div id="itemDetail"></div><div class="item-actions"><button id="itemEquipBtn">Trang bị</button><button id="itemSellBtn">Bán</button><button id="itemDropBtn">Vứt bỏ</button><button id="itemLockBtn">Khoá</button></div></div></div>
 
   </main>
 
@@ -281,7 +316,7 @@ canvas{max-height:100%;max-width:100%;width:auto;height:100%;object-fit:contain}
 
     <div class="heading">🎒 TÚI ĐỒ</div>
 
-    <div class="grid2"><div class="item"><strong>🧪 Dược phẩm HP</strong><span id="potions">3 bình</span></div><div class="item"><strong>💧 Dược phẩm MP</strong><span id="mpPotions">2 bình</span><button id="mpPotionBtn">Dùng</button></div><div class="item"><strong>🪙 Slime Gel</strong><span id="gels">0 cái</span></div><div class="item"><strong>💰 Vàng</strong><span id="bagGold">0 G</span></div></div><div class="heading">🎁 TRANG BỊ TRONG TÚI</div><div id="inventoryList" class="inventory-list"></div>
+    <div class="grid2"><div class="item"><strong>🧪 Dược phẩm HP</strong><span id="potions">3 bình</span></div><div class="item"><strong>💧 Dược phẩm MP</strong><span id="mpPotions">2 bình</span></div><div class="item"><strong>🪙 Slime Gel</strong><span id="gels">0 cái</span></div><div class="item"><strong>💰 Vàng</strong><span id="bagGold">0 G</span></div></div><div class="row"><span>Bạc</span><b class="value" id="silver">0 B</b></div><div class="heading">🎁 TRANG BỊ TRONG TÚI</div><div id="inventoryList" class="inventory-list"></div>
 
    </section>
 
@@ -334,13 +369,13 @@ const joystick={x:0,y:0,active:false};
 
 const state={
 
-started:false,paused:false,auto:true,mapIndex:0,unlockedMaps:1,
+started:false,paused:false,auto:true,mapIndex:0,unlockedMaps:1,progressionVersion:2,silver:0,
 
-mapKills:0,respawnTimer:0,level:1,xp:0,nextXp:50,
+mapKills:0,respawnTimer:0,level:1,xp:0,nextXp:20,maxLevel:200,
 
 hp:100,maxHp:100,mp:40,maxMp:40,atk:12,def:2,
 
-gold:0,potions:3,mpPotions:2,gels:0,kills:0,earned:0,loot:0,potential:0,baseAtk:12,baseDef:2,baseMaxHp:100,baseMaxMp:40,baseMagic:6,potentialStats:{attack:0,defense:0,agility:0,intelligence:0},equipped:{helm:null,armor:null,pants:null,gloves:null,boots:null,main:null,off:null,relic:null},inventory:[],
+gold:0,potions:3,mpPotions:2,gels:0,kills:0,earned:0,loot:0,potential:0,baseAtk:12,baseDef:2,baseMaxHp:100,baseMaxMp:40,baseMagic:6,baseMagicArmor:2,baseMoveSpeed:150,potentialStats:{attack:0,defense:0,agility:0,intelligence:0},equipped:{helm:null,armor:null,pants:null,gloves:null,boots:null,main:null,off:null,relic:null},inventory:[],
 
 elapsed:0,lastSave:Date.now(),lastAttack:0,lastPotion:0,lastSkill:0,
 
@@ -357,14 +392,24 @@ function currentMap(){
 }
 
 const SLOTS=[['helm','Mũ'],['armor','Áo giáp'],['pants','Quần'],['gloves','Găng tay'],['boots','Giày'],['main','Tay chính'],['off','Tay phụ'],['relic','Tạo vật']],POTS=[['attack','Tấn công','+2 song công'],['defense','Phòng thủ','+20 HP, +1 song giáp'],['agility','Nhanh nhạy','+0,3% tốc đánh, +0,1% chí mạng'],['intelligence','Thông minh','+2 MP, +0,1% hồi chiêu']];
-function norm(){state.potentialStats=state.potentialStats||{attack:0,defense:0,agility:0,intelligence:0};state.potential=state.potential||0;state.equipped=state.equipped||{};state.inventory=state.inventory||[];state.mpPotions=state.mpPotions||0;state.baseAtk=state.baseAtk??state.atk??12;state.baseDef=state.baseDef??state.def??2;state.baseMaxHp=state.baseMaxHp??state.maxHp??100;state.baseMaxMp=state.baseMaxMp??state.maxMp??40;state.baseMagic=state.baseMagic??6;}
-function derive(){norm();const p=state.potentialStats,b={atk:0,magic:0,hp:0,mp:0,armor:0,magicArmor:0,attackSpeed:0,crit:0,critDamage:0,moveSpeed:0,lifesteal:0,omnivamp:0,range:0};Object.values(state.equipped).forEach(it=>{if(it&&it.stats)Object.keys(b).forEach(k=>b[k]+=it.stats[k]||0)});const oh=state.maxHp,om=state.maxMp;state.atk=state.baseAtk+p.attack*2+b.atk;state.magicDamage=state.baseMagic+p.attack*2+b.magic;state.maxHp=state.baseMaxHp+p.defense*20+b.hp;state.maxMp=state.baseMaxMp+p.intelligence*2+b.mp;state.def=state.baseDef+p.defense+b.armor;state.magicArmor=p.defense+b.magicArmor;state.attackSpeed=1+p.agility*.003+b.attackSpeed;state.critChance=5+p.agility*.1+b.crit;state.critDamage=150+b.critDamage;state.moveSpeed=150+b.moveSpeed;state.lifesteal=b.lifesteal;state.omnivamp=b.omnivamp;state.attackRange=42+b.range;state.cooldownReduction=Math.min(.5,p.intelligence*.001);state.hp=Math.min(state.maxHp,state.hp+state.maxHp-oh);state.mp=Math.min(state.maxMp,state.mp+state.maxMp-om);}
+function norm(){state.potentialStats=state.potentialStats||{attack:0,defense:0,agility:0,intelligence:0};state.potential=state.potential||0;state.equipped=state.equipped||{};state.inventory=state.inventory||[];state.mpPotions=state.mpPotions||0;state.baseAtk=state.baseAtk??state.atk??12;state.baseDef=state.baseDef??state.def??2;state.baseMaxHp=state.baseMaxHp??state.maxHp??100;state.baseMaxMp=state.baseMaxMp??state.maxMp??40;state.baseMagic=state.baseMagic??6;state.baseMagicArmor=state.baseMagicArmor??state.baseDef??2;state.baseMoveSpeed=state.baseMoveSpeed??150;state.silver=state.silver||0;state.maxLevel=200;state.level=Math.min(200,state.level||1);if(state.level>=200)state.nextXp=0;}
+function derive(){norm();const p=state.potentialStats,b={atk:0,magic:0,hp:0,mp:0,armor:0,magicArmor:0,attackSpeed:0,crit:0,critDamage:0,moveSpeed:0,lifesteal:0,omnivamp:0,range:0};Object.values(state.equipped).forEach(it=>{if(it&&it.stats)Object.keys(b).forEach(k=>b[k]+=it.stats[k]||0)});const oh=state.maxHp,om=state.maxMp;state.atk=state.baseAtk+p.attack*2+b.atk;state.magicDamage=state.baseMagic+p.attack*2+b.magic;state.maxHp=state.baseMaxHp+p.defense*20+b.hp;state.maxMp=state.baseMaxMp+p.intelligence*2+b.mp;state.def=state.baseDef+p.defense+b.armor;state.magicArmor=state.baseMagicArmor+p.defense+b.magicArmor;state.attackSpeed=1+p.agility*.003+b.attackSpeed;state.critChance=5+p.agility*.1+b.crit;state.critDamage=150+b.critDamage;state.moveSpeed=state.baseMoveSpeed+b.moveSpeed;state.lifesteal=b.lifesteal;state.omnivamp=b.omnivamp;state.attackRange=42+b.range;state.cooldownReduction=Math.min(.5,p.intelligence*.001);state.hp=Math.min(state.maxHp,state.hp+state.maxHp-oh);state.mp=Math.min(state.maxMp,state.mp+state.maxMp-om);}
+function levelUp(){if(state.level>=200)return false;state.level++;state.baseAtk+=3;state.baseMagic+=3;state.baseMaxHp+=25;state.baseDef+=2;state.baseMagicArmor+=2;state.baseMoveSpeed+=1;state.nextXp=state.level>=200?0:Math.ceil(state.nextXp*1.25);state.potential=(state.potential||0)+5;derive();state.hp=state.maxHp;state.mp=state.maxMp;state.levelUpFx=1.5;log('✨ LÊN CẤP! Bạn đạt Lv.'+state.level+' · +3 sức mạnh công kích, +3 sức mạnh phép thuật, +25 HP, +2 giáp, +2 giáp phép, +1 tốc độ di chuyển');return true;}
+function addExperience(amount){if(state.level>=200)return;state.xp+=amount;while(state.level<200&&state.xp>=state.nextXp){state.xp-=state.nextXp;levelUp();}if(state.level>=200){state.xp=0;state.nextXp=0;}}
 function itemDesc(it){const n={atk:'VL',magic:'Phép',hp:'HP',mp:'MP',armor:'Giáp',magicArmor:'Giáp phép',attackSpeed:'Tốc đánh',crit:'Chí mạng',critDamage:'ST chí mạng',moveSpeed:'Tốc chạy',lifesteal:'Hút máu',omnivamp:'Hút máu toàn phần',range:'Tầm đánh'};return Object.entries(it.stats||{}).map(([k,v])=>n[k]+' +'+v).join(' · ');}
-function renderCharacter(){derive();$('equipmentSlots').innerHTML=SLOTS.map(([k,n])=>{const it=state.equipped[k];return '<div class="equip-slot"><b>'+n+'</b>'+(it?it.name:'Chưa trang bị')+'<button data-unequip="'+k+'" '+(!it?'disabled':'')+'>Tháo</button></div>'}).join('');const rows=[['Sức mạnh công kích',state.atk],['Sức mạnh phép thuật',state.magicDamage],['Máu',state.maxHp],['Giáp',state.def],['Giáp phép',state.magicArmor],['Tốc đánh',state.attackSpeed.toFixed(2)+'x'],['Tỉ lệ chí mạng',state.critChance.toFixed(1)+'%'],['Sát thương chí mạng',state.critDamage+'%'],['Tốc độ di chuyển',state.moveSpeed],['Hút máu',state.lifesteal+'%'],['Hút máu toàn phần',state.omnivamp+'%'],['Tầm đánh',state.attackRange],['Mana',state.maxMp],['Hồi chiêu',state.cooldownReduction*100+'%']];$('combatStats').innerHTML=rows.map(x=>'<div>'+x[0]+'<br><b>'+x[1]+'</b></div>').join('');$('potentialPoints').textContent=state.potential;$('potentialControls').innerHTML=POTS.map(([k,n,d])=>'<div class="equip-slot"><b>'+n+'</b>'+d+' / điểm<button data-potential="'+k+'" '+(!state.potential?'disabled':'')+'>+ Cộng</button></div>').join('');$('inventoryList').innerHTML=state.inventory.length?state.inventory.map((it,i)=>'<div class="item"><strong>'+it.name+'</strong>'+itemDesc(it)+'<button data-equip-index="'+i+'">Trang bị</button></div>').join(''):'<div class="muted">Chưa có trang bị. Hạ quái để tìm đồ.</div>';$('mpPotions').textContent=state.mpPotions+' bình';$('bagGold').textContent=state.gold+' G';}
-function equip(i){const it=state.inventory[i];if(!it)return;const old=state.equipped[it.slot];if(old)state.inventory.push(old);state.equipped[it.slot]=it;state.inventory.splice(i,1);derive();renderCharacter();save();}
+let selectedItemIndex=null;
+function rarityInfo(it){const rarity=it.rarity||((it.name||'').startsWith('Huyền thoại')?'Huyền thoại':(it.name||'').startsWith('Huyền bí')?'Huyền bí':(it.name||'').startsWith('Cổ')?'Cổ':(it.name||'').startsWith('Tinh xảo')?'Tinh xảo':'Thô');const values={'Thô':{color:'#b7c1c8',price:8},'Tinh xảo':{color:'#75d69a',price:25},'Cổ':{color:'#69baff',price:70},'Huyền bí':{color:'#c18cff',price:180},'Huyền thoại':{color:'#ffbf55',price:600},'Thần thoại':{color:'#ff7777',price:1800}};return {name:rarity,...(values[rarity]||values['Thô'])};}
+function itemPrice(it){return it.silverValue||Math.max(1,Math.floor(rarityInfo(it).price+Object.values(it.stats||{}).reduce((a,v)=>a+Math.abs(Number(v)||0),0)*2));}
+function openItem(i){const it=state.inventory[i];if(!it)return;selectedItemIndex=i;const r=rarityInfo(it);$('itemDetail').innerHTML='<div class="item-art">🗡️</div><h3>'+it.name+'</h3><b style="color:'+r.color+'">'+r.name+'</b><p>Loại: '+(SLOTS.find(s=>s[0]===it.slot)?.[1]||'Trang bị')+'</p><p>Chỉ số cộng thêm: '+itemDesc(it)+'</p><p>Giá bán: '+itemPrice(it)+' bạc</p>'+(it.subtitle&&['Huyền thoại','Thần thoại'].includes(r.name)?'<blockquote>'+it.subtitle+'</blockquote>':'')+(it.locked?'<p>🔒 Đang khoá</p>':'');$('itemEquipBtn').disabled=!!it.locked;$('itemSellBtn').disabled=!!it.locked;$('itemDropBtn').disabled=!!it.locked;$('itemLockBtn').textContent=it.locked?'Mở khoá':'Khoá';$('itemModal').classList.add('show');}
+function closeItem(){selectedItemIndex=null;$('itemModal').classList.remove('show');}
+function renderCharacter(){derive();$('equipmentSlots').innerHTML=SLOTS.map(([k,n])=>{const it=state.equipped[k];return '<div class="equip-slot"><b>'+n+'</b>'+(it?it.name:'Chưa trang bị')+'<button data-unequip="'+k+'" '+(!it?'disabled':'')+'>Tháo</button></div>'}).join('');const rows=[['Sức mạnh công kích',state.atk],['Sức mạnh phép thuật',state.magicDamage],['Máu',state.maxHp],['Giáp',state.def],['Giáp phép',state.magicArmor],['Tốc đánh',state.attackSpeed.toFixed(2)+'x'],['Tỉ lệ chí mạng',state.critChance.toFixed(1)+'%'],['Sát thương chí mạng',state.critDamage+'%'],['Tốc độ di chuyển',state.moveSpeed],['Hút máu',state.lifesteal+'%'],['Hút máu toàn phần',state.omnivamp+'%'],['Tầm đánh',state.attackRange],['Mana',state.maxMp],['Hồi chiêu',state.cooldownReduction*100+'%']];$('combatStats').innerHTML=rows.map(x=>'<div>'+x[0]+'<br><b>'+x[1]+'</b></div>').join('');$('potentialPoints').textContent=state.potential;$('potentialControls').innerHTML=POTS.map(([k,n,d])=>'<div class="equip-slot"><b>'+n+'</b>'+d+' / điểm<button data-potential="'+k+'" '+(!state.potential?'disabled':'')+'>+ Cộng</button></div>').join('');$('inventoryList').innerHTML=state.inventory.length?state.inventory.map((it,i)=>'<div class="item inventory-entry"><strong>'+it.name+'</strong><span style="color:'+rarityInfo(it).color+'">'+rarityInfo(it).name+'</span><button data-item-index="'+i+'">Xem trang bị</button></div>').join(''):'<div class="muted">Chưa có trang bị. Hạ quái để tìm đồ.</div>';$('mpPotions').textContent=state.mpPotions+' bình';$('bagGold').textContent=state.gold+' G';$('silver').textContent=state.silver+' B';}
+function equip(i){const it=state.inventory[i];if(!it||it.locked)return;const old=state.equipped[it.slot];if(old)state.inventory.push(old);state.equipped[it.slot]=it;state.inventory.splice(i,1);closeItem();derive();renderCharacter();save();}
 function unequip(k){const it=state.equipped[k];if(it){state.inventory.push(it);state.equipped[k]=null;renderCharacter();save();}}
+function sellItem(){const it=state.inventory[selectedItemIndex];if(!it||it.locked)return;const price=itemPrice(it),name=it.name;state.silver+=price;state.inventory.splice(selectedItemIndex,1);closeItem();renderCharacter();save();log('Đã bán '+name+' và nhận '+price+' bạc.');}
+function discardItem(){const it=state.inventory[selectedItemIndex];if(!it||it.locked)return;const name=it.name;state.inventory.splice(selectedItemIndex,1);closeItem();renderCharacter();save();log('Đã vứt bỏ '+name+'.');}
+function toggleItemLock(){const it=state.inventory[selectedItemIndex];if(!it)return;it.locked=!it.locked;openItem(selectedItemIndex);renderCharacter();save();}
 function spendPoint(k){if(!state.potential)return;state.potential--;state.potentialStats[k]=(state.potentialStats[k]||0)+1;renderCharacter();save();}
-function rollGear(){const slots=['helm','armor','pants','gloves','boots','main','off','relic'],slot=slots[Math.floor(Math.random()*8)],lv=state.level,names={helm:'Mũ',armor:'Áo giáp',pants:'Quần',gloves:'Găng tay',boots:'Giày',main:'Vũ khí',off:'Khiên',relic:'Tạo vật'},opts=[['atk',lv+1],['magic',lv+1],['hp',8+lv*3],['armor',1+Math.floor(lv/3)],['magicArmor',1+Math.floor(lv/3)],['attackSpeed',.03],['crit',.5],['critDamage',5],['moveSpeed',3],['lifesteal',.5],['omnivamp',.3],['mp',5+lv]],c=opts[Math.floor(Math.random()*opts.length)];return {slot,name:['Thô','Tinh xảo','Cổ','Huyền bí'][Math.floor(Math.random()*4)]+' '+names[slot],stats:{[c[0]]:c[1]}};}
+function rollGear(){const slots=['helm','armor','pants','gloves','boots','main','off','relic'],slot=slots[Math.floor(Math.random()*8)],lv=state.level,names={helm:'Mũ',armor:'Áo giáp',pants:'Quần',gloves:'Găng tay',boots:'Giày',main:'Vũ khí',off:'Khiên',relic:'Tạo vật'},opts=[['atk',lv+1],['magic',lv+1],['hp',8+lv*3],['armor',1+Math.floor(lv/3)],['magicArmor',1+Math.floor(lv/3)],['attackSpeed',.03],['crit',.5],['critDamage',5],['moveSpeed',3],['lifesteal',.5],['omnivamp',.3],['mp',5+lv]],c=opts[Math.floor(Math.random()*opts.length)],r=Math.random(),rarity=r<.008?'Huyền thoại':r<.045?'Huyền bí':r<.18?'Cổ':r<.48?'Tinh xảo':'Thô';return {slot,name:rarity+' '+names[slot],rarity,silverValue:Math.max(5,Math.floor(({Thô:8,'Tinh xảo':25,Cổ:70,'Huyền bí':180,'Huyền thoại':600}[rarity])+lv*2)),subtitle:rarity==='Huyền thoại'?'Một trang bị được lưu truyền qua những thời đại đã mất.':'',locked:false,stats:{[c[0]]:c[1]}};}}
 function lootDrop(x,y){const r=Math.random();if(r<.22){state.potions++;dropNotice(x,y,'🧪','Dược phẩm HP','+1');log('🎁 Rơi dược phẩm HP!')}else if(r<.38){state.mpPotions++;dropNotice(x,y,'💧','Dược phẩm MP','+1');log('🎁 Rơi dược phẩm MP!')}else if(r<.62){const n=Math.floor(rand(3,9+state.mapIndex*5));state.gold+=n;dropNotice(x,y,'🪙','Vàng','+'+n);log('🪙 Rơi '+n+' vàng!')}else if(r<.82){const it=rollGear();state.inventory.push(it);dropNotice(x,y,'🎁',it.name,itemDesc(it));log('⚔ Rơi '+it.name+'!')}else{const n=Math.floor(rand(2,6));state.gold+=n;dropNotice(x,y,'🪙','Vàng','+'+n);log('🪙 Rơi '+n+' vàng!')}}
 function drinkMp(){if(state.mpPotions&&state.mp<state.maxMp){state.mpPotions--;state.mp=Math.min(state.maxMp,state.mp+45);save();ui();log('Đã dùng dược phẩm MP.')}else log('Không thể dùng lúc này.')}
 function updateMapUI(){
@@ -459,7 +504,7 @@ function load(){
 
   const offline=Math.min(8*3600,Math.max(0,(Date.now()-(d.savedAt||Date.now()))/1000));
 
-  Object.assign(state,d);if(d.baseAtk==null)state.baseAtk=d.atk||12;if(d.baseDef==null)state.baseDef=d.def||2;if(d.baseMaxHp==null)state.baseMaxHp=d.maxHp||100;if(d.baseMaxMp==null)state.baseMaxMp=d.maxMp||40;norm();derive();
+  Object.assign(state,d);if(d.baseAtk==null)state.baseAtk=d.atk||12;if(d.baseDef==null)state.baseDef=d.def||2;if(d.baseMaxHp==null)state.baseMaxHp=d.maxHp||100;if(d.baseMaxMp==null)state.baseMaxMp=d.maxMp||40;if(d.progressionVersion!==2){state.nextXp=20;for(let lv=1;lv<Math.min(200,state.level);lv++)state.nextXp=Math.ceil(state.nextXp*1.25);state.progressionVersion=2;}norm();derive();
 
   // Timestamp performance.now() không tồn tại qua lần tải trang mới.
   // Reset cooldown cũ để người chơi không bị khóa đánh/kỹ năng.
@@ -497,25 +542,7 @@ function load(){
 
    state.earned+=gain;
 
-   while(state.xp>=state.nextXp){
-
-    state.xp-=state.nextXp;
-
-    state.level++;
-
-    state.nextXp=Math.floor(state.nextXp*1.35);
-
-    state.baseMaxHp=(state.baseMaxHp||state.maxHp)+12;
-    state.baseMaxMp=(state.baseMaxMp||state.maxMp);
-    state.baseAtk=(state.baseAtk||state.atk)+3;
-    state.baseDef=state.baseDef||state.def;
-    state.potential=(state.potential||0)+5;
-    derive();
-    state.hp=state.maxHp;
-
-    log('Offline: đạt cấp '+state.level+'!');
-
-   }
+   addExperience(gain);
 
    log('Offline '+Math.floor(offline/60)+' phút: nhận '+gain+' EXP.');
 
@@ -555,7 +582,7 @@ function spawnMob(boss=false){
 
   atk:boss?map.bossAtk:map.atk,
 
-  hit:0,attackAt:0,dead:false
+  hit:0,attackAt:0,dead:false,dir:rand(0,Math.PI*2),wanderTimer:rand(.4,2.2),phase:rand(0,6.28)
 
  });
 
@@ -635,7 +662,7 @@ function pixelPerson(x,y,main='#5a9be8',isPlayer=false){
 
 function drawMob(m){
  ctx.fillStyle='#17232988';ctx.beginPath();ctx.ellipse(m.x,m.y+12,m.boss?25:17,7,0,0,Math.PI*2);ctx.fill();
- const bob=Math.sin(performance.now()/170+m.x)*2;
+ const bob=Math.sin(performance.now()/170+(m.phase||m.x))*2+Math.sin(performance.now()/280+(m.phase||0))*1.4;
  ctx.save();ctx.translate(0,bob);
  if(m.boss){
 
@@ -709,11 +736,11 @@ function attack(skill=false,arrived=false){
  if(m.hp<=0&&!m.dead){
   m.dead=true;state.kills++;if(!m.boss){state.mapKills++;state.respawnTimer=Math.max(state.respawnTimer,.8);}
   const map=currentMap(),xp=m.boss?map.bossXp:map.xp;
-  state.xp+=xp;state.earned+=xp;state.gold+=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));state.loot++;if(!m.boss)state.gels++;lootDrop(m.x,m.y);
+  addExperience(xp);state.earned+=xp;state.gold+=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));state.loot++;if(!m.boss)state.gels++;lootDrop(m.x,m.y);
   floatText(m.x,m.y-32,'+'+xp+' EXP','#ffe27a');log((m.boss?'Guardian bị đánh bại! ':'Hạ '+map.mob+'! ')+'+'+xp+' EXP');
   if(m.boss){state.bossDefeated=true;state.unlockedMaps=Math.max(state.unlockedMaps,Math.min(maps.length,state.mapIndex+2));log('CHIẾN THẮNG! Đã mở khóa ải mới nếu còn.');updateMapUI();}
   else if(state.mapKills>=10&&!state.bossSpawned){state.bossSpawned=true;spawnMob(true);log('Thủ lĩnh '+map.boss+' đã xuất hiện!');}
-  while(state.xp>=state.nextXp){state.xp-=state.nextXp;state.level++;state.nextXp=Math.floor(state.nextXp*1.35);state.baseMaxHp+=12;state.baseMaxMp+=4;state.baseAtk+=3;state.baseDef+=1;state.potential=(state.potential||0)+5;derive();state.hp=state.maxHp;state.mp=state.maxMp;state.levelUpFx=1.5;log('✨ LÊN CẤP! Bạn đạt Lv.'+state.level+' · +5 điểm tiềm năng');}
+  
  }
 }
 
@@ -743,6 +770,7 @@ function update(dt){
   if(m.dead)continue;const d=Math.hypot(p.x-m.x,p.y-m.y);
   if(state.pendingAction&&state.pendingAction.target===m)continue;
   if(d>29&&d<220){m.x+=(p.x-m.x)/d*m.spd*dt;m.y+=(p.y-m.y)/d*m.spd*dt;}
+  else if(d>=220){m.wanderTimer=(m.wanderTimer||0)-dt;if(m.wanderTimer<=0){m.dir+=(Math.random()-.5)*2.4;m.wanderTimer=rand(1.2,3.4);}const pace=m.spd*.48;m.x+=Math.cos(m.dir)*pace*dt;m.y+=Math.sin(m.dir)*pace*dt;if(m.x<28||m.x>W-28)m.dir=Math.PI-m.dir;if(m.y<55||m.y>H-25)m.dir=-m.dir;m.x=Math.max(28,Math.min(W-28,m.x));m.y=Math.max(55,Math.min(H-25,m.y));}
   else if(d<=29&&performance.now()-m.attackAt>1100){
    m.attackAt=performance.now();const hit=Math.max(1,m.atk-state.def);state.hp=Math.max(0,state.hp-hit);state.hitFlash=.32;
    floatText(p.x,p.y-24,'-'+hit,'#ff8585');particle(p.x,p.y,'#ff7777');
@@ -814,10 +842,10 @@ function ui(){
  $('mpText').textContent=Math.floor(state.mp)+'/'+state.maxMp;
  $('mpBar').style.width=state.mp/state.maxMp*100+'%';
 
- $('xpText').textContent=state.xp+'/'+state.nextXp;
- $('xpBar').style.width=state.xp/state.nextXp*100+'%';
+ $('xpText').textContent=state.level>=200?'MAX CẤP':state.xp+'/'+state.nextXp;
+ $('xpBar').style.width=(state.level>=200?100:state.xp/state.nextXp*100)+'%';
 
- $('level').textContent='Lv. '+state.level;
+ $('level').textContent='Lv. '+state.level+' / 200';
  $('attack').textContent=state.atk;
  $('defense').textContent=state.def;renderCharacter();
  $('gold').textContent=state.gold+' G';
@@ -859,7 +887,7 @@ window.addEventListener('keydown',e=>{
 
 window.addEventListener('keyup',e=>keys[e.code]=false);
 
-$('startBtn').onclick=start;$('mpPotionBtn').onclick=drinkMp;document.addEventListener('click',e=>{const p=e.target.closest('[data-potential]');if(p)spendPoint(p.dataset.potential);const q=e.target.closest('[data-equip-index]');if(q)equip(+q.dataset.equipIndex);const z=e.target.closest('[data-unequip]');if(z)unequip(z.dataset.unequip);});
+$('startBtn').onclick=start;$('mpPotionBtn').onclick=drinkMp;$('itemModalClose').onclick=closeItem;$('itemEquipBtn').onclick=()=>{if(selectedItemIndex!==null)equip(selectedItemIndex)};$('itemSellBtn').onclick=sellItem;$('itemDropBtn').onclick=discardItem;$('itemLockBtn').onclick=toggleItemLock;document.addEventListener('click',e=>{const p=e.target.closest('[data-potential]');if(p)spendPoint(p.dataset.potential);const q=e.target.closest('[data-item-index]');if(q)openItem(+q.dataset.itemIndex);const z=e.target.closest('[data-unequip]');if(z)unequip(z.dataset.unequip);});
 $('respawnBtn').onclick=()=>{
  state.dead=false;state.paused=false;state.hp=Math.max(1,Math.round(state.maxHp*.65));
  state.player.x=240;state.player.y=360;state.pendingAction=null;state.target=null;
@@ -873,8 +901,6 @@ function applySettings(){document.documentElement.style.setProperty('--game-font
 function saveSettings(){localStorage.setItem('afkSettings',JSON.stringify(settings));applySettings();}
 function loadSettingsUI(){const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(el){if(el.type==='checkbox')el.checked=!!settings[k];else el.value=settings[k];}}}
 function initSettings(){try{Object.assign(settings,JSON.parse(localStorage.getItem('afkSettings')||'{}'));}catch{}applySettings();const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(!el)continue;el.addEventListener('input',()=>{settings[k]=el.type==='checkbox'?el.checked:(el.type==='range'?Number(el.value):el.value);saveSettings();});} $('settingsReset').onclick=()=>{Object.assign(settings,{damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,sound:false,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'});saveSettings();loadSettingsUI();};}
-async function toggleFullscreen(){const root=document.documentElement;try{if(document.fullscreenElement){await document.exitFullscreen();}else if(root.requestFullscreen){await root.requestFullscreen();}else{log('Safari iPhone chưa hỗ trợ bật toàn màn hình bằng nút này. Hãy chọn Chia sẻ → Thêm vào MH chính để mở như ứng dụng.');}}catch(e){log('Trình duyệt không cho phép bật toàn màn hình.');}}
-$('fullscreenBtn').onclick=toggleFullscreen;$('fullscreenMainBtn').onclick=toggleFullscreen;
 function start(){
  state.started=true;
  $('startScreen').classList.add('hidden');
@@ -892,13 +918,7 @@ $('autoBtn').onclick=()=>{
 $('skillBtn').onclick=()=>attack(true);
 $('mobileAttack').onclick=()=>attack(false);
 
-$('potionBtn').onclick=()=>{
- if(state.potions>0&&state.hp<state.maxHp){
-  state.potions--;
-  state.hp=Math.min(state.maxHp,state.hp+45);
-  log('Đã dùng Potion.');
- }else log('Không thể dùng Potion lúc này.');
-};
+$('potionBtn').onclick=()=>{if(state.potions>0&&state.hp<state.maxHp){state.potions--;state.hp=Math.min(state.maxHp,state.hp+45);save();ui();log('Đã dùng dược phẩm HP.')}else log('Không thể dùng lúc này.')};
 
 
 
