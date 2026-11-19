@@ -512,13 +512,13 @@ const $=id=>document.getElementById(id);
 
 const HUD_LAYOUT_KEY='afkHudLayoutV1';
 const HUD_DEFAULTS={
- hud:{x:25,y:5,scale:100,opacity:100,visible:true},
- joystick:{x:17,y:82,scale:100,opacity:100,visible:true},
- mobileAttack:{x:36,y:90,scale:100,opacity:100,visible:true},
- actionControls:{x:83,y:82,scale:100,opacity:100,visible:true},
- chatToggle:{x:50,y:10,scale:100,opacity:100,visible:true},
- mapBanner:{x:50,y:18,scale:100,opacity:100,visible:true},
- menuBar:{x:50,y:96,scale:100,opacity:100,visible:true}
+ hud:{"x":49.64102720602965,"y":76.1547636422254,"scale":100,"opacity":100,"visible":true},
+ joystick:{"x":24.82051751552484,"y":85.96257365957045,"scale":100,"opacity":100,"visible":true},
+ mobileAttack:{"x":85.33333802834535,"y":78.57786788586,"scale":100,"opacity":100,"visible":true},
+ actionControls:{"x":78.56410099909856,"y":89.19337638333221,"scale":100,"opacity":100,"visible":true},
+ menuBar:{"x":47.17949500450721,"y":4.153897204038369,"scale":100,"opacity":100,"visible":true},
+ chatToggle:{"x":90.05129300631009,"y":4.5000543243252284,"scale":100,"opacity":100,"visible":true},
+ mapBanner:{"x":11.897442157451923,"y":10.615512005018383,"scale":100,"opacity":100,"visible":true},
 };
 let hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS)),hudEditing=false,hudDrag=null,hudSelected='joystick';
 const hudTargets={
@@ -530,7 +530,7 @@ const hudTargets={
  mapBanner:()=>$('mapBanner'),
  menuBar:()=>document.querySelector('.menu-bar')
 };
-function loadHudLayout(){try{const v=JSON.parse(localStorage.getItem(HUD_LAYOUT_KEY)||'null');if(v&&v.version===1&&v.items)for(const k of Object.keys(HUD_DEFAULTS))if(v.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};}catch(e){console.warn('HUD layout load:',e);}applyHudLayout();}
+function loadHudLayout(){try{const v=JSON.parse(localStorage.getItem(HUD_LAYOUT_KEY)||'null');if(v&&v.version===2&&v.items)for(const k of Object.keys(HUD_DEFAULTS))if(v.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};}catch(e){console.warn('HUD layout load:',e);}applyHudLayout();}
 function applyHudLayout(){
  for(const [k,get] of Object.entries(hudTargets)){const el=get(),v=hudLayout[k];if(!el||!v)continue;
   const isMenu=k==='menuBar';const base=isMenu?document.querySelector('.gamebox'):document.querySelector('.canvas-wrap');
@@ -540,7 +540,7 @@ function applyHudLayout(){
   el.style.display=v.visible?'':'none';el.style.zIndex=k==='hud'?'18':'20';
  }
 }
-function saveHudLayout(){localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:1,items:hudLayout}));applyHudLayout();}
+function saveHudLayout(){localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:2,items:hudLayout}));applyHudLayout();}
 function setupHudDesigner(){
  const toggle=$('hudEditToggle'),panel=$('hudEditPanel'),select=$('hudEditSelect'),scale=$('hudEditScale'),opacity=$('hudEditOpacity'),visible=$('hudEditVisible');
  if(!toggle||!panel)return;
