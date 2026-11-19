@@ -45,20 +45,20 @@ select,button{font:inherit;color:#f5f5ef;background:#243640;border:1px solid #65
 <script>
 const KEY='afkHudLayoutV1';
 const defaults={
- hud:{x:4,y:4,scale:100,opacity:100,visible:true},
- joystick:{x:20,y:84,scale:100,opacity:100,visible:true},
- mobileAttack:{x:36,y:89,scale:100,opacity:100,visible:true},
- actionControls:{x:83,y:80,scale:100,opacity:100,visible:true},
- menuBar:{x:84,y:5,scale:100,opacity:100,visible:true},
- chatToggle:{x:50,y:7,scale:100,opacity:100,visible:true},
- mapBanner:{x:84,y:17,scale:100,opacity:100,visible:true}
+ hud:{"x":49.64102720602965,"y":76.1547636422254,"scale":100,"opacity":100,"visible":true},
+ joystick:{"x":24.82051751552484,"y":85.96257365957045,"scale":100,"opacity":100,"visible":true},
+ mobileAttack:{"x":85.33333802834535,"y":78.57786788586,"scale":100,"opacity":100,"visible":true},
+ actionControls:{"x":78.56410099909856,"y":89.19337638333221,"scale":100,"opacity":100,"visible":true},
+ menuBar:{"x":47.17949500450721,"y":4.153897204038369,"scale":100,"opacity":100,"visible":true},
+ chatToggle:{"x":90.05129300631009,"y":4.5000543243252284,"scale":100,"opacity":100,"visible":true},
+ mapBanner:{"x":11.897442157451923,"y":10.615512005018383,"scale":100,"opacity":100,"visible":true},
 };
 let layout=structuredClone(defaults),selected='hud',drag=null;
 const preview=document.getElementById('preview'),status=document.getElementById('status');
-function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&v.version===1)for(const k of Object.keys(defaults))layout[k]={...defaults[k],...(v.items?.[k]||{})};}catch{}}
+function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&v.version===2)for(const k of Object.keys(defaults))layout[k]={...defaults[k],...(v.items?.[k]||{})};}catch{}}
 function render(){for(const [k,v] of Object.entries(layout)){const el=document.querySelector('[data-key="'+k+'"]');el.style.left=v.x+'%';el.style.top=v.y+'%';el.style.right='auto';el.style.transform='translate(-50%,-50%) scale('+v.scale/100+')';el.style.opacity=v.opacity/100;el.classList.toggle('hidden',!v.visible);el.classList.toggle('selected',k===selected);}
 const v=layout[selected];document.getElementById('elementSelect').value=selected;document.getElementById('scale').value=v.scale;document.getElementById('opacity').value=v.opacity;document.getElementById('visible').checked=v.visible;document.getElementById('scaleValue').textContent=v.scale+'%';document.getElementById('opacityValue').textContent=v.opacity+'%';}
-function persist(){localStorage.setItem(KEY,JSON.stringify({version:1,items:layout}));status.textContent='Đã lưu bố cục trên thiết bị này.';}
+function persist(){localStorage.setItem(KEY,JSON.stringify({version:2,items:layout}));status.textContent='Đã lưu bố cục trên thiết bị này.';}
 function choose(k){selected=k;render();}
 document.querySelectorAll('.item').forEach(el=>{el.addEventListener('pointerdown',e=>{e.preventDefault();choose(el.dataset.key);drag={key:selected,id:e.pointerId};el.setPointerCapture(e.pointerId);});el.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const r=preview.getBoundingClientRect(),v=layout[drag.key];v.x=Math.max(2,Math.min(98,(e.clientX-r.left)/r.width*100));v.y=Math.max(2,Math.min(98,(e.clientY-r.top)/r.height*100));render();});el.addEventListener('pointerup',()=>drag=null);el.addEventListener('pointercancel',()=>drag=null);});
 document.getElementById('elementSelect').onchange=e=>choose(e.target.value);
@@ -67,8 +67,8 @@ document.getElementById('opacity').oninput=e=>{layout[selected].opacity=+e.targe
 document.getElementById('visible').onchange=e=>{layout[selected].visible=e.target.checked;render();};
 document.getElementById('save').onclick=persist;
 document.getElementById('reset').onclick=()=>{layout=structuredClone(defaults);render();persist();};
-document.getElementById('export').onclick=()=>{const blob=new Blob([JSON.stringify({version:1,items:layout},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='afk-adventure-hud.json';a.click();URL.revokeObjectURL(a.href);status.textContent='Đã xuất cấu hình JSON.';};
+document.getElementById('export').onclick=()=>{const blob=new Blob([JSON.stringify({version:2,items:layout},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='afk-adventure-hud.json';a.click();URL.revokeObjectURL(a.href);status.textContent='Đã xuất cấu hình JSON.';};
 document.getElementById('import').onclick=()=>document.getElementById('file').click();
-document.getElementById('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const v=JSON.parse(await f.text());if(v.version!==1||!v.items)throw Error('Sai định dạng');for(const k of Object.keys(defaults))if(v.items[k])layout[k]={...defaults[k],...v.items[k]};render();persist();}catch(err){status.textContent='Không thể nhập: '+err.message;}e.target.value='';};
+document.getElementById('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const v=JSON.parse(await f.text());if(v.version!==2||!v.items)throw Error('Sai định dạng');for(const k of Object.keys(defaults))if(v.items[k])layout[k]={...defaults[k],...v.items[k]};render();persist();}catch(err){status.textContent='Không thể nhập: '+err.message;}e.target.value='';};
 load();render();
 </script></body></html>
