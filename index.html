@@ -563,6 +563,8 @@ function setupHudDesigner(){
  const end=e=>{if(hudDrag&&(!e.pointerId||hudDrag.id===e.pointerId))hudDrag=null;};
  document.addEventListener('pointerup',end,true);document.addEventListener('pointercancel',end,true);
  loadHudLayout();
+ window.addEventListener('storage',e=>{if(e.key===HUD_LAYOUT_KEY){try{const v=JSON.parse(e.newValue||'null');if(v&&v.version===1){for(const k of Object.keys(HUD_DEFAULTS))if(v.items?.[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};applyHudLayout();}}catch(err){console.warn('HUD sync:',err);}}});
+ document.addEventListener('click',e=>{if(hudEditing&&e.target.closest('[data-hud-key]')){e.preventDefault();e.stopImmediatePropagation();}},true);
 }
 
 // Đưa modal ra khỏi gamebox để không bị bảng menu che do stacking context.
