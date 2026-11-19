@@ -244,6 +244,36 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
  .canvas-wrap>.action-controls button{min-height:32px!important;font-size:9px!important;padding:4px 2px!important}
 }
 
+
+/* v1.2.8 — separated combat-control zones, inspired by the reference layout */
+.canvas-wrap{isolation:isolate}
+.canvas-wrap::after{content:"";position:absolute;z-index:10;left:0;right:0;bottom:0;height:126px;background:linear-gradient(180deg,transparent 0%,rgba(5,12,18,.34) 22%,rgba(5,12,18,.88) 100%);pointer-events:none}
+.canvas-wrap>.hud{position:absolute!important;top:7px!important;left:7px!important;right:7px!important;z-index:16!important;display:flex!important;justify-content:flex-start!important;align-items:center!important;gap:10px!important;flex-wrap:nowrap!important;width:auto!important;margin:0!important;padding:5px 8px!important;background:rgba(5,13,20,.88)!important;border:1px solid rgba(150,180,180,.5)!important;border-radius:8px!important;pointer-events:none!important}
+.canvas-wrap>.hud .stat{font-size:10px!important;min-width:0;white-space:nowrap}
+.canvas-wrap>.hud .bar{width:clamp(42px,12vw,70px)!important;height:5px!important;margin-top:3px!important}
+.canvas-wrap>.mobile-controls{position:absolute!important;left:8px!important;bottom:12px!important;z-index:18!important;display:flex!important;flex:none!important;width:44%!important;max-width:190px!important;justify-content:flex-start!important;align-items:flex-end!important;gap:6px!important;margin:0!important;padding:0!important}
+.canvas-wrap>.mobile-controls .joystick{width:72px!important;height:72px!important;flex:0 0 72px!important}
+.canvas-wrap>.mobile-controls .stick{width:34px!important;height:34px!important;left:17px!important;top:17px!important}
+.canvas-wrap>.mobile-controls .controls{display:flex!important;flex:1 1 0!important;min-width:0!important;justify-content:flex-start!important}
+.canvas-wrap>.mobile-controls .controls button{width:100%!important;min-width:0!important;min-height:46px!important;padding:5px 3px!important;font-size:10px!important;white-space:normal!important}
+.canvas-wrap>.action-controls{position:absolute!important;right:8px!important;bottom:12px!important;z-index:18!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(36px,auto))!important;gap:5px!important;width:48%!important;max-width:205px!important;margin:0!important;padding:0!important}
+.canvas-wrap>.action-controls button{width:100%!important;min-width:0!important;min-height:38px!important;padding:5px 3px!important;font-size:clamp(9px,2.6vw,11px)!important;line-height:1.1!important;white-space:normal!important}
+.canvas-wrap>.chat-toggle{z-index:19!important}
+.canvas-wrap>.chat-panel{z-index:25!important}
+.canvas-wrap>.map-banner{z-index:20!important}
+@media(max-width:520px){
+ .canvas-wrap::after{height:116px}
+ .canvas-wrap>.hud{top:5px!important;left:5px!important;right:5px!important;gap:5px!important;padding:4px 5px!important}
+ .canvas-wrap>.hud .stat{font-size:9px!important}
+ .canvas-wrap>.hud .bar{width:clamp(34px,10vw,48px)!important}
+ .canvas-wrap>.mobile-controls{left:5px!important;bottom:8px!important;width:43%!important;gap:4px!important}
+ .canvas-wrap>.mobile-controls .joystick{width:62px!important;height:62px!important;flex-basis:62px!important}
+ .canvas-wrap>.mobile-controls .stick{width:30px!important;height:30px!important;left:14px!important;top:14px!important}
+ .canvas-wrap>.mobile-controls .controls button{min-height:38px!important;font-size:9px!important}
+ .canvas-wrap>.action-controls{right:5px!important;bottom:8px!important;width:49%!important;gap:4px!important;grid-template-rows:repeat(2,minmax(34px,auto))!important}
+ .canvas-wrap>.action-controls button{min-height:34px!important;font-size:9px!important;padding:4px 2px!important}
+}
+
 </style>
 
 </head>
@@ -278,7 +308,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
     <div id="rewardToast" class="reward-toast" role="status" aria-live="assertive"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.7</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.8</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ THẾ GIỚI HẮC ÁM</h2><div class="intro-story">Hàng thiên niên kỷ đã trôi qua, nhưng mỗi khi nhắc về cuộc Đại Hỗn Chiến trên lục địa Eldric, nhân loại vẫn không khỏi rùng mình kinh hãi. Những cánh đồng chất đầy thi thể, máu nhuộm đỏ đất trời, tiếng binh khí va chạm chát chúa hòa cùng tiếng gào thét bi ai và những luồng ma pháp xé toạc không gian—tất cả địa ngục trần gian ấy chỉ là hệ quả từ sự thức tỉnh của Chúa tể Hắc ám Halphys, kẻ vừa phá vỡ phong ấn cổ đại sau hàng thế kỷ bị giam cầm.
