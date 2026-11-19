@@ -1150,7 +1150,6 @@ function update(dt){
  if(state.pendingAction&&state.pendingAction.target.dead)state.pendingAction=null;
  state.respawnTimer=Math.max(0,state.respawnTimer-dt);
  if(state.respawnTimer<=0&&state.mobs.filter(m=>!m.boss).length<7){spawnMob();state.respawnTimer=.65;}
- if(state.mapKills>=10&&!state.bossSpawned){state.bossSpawned=true;spawnMob(true);log('Thủ lĩnh '+currentMap().boss+' đã xuất hiện!');}
  state.hp=Math.min(state.maxHp,state.hp+1.1*dt);state.mp=Math.min(state.maxMp,state.mp+.8*dt);
  if(state.hp<state.maxHp*.38&&state.potions>0&&performance.now()-state.lastPotion>4000){state.potions--;state.hp=Math.min(state.maxHp,state.hp+45);state.lastPotion=performance.now();log('Tự dùng Potion hồi máu.');}
  state.particles.forEach(a=>{a.x+=a.vx*dt;a.y+=a.vy*dt;a.life-=dt;});state.particles=state.particles.filter(a=>a.life>0);
