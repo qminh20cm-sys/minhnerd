@@ -245,7 +245,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 }
 
 
-/* v1.3.2 — separated combat-control zones, inspired by the reference layout */
+/* v1.4.0 — separated combat-control zones, inspired by the reference layout */
 .canvas-wrap{isolation:isolate}
 .canvas-wrap::after{content:"";position:absolute;z-index:10;left:0;right:0;bottom:0;height:126px;background:linear-gradient(180deg,transparent 0%,rgba(5,12,18,.34) 22%,rgba(5,12,18,.88) 100%);pointer-events:none}
 .canvas-wrap>.hud{position:absolute!important;top:7px!important;left:7px!important;right:7px!important;z-index:16!important;display:flex!important;justify-content:flex-start!important;align-items:center!important;gap:10px!important;flex-wrap:nowrap!important;width:auto!important;margin:0!important;padding:5px 8px!important;background:rgba(5,13,20,.88)!important;border:1px solid rgba(150,180,180,.5)!important;border-radius:8px!important;pointer-events:none!important}
@@ -345,6 +345,22 @@ body.hud-editing #hudEditToggle,body.hud-editing #hudEditPanel{touch-action:pan-
  .canvas-wrap>.combat-ui .action-controls button{width:46px!important;height:46px!important;min-width:46px!important;min-height:46px!important;max-width:46px!important;max-height:46px!important;font-size:20px!important}
 }
 
+
+/* HUD Designer v4 runtime: each HUD element is independently positioned */
+.canvas-wrap>.combat-ui{display:block!important;inset:0!important;padding:0!important;pointer-events:none!important}
+.canvas-wrap>.combat-ui>.hud,.canvas-wrap>.combat-ui>.combat-bottom,.canvas-wrap>.combat-ui .mobile-controls,.canvas-wrap>.combat-ui .mobile-controls .controls,.canvas-wrap>.combat-ui .action-controls{display:contents!important}
+.canvas-wrap>.combat-ui .stat{position:absolute;display:flex!important;box-sizing:border-box;align-items:center;justify-content:center;flex-direction:column;gap:2px;min-width:0!important;margin:0!important;padding:4px!important;font-size:10px!important;white-space:nowrap;background:rgba(5,13,20,.86);border:1px solid #78939b;border-radius:10px;pointer-events:none}
+.canvas-wrap>.combat-ui .stat b{display:none!important}
+.canvas-wrap>.combat-ui .stat .bar{display:block!important;width:80%!important;height:5px!important;margin:0!important;border:0!important}
+.canvas-wrap>.combat-ui button{box-sizing:border-box!important;display:grid!important;place-items:center!important;padding:0!important;min-width:0!important;min-height:0!important;line-height:1!important;font-size:22px!important;pointer-events:auto!important;touch-action:manipulation!important}
+.canvas-wrap>.combat-ui #joystick{position:absolute!important;pointer-events:auto!important}
+.canvas-wrap>.combat-ui #joystick .stick{position:absolute}
+.canvas-wrap>.combat-ui #mobileAttack,.canvas-wrap>.combat-ui #autoBtn,.canvas-wrap>.combat-ui #skillBtn,.canvas-wrap>.combat-ui #potionBtn,.canvas-wrap>.combat-ui #mpPotionBtn{border:2px solid #8da9b0!important;box-shadow:0 3px 9px #0008,inset 0 0 0 2px #ffffff12!important;color:#fff!important}
+.canvas-wrap>.combat-ui #autoBtn.active{border-color:#83e5b3!important}
+.canvas-wrap>.combat-ui #chatToggle,.canvas-wrap>.combat-ui #mapBanner{pointer-events:auto!important}
+.canvas-wrap>.combat-ui #mapBanner{display:flex;align-items:center;justify-content:center;text-align:center}
+.canvas-wrap>.combat-ui .menu-bar{display:flex!important;align-items:center;justify-content:center;gap:4px;padding:4px!important}
+
 </style>
 
 </head>
@@ -405,11 +421,11 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
    <div class="combat-ui">
     <div class="hud">
 
-    <div class="stat">❤️ HP <b id="hpText">100/100</b><div class="bar"><div class="fill hp" id="hpBar"></div></div></div>
+    <div class="stat" id="hpStat">❤️ HP <b id="hpText">100/100</b><div class="bar"><div class="fill hp" id="hpBar"></div></div></div>
 
-    <div class="stat">💧 MP <b id="mpText">40/40</b><div class="bar"><div class="fill mp" id="mpBar"></div></div></div>
+    <div class="stat" id="mpStat">💧 MP <b id="mpText">40/40</b><div class="bar"><div class="fill mp" id="mpBar"></div></div></div>
 
-    <div class="stat">⭐ EXP <b id="xpText">0/50</b><div class="bar"><div class="fill xp" id="xpBar"></div></div></div>
+    <div class="stat" id="xpStat">⭐ EXP <b id="xpText">0/50</b><div class="bar"><div class="fill xp" id="xpBar"></div></div></div>
 
    </div>
     <div class="combat-bottom">
@@ -531,59 +547,50 @@ const $=id=>document.getElementById(id);
 
 const HUD_LAYOUT_KEY='afkHudLayoutV1';
 const HUD_DEFAULTS={
- hud:{"x":49.64102720602965,"y":76.1547636422254,"scale":100,"opacity":100,"visible":true},
- joystick:{"x":12,"y":86,"scale":100,"opacity":100,"visible":true},
- mobileAttack:{"x":89,"y":68,"scale":100,"opacity":100,"visible":true},
- actionControls:{"x":82,"y":86,"scale":100,"opacity":100,"visible":true},
- menuBar:{"x":47.17949500450721,"y":4.153897204038369,"scale":100,"opacity":100,"visible":true},
- chatToggle:{"x":90.05129300631009,"y":4.5000543243252284,"scale":100,"opacity":100,"visible":true},
- mapBanner:{"x":11.897442157451923,"y":10.615512005018383,"scale":100,"opacity":100,"visible":true},
+ hpStat:{x:18,y:5,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ mpStat:{x:50,y:5,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ xpStat:{x:82,y:5,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ joystick:{x:14,y:84,width:72,height:72,scale:100,opacity:100,visible:true,shape:'circle',color:'#17303b'},
+ mobileAttack:{x:88,y:68,width:64,height:64,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ autoBtn:{x:72,y:84,width:50,height:50,scale:100,opacity:100,visible:true,shape:'circle',color:'#245b42'},
+ skillBtn:{x:84,y:84,width:50,height:50,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ potionBtn:{x:72,y:94,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ mpPotionBtn:{x:84,y:94,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ chatToggle:{x:92,y:10,width:52,height:52,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ mapBanner:{x:50,y:15,width:190,height:48,scale:100,opacity:100,visible:true,shape:'rounded',color:'#dfc080'},
+ menuBar:{x:50,y:5,width:380,height:48,scale:100,opacity:100,visible:true,shape:'rounded',color:'#203541'}
 };
-let hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS)),hudEditing=false,hudDrag=null,hudSelected='joystick';
 const hudTargets={
- hud:()=>document.querySelector('.combat-ui>.hud'),
- joystick:()=>$('joystick'),
- mobileAttack:()=>$('mobileAttack'),
- actionControls:()=>document.querySelector('.combat-ui>.combat-bottom>.action-controls'),
- chatToggle:()=>$('chatToggle'),
- mapBanner:()=>$('mapBanner'),
- menuBar:()=>document.querySelector('.menu-bar')
+ hpStat:()=>$('hpStat'),mpStat:()=>$('mpStat'),xpStat:()=>$('xpStat'),
+ joystick:()=>$('joystick'),mobileAttack:()=>$('mobileAttack'),autoBtn:()=>$('autoBtn'),
+ skillBtn:()=>$('skillBtn'),potionBtn:()=>$('potionBtn'),mpPotionBtn:()=>$('mpPotionBtn'),
+ chatToggle:()=>$('chatToggle'),mapBanner:()=>$('mapBanner'),menuBar:()=>document.querySelector('.menu-bar')
 };
-function loadHudLayout(){try{const v=JSON.parse(localStorage.getItem(HUD_LAYOUT_KEY)||'null');if(v&&v.version===3&&v.items)for(const k of Object.keys(HUD_DEFAULTS))if(v.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};}catch(e){console.warn('HUD layout load:',e);}applyHudLayout();}
+let hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS));
+function loadHudLayout(){try{const v=JSON.parse(localStorage.getItem(HUD_LAYOUT_KEY)||'null');if(v&&v.version===4&&v.items)for(const k of Object.keys(HUD_DEFAULTS))if(v.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};}catch(e){console.warn('HUD layout load:',e);}applyHudLayout();}
 function applyHudLayout(){
- for(const [k,get] of Object.entries(hudTargets)){const el=get(),v=hudLayout[k];if(!el||!v)continue;
-  const isMenu=k==='menuBar';const base=isMenu?document.querySelector('.gamebox'):document.querySelector('.canvas-wrap');
-  if(!base)continue;
+ const canvas=document.querySelector('.canvas-wrap'),gamebox=document.querySelector('.gamebox');
+ const hud=document.querySelector('.combat-ui>.hud'),bottom=document.querySelector('.combat-ui>.combat-bottom');
+ if(hud)hud.style.display='contents';
+ if(bottom)bottom.style.display='contents';
+ document.querySelectorAll('.combat-ui .mobile-controls,.combat-ui .mobile-controls .controls,.combat-ui .action-controls').forEach(el=>el.style.display='contents');
+ for(const [k,get] of Object.entries(hudTargets)){
+  const el=get(),v=hudLayout[k];if(!el||!v)continue;
+  const base=k==='menuBar'?gamebox:canvas;if(!base)continue;
   el.style.position='absolute';el.style.left=v.x+'%';el.style.top=v.y+'%';el.style.right='auto';el.style.bottom='auto';
-  el.style.transform='translate(-50%,-50%) scale('+(v.scale/100)+')';el.style.transformOrigin='center center';el.style.opacity=String(v.opacity/100);
-  el.style.display=v.visible?'':'none';el.style.zIndex=k==='hud'?'18':'20';
+  el.style.width=v.width+'px';el.style.height=v.height+'px';
+  el.style.minWidth='0';el.style.minHeight='0';el.style.maxWidth='none';el.style.maxHeight='none';
+  el.style.transform='translate(-50%,-50%) scale('+(v.scale/100)+')';el.style.transformOrigin='center center';
+  el.style.opacity=String(v.opacity/100);el.style.display=v.visible?'':'none';
+  el.style.borderRadius=v.shape==='circle'?'50%':v.shape==='square'?'0':v.shape==='pill'?'999px':'10px';
+  if(v.color)el.style.backgroundColor=v.color;
+  el.style.zIndex=k==='menuBar'?'25':'20';
  }
 }
-function saveHudLayout(){localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:3,items:hudLayout}));applyHudLayout();}
+function saveHudLayout(){localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:4,items:hudLayout}));applyHudLayout();}
 function setupHudDesigner(){
- const toggle=$('hudEditToggle'),panel=$('hudEditPanel'),select=$('hudEditSelect'),scale=$('hudEditScale'),opacity=$('hudEditOpacity'),visible=$('hudEditVisible');
- if(!toggle||!panel)return;
- const labels={hud:'HP / MP / EXP',joystick:'Joystick',mobileAttack:'Nút đánh',actionControls:'AUTO / kỹ năng / thuốc',chatToggle:'Nút chat',mapBanner:'Tên bản đồ',menuBar:'Thanh menu'};
- function refresh(){const v=hudLayout[hudSelected];select.value=hudSelected;scale.value=v.scale;opacity.value=v.opacity;visible.checked=v.visible;$('hudEditScaleValue').textContent=v.scale+'%';$('hudEditOpacityValue').textContent=v.opacity+'%';}
- function setEditing(on){hudEditing=on;document.body.classList.toggle('hud-editing',on);panel.hidden=!on;toggle.textContent=on?'✓ XONG':'✥ SỬA HUD';if(on)refresh();else{saveHudLayout();hudDrag=null;}}
- toggle.addEventListener('click',()=>setEditing(!hudEditing));
- select.addEventListener('change',()=>{hudSelected=select.value;refresh();});
- scale.addEventListener('input',()=>{hudLayout[hudSelected].scale=+scale.value;refresh();applyHudLayout();});
- opacity.addEventListener('input',()=>{hudLayout[hudSelected].opacity=+opacity.value;refresh();applyHudLayout();});
- visible.addEventListener('change',()=>{hudLayout[hudSelected].visible=visible.checked;applyHudLayout();});
- $('hudEditSave').addEventListener('click',()=>{saveHudLayout();setEditing(false);});
- $('hudEditReset').addEventListener('click',()=>{hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS));saveHudLayout();refresh();});
- $('hudEditOpenFull').addEventListener('click',()=>{window.open('ui-editor.html','_blank','noopener');});
- for(const [k,get] of Object.entries(hudTargets)){const el=get();if(!el)continue;
-  el.dataset.hudKey=k;
-  el.addEventListener('pointerdown',e=>{if(!hudEditing)return;e.preventDefault();e.stopImmediatePropagation();hudSelected=k;refresh();hudDrag={key:k,id:e.pointerId};if(el.setPointerCapture)try{el.setPointerCapture(e.pointerId);}catch{}},{capture:true});
- }
- document.addEventListener('pointermove',e=>{if(!hudEditing||!hudDrag||hudDrag.id!==e.pointerId)return;e.preventDefault();const k=hudDrag.key,isMenu=k==='menuBar',base=isMenu?document.querySelector('.gamebox'):document.querySelector('.canvas-wrap');if(!base)return;const r=base.getBoundingClientRect(),v=hudLayout[k];v.x=Math.max(2,Math.min(98,(e.clientX-r.left)/r.width*100));v.y=Math.max(2,Math.min(98,(e.clientY-r.top)/r.height*100));applyHudLayout();},{capture:true,passive:false});
- const end=e=>{if(hudDrag&&(!e.pointerId||hudDrag.id===e.pointerId))hudDrag=null;};
- document.addEventListener('pointerup',end,true);document.addEventListener('pointercancel',end,true);
  loadHudLayout();
- window.addEventListener('storage',e=>{if(e.key===HUD_LAYOUT_KEY){try{const v=JSON.parse(e.newValue||'null');if(v&&v.version===3){for(const k of Object.keys(HUD_DEFAULTS))if(v.items?.[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};applyHudLayout();}}catch(err){console.warn('HUD sync:',err);}}});
- document.addEventListener('click',e=>{if(hudEditing&&e.target.closest('[data-hud-key]')){e.preventDefault();e.stopImmediatePropagation();}},true);
+ window.addEventListener('storage',e=>{if(e.key===HUD_LAYOUT_KEY){try{const v=JSON.parse(e.newValue||'null');if(v&&v.version===4){for(const k of Object.keys(HUD_DEFAULTS))if(v.items?.[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};applyHudLayout();}}catch(err){console.warn('HUD sync:',err);}}});
 }
 
 // Đưa modal ra khỏi gamebox để không bị bảng menu che do stacking context.
