@@ -118,41 +118,28 @@ canvas{width:auto;height:100%;max-width:100%;object-fit:contain;touch-action:man
 html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%;width:100%}body{position:fixed;inset:0}.wrap{height:100dvh;overflow:hidden;overscroll-behavior:none}.canvas-wrap,.gamebox,.mobile-controls,.controls,.menu-bar,.joystick,canvas{touch-action:none;overscroll-behavior:none}.side.open{overflow-y:auto;touch-action:pan-y}
 @media(max-width:520px){.wrap{padding:calc(4px + env(safe-area-inset-top)) 5px calc(4px + env(safe-area-inset-bottom));display:flex;flex-direction:column;height:100dvh;min-height:0}.top{margin-bottom:3px;flex:none}.logo{font-size:16px}.sub{font-size:9px}.menu-bar{gap:4px;margin-bottom:4px;flex:none}.menu-bar button{padding:4px 2px;min-width:0;font-size:21px}.layout{flex:1;min-height:0}.gamebox{padding:4px;gap:3px}.canvas-wrap{height:auto;min-height:130px;max-height:40dvh;flex:1}.hud{padding:3px 1px;gap:3px;flex:none}.stat{font-size:9px}.bar{width:68px;height:6px}.mobile-controls{margin-top:2px;gap:5px;flex:none}.joystick{width:76px;height:76px;flex-basis:76px}.stick{width:36px;height:36px;left:18px;top:18px}.controls{gap:4px;flex:none}.controls button{flex:1;padding:5px 3px;font-size:10px}.side.open{left:6px;right:6px;top:max(6%,env(safe-area-inset-top));max-height:86dvh;padding:8px}.panel{padding:7px}.footer{display:none}}
 
-/* Thế Giới Hắc Ám: touch UI polish */
-*,*::before,*::after{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-input,textarea,select{ -webkit-user-select:text; user-select:text; }
-button,.menu-bar,.controls,.mobile-controls,.joystick,canvas{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-.gamebox{min-height:0;flex:1}
-.menu-bar{width:100%;flex:none;margin:0 0 5px}
-.canvas-wrap{max-height:none;min-height:0;flex:1}
-canvas{max-height:100%;max-width:100%;width:auto;height:100%;object-fit:contain}
-@media(max-width:520px){
- .gamebox{height:100%;min-height:0}
- .canvas-wrap{max-height:none;min-height:0;flex:1}
- .menu-bar{margin:0 0 3px}
-}
 
-
-html,body{width:100%;height:100%;margin:0;overflow:hidden}
-.wrap{width:100%;height:100dvh;max-width:none;padding:0;margin:0;display:block}
+/* Stable responsive game layout: restore flex-based canvas flow */
+html,body{width:100%;height:100%;margin:0;overflow:hidden;overscroll-behavior:none;touch-action:manipulation}
+body{position:fixed;inset:0}
+.wrap{width:100%;height:100dvh;max-width:none;margin:0;padding:calc(4px + env(safe-area-inset-top)) 5px calc(4px + env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden}
 .top,.footer{display:none!important}
-.layout{display:block!important;width:100%;height:100dvh;margin:0;padding:0}
-.gamebox{position:fixed;inset:0;width:100vw;height:100dvh;min-height:0;padding:0!important;margin:0;border:0;border-radius:0;overflow:hidden;display:block;background:#101820;z-index:1}
-.canvas-wrap{position:absolute;inset:0;width:100%;height:100%;max-height:none;min-height:0;border:0;border-radius:0;display:block;overflow:hidden}
-canvas{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;object-fit:fill}
-.menu-bar{position:absolute;z-index:12;top:calc(env(safe-area-inset-top) + 5px);left:8px;right:8px;width:auto;margin:0;display:flex;gap:5px}
-.menu-bar button{min-width:0;padding:7px 3px;font-size:20px;flex:1;background:#172a35dd}
-.hud{position:absolute;z-index:11;top:calc(env(safe-area-inset-top) + 52px);left:8px;right:8px;padding:4px 7px;background:#08131bbd;border:1px solid #597078;border-radius:8px;justify-content:space-around;pointer-events:none}
-.stat{font-size:10px}.bar{width:clamp(48px,16vw,100px);height:6px}
-.mobile-controls{display:flex!important;position:absolute;z-index:13;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 12px);margin:0;align-items:flex-end;pointer-events:none}
-.joystick,.controls button{pointer-events:auto}
-.joystick{width:94px;height:94px;flex-basis:94px;background:#142a35d9}
-.stick{width:42px;height:42px;left:24px;top:24px}
-.mobile-controls .controls{margin-left:auto;display:grid;grid-template-columns:repeat(2,minmax(58px,auto));gap:7px}
-.mobile-controls .controls button{min-height:44px;font-size:13px;padding:8px}
-.action-controls{position:absolute;z-index:13;right:12px;bottom:calc(env(safe-area-inset-bottom) + 122px);display:flex;gap:6px;flex-wrap:wrap;max-width:58%;justify-content:flex-end}
-.action-controls button{font-size:11px;padding:7px 8px;background:#172a35e8}
-.side.open{position:fixed;z-index:30;left:8px;right:8px;top:calc(env(safe-area-inset-top) + 58px);max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 75px);overflow:auto;display:flex;flex-direction:column}
+.layout{display:flex!important;flex:1;min-height:0;width:100%;margin:0;gap:0}
+.gamebox{position:relative!important;inset:auto!important;z-index:1;width:100%;height:100%;min-height:0;flex:1;padding:4px!important;margin:0;border:0;border-radius:0;overflow:hidden;display:flex!important;flex-direction:column;gap:5px;background:#101820}
+.menu-bar{position:relative!important;inset:auto!important;z-index:12;display:flex;flex:none;width:100%;gap:4px;margin:0 0 2px;padding:0}
+.menu-bar button{flex:1;min-width:0;padding:6px 2px;font-size:clamp(17px,4.8vw,22px);line-height:1.2}
+.canvas-wrap{position:relative!important;inset:auto!important;z-index:0;display:flex;flex:1 1 0;min-width:0;min-height:110px;width:100%;height:auto;max-height:none;align-items:center;justify-content:center;overflow:hidden;border:1px solid #526c69;border-radius:6px;background:#182b2c}
+canvas#game{position:relative!important;inset:auto!important;display:block;width:auto!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain;z-index:auto!important;pointer-events:auto!important;touch-action:none}
+.hud{position:relative!important;inset:auto!important;z-index:2;display:flex;flex:none;width:100%;justify-content:space-around;gap:4px;margin:0;padding:4px 2px;background:#08131bbd;border:1px solid #597078;border-radius:8px;pointer-events:none}
+.stat{font-size:clamp(9px,2.6vw,12px)}.bar{width:clamp(45px,16vw,90px);height:6px}
+.mobile-controls{position:relative!important;inset:auto!important;z-index:13;display:flex!important;flex:none;width:100%;justify-content:space-between;align-items:center;gap:8px;margin:0;padding:2px 4px;pointer-events:auto}
+.joystick{width:78px;height:78px;flex:0 0 78px;touch-action:none}
+.stick{width:36px;height:36px;left:19px;top:19px;pointer-events:none}
+.mobile-controls .controls{display:flex;flex:1;justify-content:flex-end;gap:6px}
+.mobile-controls .controls button{min-height:46px;min-width:88px;padding:7px;font-size:12px;touch-action:manipulation}
+.action-controls{position:relative!important;inset:auto!important;z-index:13;display:flex;flex:none;justify-content:center;align-items:center;flex-wrap:nowrap;gap:6px;width:100%;max-width:none;margin:0;padding:0}
+.action-controls button{flex:1;min-width:0;min-height:43px;padding:6px 3px;font-size:clamp(10px,2.8vw,13px);white-space:normal;touch-action:manipulation}
+.side.open{position:fixed;z-index:30;left:8px;right:8px;top:calc(env(safe-area-inset-top) + 8px);max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px);overflow:auto;display:flex;flex-direction:column}
 .item-modal{display:none;position:fixed;inset:0;z-index:50;background:#02080ddd;align-items:center;justify-content:center;padding:18px}
 .item-modal.show{display:flex}
 .item-modal-card{position:relative;width:min(100%,360px);max-height:82dvh;overflow:auto;padding:20px;background:linear-gradient(180deg,#263c4b,#101e28);border:2px solid #718a91;border-radius:14px;text-align:center}
@@ -163,32 +150,17 @@ canvas{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-heigh
 .item-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:14px}
 .inventory-entry{display:grid;grid-template-columns:1fr auto;gap:5px;align-items:center}
 .inventory-entry button{grid-column:1/-1}
-@media(max-width:520px){.menu-bar button{font-size:18px;padding:6px 1px}.hud{top:calc(env(safe-area-inset-top) + 47px)}.mobile-controls{bottom:calc(env(safe-area-inset-bottom) + 9px)}.joystick{width:82px;height:82px;flex-basis:82px}.stick{width:38px;height:38px;left:20px;top:20px}.action-controls{bottom:calc(env(safe-area-inset-bottom) + 104px);right:10px;max-width:64%}}
-
-
-/* iOS Safari: prevent double-tap page zoom and text selection */
-html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;overscroll-behavior:none}
-body,button,.menu-bar,.hud,.controls,.mobile-controls,.gamebox,.canvas-wrap,canvas,.overlay,.modal{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-button,.menu-bar button,.controls button{touch-action:manipulation}
-.joystick,.canvas-wrap,canvas{touch-action:none}
-.overlay{z-index:25;pointer-events:auto}
-.overlay .modal{position:relative;z-index:26;pointer-events:auto}
-#startBtn{position:relative;z-index:27;min-height:48px;touch-action:manipulation}
-
-/* Keep the game canvas visible and paintable on mobile Safari */
-.gamebox{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;overflow:hidden!important}
-.canvas-wrap{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;background:#477d52!important;border:0!important;border-radius:0!important;overflow:hidden!important}
-canvas#game{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:fill!important;z-index:1!important}
-
-
-/* iPhone Safari interaction and canvas stacking fix */
-html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;overscroll-behavior:none}
-body,button,canvas,.menu-bar,.hud,.mobile-controls,.controls,.joystick{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
-button{touch-action:manipulation!important}
-.canvas-wrap{background:#182b2c!important}
-canvas#game{z-index:0!important;pointer-events:none!important}
-.menu-bar,.hud,.mobile-controls,.action-controls{z-index:20!important}
-.joystick,.controls button{pointer-events:auto!important}
+*,*::before,*::after{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,select{-webkit-user-select:text;user-select:text}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+@media(max-width:520px){
+ .wrap{padding:calc(4px + env(safe-area-inset-top)) 4px calc(4px + env(safe-area-inset-bottom))}
+ .gamebox{gap:4px}.menu-bar button{font-size:18px;padding:5px 1px}
+ .canvas-wrap{min-height:100px}.mobile-controls{gap:4px;padding:1px 2px}
+ .joystick{width:72px;height:72px;flex-basis:72px}.stick{width:34px;height:34px;left:18px;top:18px}
+ .mobile-controls .controls button{min-width:76px;min-height:42px;font-size:11px}
+ .action-controls{gap:4px}.action-controls button{min-height:40px;padding:5px 2px;font-size:10px}
+}
 
 </style>
 
@@ -974,8 +946,6 @@ document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('clic
  if(!side.querySelector('.menu-close')){const close=document.createElement('button');close.className='menu-close';close.textContent='✕ ĐÓNG';close.onclick=()=>side.classList.remove('open');side.prepend(close);}
 }));
 window.addEventListener('beforeunload',save);
-let lastTouchEnd=0;
-document.addEventListener('touchend',function(e){const now=Date.now();if(now-lastTouchEnd<=350){e.preventDefault();}lastTouchEnd=now;},{passive:false});
 document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
 
 initSettings();
