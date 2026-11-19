@@ -170,6 +170,10 @@ input,textarea,select{-webkit-user-select:text;user-select:text;-webkit-touch-ca
  .action-controls{gap:4px}.action-controls button{min-height:40px;padding:5px 2px;font-size:10px}
 }
 
+
+.reward-toast{position:absolute;z-index:56;top:13%;left:50%;transform:translate(-50%,-8px);width:max-content;max-width:88%;padding:11px 16px;border:2px solid #f3cf72;border-radius:10px;background:linear-gradient(135deg,#35230cF2,#171d28F2);box-shadow:0 5px 22px #000b;color:#ffe8a6;text-align:center;font:bold 13px monospace;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s ease,transform .18s ease}
+.reward-toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+
 </style>
 
 </head>
@@ -203,6 +207,7 @@ input,textarea,select{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     <button id="chatToggle" class="chat-toggle" aria-label="Mở chat" title="Chat">💬</button>
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
+    <div id="rewardToast" class="reward-toast" role="status" aria-live="assertive"></div>
     <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.3</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
@@ -482,6 +487,8 @@ function selectMap(i){
  save();
 
 }
+
+function showRewardToast(message){const el=$('rewardToast');if(!el)return;el.textContent=message;el.classList.add('show');clearTimeout(showRewardToast.timer);showRewardToast.timer=setTimeout(()=>el.classList.remove('show'),2600);}
 
 function log(s){
 
@@ -925,13 +932,18 @@ window.addEventListener('keyup',e=>keys[e.code]=false);
 
 $('blacksmithClose').onclick=()=> $('blacksmithModal').classList.remove('show');$('classClose').onclick=()=> $('classModal').classList.remove('show');$('itemModalClose').onclick=()=>{$('itemModal').classList.remove('show');$('itemModal').dataset.equippedSlot='';['itemEquipBtn','itemSellBtn','itemDropBtn','itemLockBtn'].forEach(id=>$(id).style.display='');};$('characterNameInput').addEventListener('input',e=>{settings.playerName=(e.target.value||'').slice(0,18);localStorage.setItem('afkSettings',JSON.stringify(settings));save();});$('characterNameInput').addEventListener('change',e=>{settings.playerName=(e.target.value||'Wanderer').trim().slice(0,18)||'Wanderer';saveSettings();save();ui();});
 $('mpPotionBtn').onclick=drinkMp;$('itemModalClose').onclick=()=>{$('itemModal').classList.remove('show');$('itemModal').dataset.equippedSlot='';['itemEquipBtn','itemSellBtn','itemDropBtn','itemLockBtn'].forEach(id=>$(id).style.display='');};
+let lastAdminGrantAt=0;
 function runHiddenChatCommand(raw){
  const command=raw.trim().toLowerCase().replace(/\s+/g,' ');
  if(command!=='give admini itms 1 test true')return false;
+ const now=Date.now();
+ if(now-lastAdminGrantAt<1500){showRewardToast('⏳ Lệnh vừa được thực hiện!');return true;}
+ lastAdminGrantAt=now;
  const lv=Math.max(1,state.level||1),stats={atk:lv*2+8,atkPct:2+Math.floor(lv/12),crit:1+lv*.015,critDamage:5,attackSpeed:.04};
  const item={slot:'main',type:'Kiếm',name:'Kiếm Huyền thoại',rarity:'Huyền thoại',rarityLines:5,primaryKeys:['atk','atkPct'],secondaryKeys:['crit','critDamage','attackSpeed'],silverValue:Math.max(5,600+lv*2),subtitle:'Thanh kiếm được ban tặng bởi quyền năng bí ẩn.',locked:false,stats};
  state.inventory.push(item);renderCharacter();save();ui();
  log('⚙ Lệnh admin thành công: đã nhận 1 '+item.name+'.');
+ showRewardToast('🎁 ĐÃ NHẬN: KIẾM HUYỀN THOẠI!');
  state.chatBubble='Đã nhận Kiếm Huyền thoại!';state.chatBubbleUntil=Date.now()+5000;
  return true;
 }
