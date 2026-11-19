@@ -176,6 +176,40 @@ input,textarea,select{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 .reward-toast{position:absolute;z-index:56;top:13%;left:50%;transform:translate(-50%,-8px);width:max-content;max-width:88%;padding:11px 16px;border:2px solid #f3cf72;border-radius:10px;background:linear-gradient(135deg,#35230cF2,#171d28F2);box-shadow:0 5px 22px #000b;color:#ffe8a6;text-align:center;font:bold 13px monospace;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s ease,transform .18s ease}
 .reward-toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
 
+
+/* Overlay HUD: controls float above the battlefield */
+.gamebox{position:relative!important;overflow:hidden!important;isolation:isolate}
+.canvas-wrap{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-height:none!important;min-height:0!important;flex:none!important;z-index:0!important;border:0!important;border-radius:0!important;background:#182b2c}
+canvas#game{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important}
+.menu-bar{position:absolute!important;top:8px!important;left:8px!important;right:8px!important;width:auto!important;z-index:16!important;margin:0!important;padding:0!important;pointer-events:none}
+.menu-bar button{pointer-events:auto;min-height:42px;background:#1a2b36df;backdrop-filter:blur(5px);box-shadow:0 2px 8px #0007}
+.hud{position:absolute!important;left:8px!important;right:8px!important;bottom:108px!important;width:auto!important;z-index:14!important;margin:0!important;padding:7px 5px!important;background:#08131bdc!important;backdrop-filter:blur(5px);box-shadow:0 3px 12px #0008;pointer-events:none}
+.mobile-controls{position:absolute!important;left:8px!important;right:8px!important;bottom:58px!important;width:auto!important;z-index:15!important;margin:0!important;padding:0!important;pointer-events:none}
+.mobile-controls .joystick,.mobile-controls .controls{pointer-events:auto}
+.mobile-controls .controls{justify-content:flex-end!important}
+.mobile-controls .controls button{min-width:82px!important;min-height:48px!important;background:#263e4beF;box-shadow:0 2px 8px #0008}
+.action-controls{position:absolute!important;left:8px!important;right:8px!important;bottom:7px!important;width:auto!important;max-width:none!important;z-index:16!important;margin:0!important;padding:0!important;gap:5px!important}
+.action-controls button{min-height:43px!important;background:#263e4beF;backdrop-filter:blur(5px);box-shadow:0 2px 8px #0008}
+.chat-toggle{top:58px!important;right:10px!important}
+.chat-panel{top:102px!important;right:10px!important}
+.map-banner{top:58px!important}
+.game-version{left:8px!important;right:auto!important;bottom:55px!important;z-index:12!important}
+@media(max-width:520px){
+ .menu-bar{top:calc(6px + env(safe-area-inset-top))!important;left:5px!important;right:5px!important}
+ .menu-bar button{min-height:36px!important;font-size:17px!important;padding:4px 1px!important}
+ .hud{left:5px!important;right:5px!important;bottom:103px!important;padding:5px 2px!important}
+ .mobile-controls{left:6px!important;right:6px!important;bottom:55px!important}
+ .joystick{width:68px!important;height:68px!important;flex-basis:68px!important}
+ .stick{width:32px!important;height:32px!important;left:16px!important;top:16px!important}
+ .mobile-controls .controls button{min-width:72px!important;min-height:43px!important;font-size:11px!important}
+ .action-controls{left:5px!important;right:5px!important;bottom:calc(5px + env(safe-area-inset-bottom))!important;gap:3px!important}
+ .action-controls button{min-height:39px!important;padding:4px 2px!important;font-size:10px!important}
+ .chat-toggle{top:49px!important;right:7px!important}
+ .chat-panel{top:92px!important;right:7px!important}
+ .map-banner{top:49px!important}
+ .game-version{bottom:52px!important;left:7px!important}
+}
+
 </style>
 
 </head>
