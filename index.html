@@ -1240,7 +1240,7 @@ window.addEventListener('keydown',e=>{
 window.addEventListener('keyup',e=>keys[e.code]=false);
 
 $('blacksmithClose').onclick=()=> $('blacksmithModal').classList.remove('show');$('classClose').onclick=()=> $('classModal').classList.remove('show');$('itemModalClose').onclick=()=>{$('itemModal').classList.remove('show');$('itemModal').dataset.equippedSlot='';['itemEquipBtn','itemDropBtn','itemLockBtn'].forEach(id=>$(id).style.display='');};$('characterNameInput').addEventListener('input',e=>{settings.playerName=(e.target.value||'').slice(0,18);localStorage.setItem('afkSettings',JSON.stringify(settings));save();});$('characterNameInput').addEventListener('change',e=>{settings.playerName=(e.target.value||'Wanderer').trim().slice(0,18)||'Wanderer';saveSettings();save();ui();});
-$('mpPotionBtn').onclick=drinkMp;$('itemModalClose').onclick=()=>{$('itemModal').classList.remove('show');$('itemModal').dataset.equippedSlot='';['itemEquipBtn','itemDropBtn','itemLockBtn'].forEach(id=>$(id).style.display='');};
+bindGameControl('mpPotionBtn',drinkMp);$('itemModalClose').onclick=()=>{$('itemModal').classList.remove('show');$('itemModal').dataset.equippedSlot='';['itemEquipBtn','itemDropBtn','itemLockBtn'].forEach(id=>$(id).style.display='');};
 let lastAdminGrantAt=0;
 function runHiddenChatCommand(raw){
  const command=raw.trim().toLowerCase().replace(/\s+/g,' ');
