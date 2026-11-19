@@ -188,7 +188,7 @@ input,textarea,select{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 
    <div class="logo">✦ THẾ GIỚI HẮC ÁM</div>
 
-   <div class="sub">Pixel RPG • Iron Sword Update v1.2.7</div>
+   <div class="sub">Pixel RPG • Economy, Inventory & 10 Maps Update v1.2.8</div>
 
   </div>
 
@@ -258,9 +258,9 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
 
    </div>
 
-   <div class="item-modal" id="itemModal"><div class="item-modal-card"><button class="modal-close" id="itemModalClose">✕</button><div id="itemDetail"></div><div class="item-actions"><button id="itemEquipBtn">Trang bị</button><button id="itemSellBtn">Bán</button><button id="itemDropBtn">Vứt bỏ</button><button id="itemLockBtn">Khoá</button></div></div></div>
+   <div class="item-modal" id="itemModal"><div class="item-modal-card"><button class="modal-close" id="itemModalClose">✕</button><div id="itemDetail"></div><div class="item-actions"><button id="itemEquipBtn">Trang bị</button><button id="itemDropBtn">Vứt bỏ</button><button id="itemLockBtn">Khoá</button></div></div></div>
   <div class="blacksmith-modal" id="blacksmithModal"><div class="blacksmith-card"><button class="modal-close" id="blacksmithClose">✕</button><h3>⚒️ Lò rèn Aborne</h3><p style="font-size:11px;color:#c8d8d5">Chọn trang bị để làm mới toàn bộ dòng chỉ số phụ. Chỉ số chính được giữ nguyên.</p><div id="blacksmithList"></div></div></div>
-  <div class="town-shop-modal" id="townShopModal"><div class="town-shop-card"><button class="modal-close" id="townShopClose">✕</button><h3>🛒 Cửa hàng Aborne</h3><p>Thương nhân cung cấp vật phẩm hồi phục cho chuyến phiêu lưu.</p><div class="town-shop-actions"><button id="townShopHp">🧪 Mua Potion HP — 15 vàng</button><button id="townShopMp">💧 Mua Potion MP — 12 vàng</button><button id="townShopIronSword">⚔️ Mua Kiếm Sắt — 500 vàng</button></div></div></div><div class="dialog-modal" id="npcDialog"><div class="dialog-card"><div class="dialog-portrait" id="npcPortrait">🧙</div><h3 id="npcTitle">NPC</h3><p id="npcLine"></p><div class="dialog-actions" id="npcChoices"></div></div></div><div class="class-modal" id="classModal"><div class="class-card"><button class="modal-close" id="classClose">✕</button><h3>⚔️ Chọn class nhân vật</h3><p style="font-size:11px;color:#c8d8d5">Có thể đổi class miễn phí tại Syrupp ở thị trấn Aborne.</p><div class="class-options" id="classOptions"></div></div></div>
+  <div class="town-shop-modal" id="townShopModal"><div class="town-shop-card"><button class="modal-close" id="townShopClose">✕</button><h3>🛒 Cửa hàng của Pelio</h3><p>Chọn danh mục giao dịch.</p><div class="shop-tabs"><button data-shop-tab="potions" class="active">Mua dược phẩm</button><button data-shop-tab="gear">Mua trang bị</button><button data-shop-tab="sell">Bán đồ</button></div><section class="shop-section" id="shopPotions"><h4>🧪 Dược phẩm</h4><div class="town-shop-actions"><button id="townShopHp">🧪 Mua Potion HP — 15 vàng</button><button id="townShopMp">💧 Mua Potion MP — 12 vàng</button></div></section><section class="shop-section" id="shopGear" hidden><h4>⚔️ Trang bị</h4><div class="town-shop-actions"><button id="townShopIronSword">⚔️ Kiếm Sắt — 500 vàng</button></div></section><section class="shop-section" id="shopSell" hidden><h4>💰 Bán trang bị</h4><div id="merchantSellList"></div></section></div></div><div class="dialog-modal" id="npcDialog"><div class="dialog-card"><div class="dialog-portrait" id="npcPortrait">🧙</div><h3 id="npcTitle">NPC</h3><p id="npcLine"></p><div class="dialog-actions" id="npcChoices"></div></div></div><div class="class-modal" id="classModal"><div class="class-card"><button class="modal-close" id="classClose">✕</button><h3>⚔️ Chọn class nhân vật</h3><p style="font-size:11px;color:#c8d8d5">Có thể đổi class miễn phí tại Syrupp ở thị trấn Aborne.</p><div class="class-options" id="classOptions"></div></div></div>
 
   </main>
 
@@ -313,7 +313,7 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
 
     <div class="heading">🎒 TÚI ĐỒ</div>
 
-    <div class="grid2"><div class="item"><strong>🧪 Dược phẩm HP</strong><span id="potions">3 bình</span></div><div class="item"><strong>💧 Dược phẩm MP</strong><span id="mpPotions">2 bình</span></div><div class="item"><strong>🪙 Slime Gel</strong><span id="gels">0 cái</span></div><div class="item"><strong>💰 Vàng</strong><span id="bagGold">0 G</span></div></div><div class="row"><span>Bạc</span><b class="value" id="silver">0 B</b></div><div class="heading">🎁 TRANG BỊ TRONG TÚI</div><div id="inventoryList" class="inventory-list"></div>
+    <div class="heading">📦 TÀI NGUYÊN</div><div class="grid2"><div class="item"><strong>🧪 Dược phẩm HP</strong><span id="potions">3 bình</span></div><div class="item"><strong>💧 Dược phẩm MP</strong><span id="mpPotions">2 bình</span></div><div class="item"><strong>💰 Vàng</strong><span id="bagGold">0 vàng</span></div><div class="item"><strong>💎 Đá quý</strong><span id="bagGems">0 viên</span></div></div><div class="heading">🎁 VẬT PHẨM</div><div class="inventory-grid" id="inventoryList"></div><div class="muted" style="font-size:10px;margin-top:6px">Túi chứa tối đa 64 vật phẩm. Chạm vào một ô để xem chi tiết.</div>
 
    </section>
 
@@ -345,26 +345,29 @@ document.body.appendChild($('blacksmithModal'));
 document.body.appendChild($('townShopModal'));
 
 const maps=[
-
 {name:'Đồng cỏ xanh',difficulty:'Dễ',mob:'Slime',hp:32,atk:5,xp:12,gold:4,color:'#477d52',path:'#9b875c',water:'#397c83',boss:'Forest Guardian',bossHp:260,bossAtk:14,bossXp:120,bossGold:80},
-
 {name:'Hang động đá',difficulty:'Trung bình',mob:'Thạch quái',hp:62,atk:10,xp:25,gold:9,color:'#4d5966',path:'#8b8175',water:'#344f67',boss:'Cave Golem',bossHp:520,bossAtk:23,bossXp:260,bossGold:180},
-
-{name:'Thung lũng tro',difficulty:'Khó',mob:'Hỏa linh',hp:105,atk:18,xp:45,gold:17,color:'#704b42',path:'#b17b52',water:'#69434b',boss:'Ash Warden',bossHp:900,bossAtk:36,bossXp:520,bossGold:360}
-
+{name:'Thung lũng tro',difficulty:'Khó',mob:'Hỏa linh',hp:105,atk:18,xp:45,gold:17,color:'#704b42',path:'#b17b52',water:'#69434b',boss:'Ash Warden',bossHp:900,bossAtk:36,bossXp:520,bossGold:360},
+{name:'Map 4',difficulty:'Khó',mob:'Quái vật map 4',hp:160,atk:27,xp:70,gold:28,color:'#53634b',path:'#9b875c',water:'#397c83',boss:'Boss map 4',bossHp:1300,bossAtk:48,bossXp:800,bossGold:520},
+{name:'Map 5',difficulty:'Rất khó',mob:'Quái vật map 5',hp:230,atk:38,xp:100,gold:40,color:'#5d5368',path:'#887c9c',water:'#465a78',boss:'Boss map 5',bossHp:1900,bossAtk:65,bossXp:1100,bossGold:720},
+{name:'Map 6',difficulty:'Rất khó',mob:'Quái vật map 6',hp:320,atk:52,xp:140,gold:55,color:'#6c5147',path:'#a27c5c',water:'#5b4b62',boss:'Boss map 6',bossHp:2700,bossAtk:85,bossXp:1500,bossGold:950},
+{name:'Map 7',difficulty:'Ác mộng',mob:'Quái vật map 7',hp:440,atk:70,xp:190,gold:75,color:'#4d526d',path:'#8b829e',water:'#3d5776',boss:'Boss map 7',bossHp:3700,bossAtk:110,bossXp:2000,bossGold:1250},
+{name:'Map 8',difficulty:'Ác mộng',mob:'Quái vật map 8',hp:600,atk:92,xp:250,gold:100,color:'#694b58',path:'#a17b7e',water:'#57465e',boss:'Boss map 8',bossHp:5000,bossAtk:145,bossXp:2600,bossGold:1600},
+{name:'Map 9',difficulty:'Huyền thoại',mob:'Quái vật map 9',hp:820,atk:120,xp:330,gold:130,color:'#55475c',path:'#9881a5',water:'#4b4c76',boss:'Boss map 9',bossHp:6800,bossAtk:185,bossXp:3400,bossGold:2100},
+{name:'Map 10',difficulty:'Huyền thoại',mob:'Quái vật map 10',hp:1100,atk:155,xp:430,gold:170,color:'#4a3f54',path:'#987c98',water:'#4a4c70',boss:'Boss map 10',bossHp:9000,bossAtk:235,bossXp:4500,bossGold:2800}
 ];
 
 const joystick={x:0,y:0,active:false};
 
 const state={
 
-started:false,paused:false,auto:true,inTown:true,characterClass:'Chiến binh',characterCreated:false,gems:0,mapIndex:0,unlockedMaps:1,progressionVersion:2,silver:0,mapKillCounts:[0,0,0],mapBossesDefeated:[false,false,false],mainQuestIndex:0,mainQuestAccepted:false,mainQuestKills:0,mainQuestOre:0,mainQuestBossDefeated:false,townNpcVisited:[],
+started:false,paused:false,auto:true,inTown:true,characterClass:'Chiến binh',characterCreated:false,gems:0,mapIndex:0,unlockedMaps:1,progressionVersion:2,silver:0,mapKillCounts:Array(10).fill(0),mapBossesDefeated:Array(10).fill(false),mainQuestIndex:0,mainQuestAccepted:false,mainQuestKills:0,mainQuestOre:0,mainQuestBossDefeated:false,townNpcVisited:[],
 
 mapKills:0,respawnTimer:0,level:1,xp:0,nextXp:20,maxLevel:200,
 
 hp:100,maxHp:100,mp:40,maxMp:40,atk:12,def:2,
 
-gold:0,potions:3,mpPotions:2,gels:0,kills:0,earned:0,loot:0,potential:0,baseAtk:12,baseDef:2,baseMaxHp:100,baseMaxMp:40,baseMagic:6,baseMagicArmor:2,baseMoveSpeed:150,potentialStats:{attack:0,defense:0,agility:0,intelligence:0},equipped:{helm:null,armor:null,pants:null,gloves:null,boots:null,main:null,off:null,relic:null},inventory:[],
+gold:0,gems:0,potions:3,mpPotions:2,kills:0,earned:0,loot:0,potential:0,baseAtk:12,baseDef:2,baseMaxHp:100,baseMaxMp:40,baseMagic:6,baseMagicArmor:2,baseMoveSpeed:150,potentialStats:{attack:0,defense:0,agility:0,intelligence:0},equipped:{helm:null,armor:null,pants:null,gloves:null,boots:null,main:null,off:null,relic:null},inventory:[],
 
 elapsed:0,lastSave:Date.now(),lastAttack:0,lastPotion:0,lastSkill:0,
 
@@ -407,11 +410,11 @@ function norm(){state.characterClass=CLASS_DATA.some(c=>c.name===state.character
 function derive(){norm();const p=state.potentialStats,b={atk:0,atkPct:0,magic:0,magicPct:0,hp:0,hpPct:0,mp:0,armor:0,armorPct:0,magicArmor:0,magicArmorPct:0,attackSpeed:0,crit:0,critDamage:0,moveSpeed:0,lifesteal:0,omnivamp:0,range:0};Object.values(state.equipped).forEach(it=>{if(it&&it.stats)Object.keys(b).forEach(k=>b[k]+=Number(it.stats[k])||0)});const oh=state.maxHp,om=state.maxMp;const cls=state.characterClass||'Chiến binh';state.atk=Math.floor((state.baseAtk+p.attack*2+b.atk)*(1+b.atkPct/100)*(cls==='Chiến binh'?1.12:cls==='Sát thủ'?1.04:cls==='Cung thủ'?1.03:1));state.magicDamage=Math.floor((state.baseMagic+p.attack*2+b.magic)*(1+b.magicPct/100)*(cls==='Pháp sư'?1.25:1));state.maxHp=Math.floor((state.baseMaxHp+p.defense*20+b.hp)*(1+b.hpPct/100));state.maxMp=state.baseMaxMp+p.intelligence*2+b.mp;state.def=Math.floor((state.baseDef+p.defense+b.armor)*(1+b.armorPct/100)*(cls==='Chiến binh'?1.12:1));state.magicArmor=Math.floor((state.baseMagicArmor+p.defense+b.magicArmor)*(1+b.magicArmorPct/100));state.attackSpeed=1+p.agility*.003+b.attackSpeed+(cls==='Sát thủ'?.18:cls==='Cung thủ'?.08:0);state.critChance=5+p.agility*.1+b.crit+(cls==='Sát thủ'?8:cls==='Cung thủ'?3:0);state.critDamage=150+b.critDamage;state.moveSpeed=state.baseMoveSpeed+b.moveSpeed;state.lifesteal=b.lifesteal;state.omnivamp=b.omnivamp;state.attackRange=42+b.range+(cls==='Cung thủ'?28:0);state.cooldownReduction=Math.min(.5,p.intelligence*.001);state.hp=Math.min(state.maxHp,state.hp+state.maxHp-oh);state.mp=Math.min(state.maxMp,state.mp+state.maxMp-om);}
 function levelUp(){if(state.level>=200)return false;state.level++;state.baseAtk+=3;state.baseMagic+=3;state.baseMaxHp+=25;state.baseDef+=2;state.baseMagicArmor+=2;state.baseMoveSpeed+=1;state.nextXp=state.level>=200?0:Math.ceil(state.nextXp*1.25);state.potential=(state.potential||0)+5;derive();state.hp=state.maxHp;state.mp=state.maxMp;state.levelUpFx=1.5;log('✨ LÊN CẤP! Bạn đạt Lv.'+state.level+' · +3 sức mạnh công kích, +3 sức mạnh phép thuật, +25 HP, +2 giáp, +2 giáp phép, +1 tốc độ di chuyển');return true;}
 function addExperience(amount){if(state.level>=200)return;state.xp+=amount;while(state.level<200&&state.xp>=state.nextXp){state.xp-=state.nextXp;levelUp();}if(state.level>=200){state.xp=0;state.nextXp=0;}}
-function itemDesc(it){const n={atk:'Sức mạnh công kích',atkPct:'% SMCK',magic:'Sức mạnh phép thuật',magicPct:'% SMPT',hp:'Máu',hpPct:'% Máu',mp:'Mana',armor:'Giáp',armorPct:'% Giáp',magicArmor:'Giáp phép',magicArmorPct:'% Giáp phép',attackSpeed:'Tốc độ đánh',crit:'Tỉ lệ chí mạng',critDamage:'Sát thương chí mạng',moveSpeed:'Tốc độ di chuyển',lifesteal:'Hút máu',omnivamp:'Hút máu toàn phần',range:'Tầm đánh'};return Object.entries(it.stats||{}).filter(([,v])=>Number(v)!==0).map(([k,v])=>(n[k]||k)+' +'+(k==='attackSpeed'?(v*100).toFixed(1):v)+(k.endsWith('Pct')||['crit','critDamage','attackSpeed','lifesteal','omnivamp'].includes(k)?'%':'' )).join(' · ');}
+function itemDesc(it){const n={atk:'Sức mạnh công kích',atkPct:'Sức mạnh công kích',magic:'Sức mạnh phép thuật',magicPct:'Sức mạnh phép thuật',hp:'Máu',hpPct:'Máu',mp:'Mana',armor:'Giáp',armorPct:'Giáp',magicArmor:'Giáp phép',magicArmorPct:'Giáp phép',attackSpeed:'Tốc độ đánh',crit:'Tỉ lệ chí mạng',critDamage:'Sát thương chí mạng',moveSpeed:'Tốc độ di chuyển',lifesteal:'Hút máu',omnivamp:'Hút máu toàn phần',range:'Tầm đánh'};return Object.entries(it.stats||{}).filter(([,v])=>Number(v)!==0).map(([k,v])=>(n[k]||k)+' +'+(k==='attackSpeed'?(v*100).toFixed(1):v)+(k.endsWith('Pct')||['crit','critDamage','attackSpeed','lifesteal','omnivamp','atkPct','magicPct','hpPct','armorPct','magicArmorPct'].includes(k)?'%':'')).join(' | ');}function itemDescHtml(it){return itemDesc(it).split(' | ').join('<br>');}
 let selectedItemIndex=null;
 const RARITY_DATA=[{name:'Thô',color:'#b7c1c8',price:8,lines:1,css:'tho'},{name:'Thường',color:'#78d98a',price:25,lines:2,css:'thuong'},{name:'Hiếm',color:'#55dff0',price:70,lines:3,css:'hiem'},{name:'Sử thi',color:'#c18cff',price:180,lines:4,css:'suthi'},{name:'Huyền thoại',color:'#ffd35d',price:600,lines:5,css:'huyen-thoai'},{name:'Truyền thuyết',color:'#ff626f',price:1800,lines:6,css:'truyen-thuyet'}];
 function rarityInfo(it){let name=it.rarity||'Thô';const old={'Tinh xảo':'Thường','Cổ':'Hiếm','Huyền bí':'Sử thi','Thần thoại':'Truyền thuyết'};name=old[name]||name;const r=RARITY_DATA.find(x=>x.name===name)||RARITY_DATA[0];it.rarity=r.name;return r;}
-function itemPrice(it){return it.silverValue||Math.max(1,Math.floor(rarityInfo(it).price+Object.values(it.stats||{}).reduce((a,v)=>a+Math.abs(Number(v)||0),0)*2));}
+function itemPrice(it){return it.sellValueGold??it.silverValue??Math.max(1,Math.floor(rarityInfo(it).price+Object.values(it.stats||{}).reduce((a,v)=>a+Math.abs(Number(v)||0),0)*2));}
 function openItem(i){$('itemModal').dataset.equippedSlot='';['itemEquipBtn','itemSellBtn','itemDropBtn','itemLockBtn'].forEach(id=>$(id).style.display='');const it=state.inventory[i];if(!it)return;selectedItemIndex=i;const r=rarityInfo(it);$('itemDetail').innerHTML='<div class="item-art">'+(it.image?'<img src="'+it.image+'" alt="'+it.name+'">':'🗡️')+'</div><h3 class="rarity-'+r.css+'">'+it.name+'</h3><b class="rarity-'+r.css+'">'+r.name+'</b><p>Loại: '+(SLOTS.find(s=>s[0]===it.slot)?.[1]||'Trang bị')+'</p><p>Chỉ số cộng thêm: '+itemDesc(it)+'</p><p>Giá bán: '+itemPrice(it)+' bạc</p>'+(it.subtitle&&['Huyền thoại','Truyền thuyết'].includes(r.name)?'<blockquote>'+it.subtitle+'</blockquote>':'')+(it.locked?'<p>🔒 Đang khoá</p>':'');$('itemEquipBtn').disabled=!!it.locked;$('itemSellBtn').disabled=!!it.locked;$('itemDropBtn').disabled=!!it.locked;$('itemLockBtn').textContent=it.locked?'Mở khoá':'Khoá';$('itemModal').classList.add('show');}
 function closeItem(){selectedItemIndex=null;$('itemModal').classList.remove('show');}
 function openEquippedItem(k){$('itemModal').dataset.equippedSlot=k;const it=state.equipped[k];if(!it)return;const r=rarityInfo(it);$('itemDetail').innerHTML='<div class="item-art">'+(it.image?'<img src="'+it.image+'" alt="'+it.name+'">':'🛡️')+'</div><h3 class="rarity-'+r.css+'">'+it.name+'</h3><b class="rarity-'+r.css+'">'+r.name+'</b><p>Vị trí: '+(SLOTS.find(x=>x[0]===k)?.[1]||'Trang bị')+'</p><p>Chỉ số cộng thêm: '+itemDesc(it)+'</p>';$('itemEquipBtn').style.display='none';$('itemSellBtn').style.display='none';$('itemDropBtn').style.display='none';$('itemLockBtn').style.display='none';$('itemModal').classList.add('show');$('itemModal').dataset.equippedSlot=k;}
