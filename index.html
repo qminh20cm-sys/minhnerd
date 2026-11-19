@@ -192,7 +192,6 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 .action-controls button{min-height:43px!important;background:#263e4beF;backdrop-filter:blur(5px);box-shadow:0 2px 8px #0008}
 .chat-toggle{top:58px!important;right:10px!important}
 .chat-panel{top:102px!important;right:10px!important}
-.map-banner{top:58px!important}
 .game-version{left:8px!important;right:auto!important;bottom:55px!important;z-index:12!important}
 @media(max-width:520px){
  .menu-bar{top:calc(6px + env(safe-area-inset-top))!important;left:5px!important;right:5px!important}
@@ -206,7 +205,6 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
  .action-controls button{min-height:39px!important;padding:4px 2px!important;font-size:10px!important}
  .chat-toggle{top:49px!important;right:7px!important}
  .chat-panel{top:92px!important;right:7px!important}
- .map-banner{top:49px!important}
  .game-version{bottom:52px!important;left:7px!important}
 }
 
@@ -313,20 +311,6 @@ html,body{overscroll-behavior-x:none!important}
 
 
 /* AFK HUD Designer */
-#hudEditToggle{position:absolute!important;top:8px!important;right:8px!important;z-index:80!important;padding:6px 9px!important;font-size:10px!important;background:#263944!important;border:1px solid #d7b66c!important;color:#ffe4a5!important;border-radius:8px!important;pointer-events:auto!important}
-#hudEditPanel{position:absolute!important;top:42px!important;right:8px!important;z-index:81!important;width:min(245px,72vw)!important;padding:10px!important;background:#101b23f2!important;border:1px solid #c4a16b!important;border-radius:10px!important;color:#fff!important;font:12px system-ui!important;box-shadow:0 8px 25px #0009!important;pointer-events:auto!important}
-#hudEditPanel[hidden]{display:none!important}
-#hudEditPanel strong{display:block;color:#ffe0a0;margin-bottom:8px}
-#hudEditPanel select,#hudEditPanel input[type=range]{width:100%;margin:5px 0 8px}
-#hudEditPanel label{display:flex;justify-content:space-between;align-items:center;gap:5px}
-#hudEditPanel .hud-edit-actions{display:grid;grid-template-columns:1fr 1fr;gap:5px}
-#hudEditPanel .hud-edit-actions button{font-size:10px;padding:6px 3px}
-#hudEditPanel small{display:block;color:#b8c4c9;margin-top:7px}
-body.hud-editing .combat-ui,body.hud-editing .combat-ui *,body.hud-editing .menu-bar,body.hud-editing #chatToggle,body.hud-editing #mapBanner{pointer-events:auto!important;touch-action:none!important}
-body.hud-editing [data-hud-key]{outline:1px dashed #ffe08a!important;outline-offset:3px!important;cursor:move!important}
-body.hud-editing #hudEditToggle,body.hud-editing #hudEditPanel{touch-action:pan-y!important}
-
-
 /* v1.4.0 — icon-only circular combat controls with separated default positions */
 .canvas-wrap>.combat-ui .mobile-controls{position:absolute!important;inset:0!important;width:100%!important;max-width:none!important;display:block!important;pointer-events:none!important}
 .canvas-wrap>.combat-ui .mobile-controls .joystick{position:absolute!important;pointer-events:auto!important}
@@ -404,19 +388,6 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
    <div class="death-screen" id="deathScreen"><div class="death-card"><h2>☠ BẠN ĐÃ BỊ HẠ</h2><p>Hành trình tạm dừng. Hãy hồi sinh để tiếp tục cuộc phiêu lưu.</p><button id="respawnBtn">↻ HỒI SINH</button></div></div>
 
 
-
-   <button id="hudEditToggle" type="button">✥ SỬA HUD</button>
-   <div id="hudEditPanel" hidden>
-    <strong>THIẾT KẾ HUD</strong>
-    <select id="hudEditSelect">
-     <option value="hud">HP / MP / EXP</option><option value="joystick">Joystick</option><option value="mobileAttack">Nút đánh</option><option value="actionControls">AUTO / kỹ năng / thuốc</option><option value="chatToggle">Nút chat</option><option value="mapBanner">Tên bản đồ</option><option value="menuBar">Thanh menu</option>
-    </select>
-    <label>Kích thước <span id="hudEditScaleValue">100%</span></label><input id="hudEditScale" type="range" min="50" max="180" value="100">
-    <label>Độ trong suốt <span id="hudEditOpacityValue">100%</span></label><input id="hudEditOpacity" type="range" min="20" max="100" value="100">
-    <label><input id="hudEditVisible" type="checkbox" checked> Hiển thị</label>
-    <div class="hud-edit-actions"><button id="hudEditReset" type="button">Mặc định</button><button id="hudEditOpenFull" type="button">Trình thiết kế PC</button><button id="hudEditSave" type="button">Lưu / Xong</button></div>
-    <small>Kéo trực tiếp thành phần để đổi vị trí.</small>
-   </div>
 
    <div class="combat-ui">
     <div class="hud">
@@ -557,14 +528,13 @@ const HUD_DEFAULTS={
  potionBtn:{x:64.88401182008587,y:81.79787924350403,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
  mpPotionBtn:{x:59.40371416465125,y:92.30668013976243,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
  chatToggle:{x:89.04716830793876,y:22.528241921353967,width:52,height:52,scale:70,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- mapBanner:{x:49.688623770756394,y:22.948592888193794,width:190,height:48,scale:64,opacity:100,visible:true,shape:'rounded',color:'#dfc080'},
  menuBar:{x:50,y:6.1345114541803385,width:240,height:34,scale:150,opacity:100,visible:true,shape:'rounded',color:'#203541'}
 };
 const hudTargets={
  hpStat:()=>$('hpStat'),mpStat:()=>$('mpStat'),xpStat:()=>$('xpStat'),
  joystick:()=>$('joystick'),mobileAttack:()=>$('mobileAttack'),autoBtn:()=>$('autoBtn'),
  skillBtn:()=>$('skillBtn'),potionBtn:()=>$('potionBtn'),mpPotionBtn:()=>$('mpPotionBtn'),
- chatToggle:()=>$('chatToggle'),mapBanner:()=>$('mapBanner'),menuBar:()=>document.querySelector('.menu-bar')
+ chatToggle:()=>$('chatToggle'),menuBar:()=>document.querySelector('.menu-bar')
 };
 let hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS));
 function loadHudLayout(){try{const v=JSON.parse(localStorage.getItem(HUD_LAYOUT_KEY)||'null');if(v&&v.version===6&&v.items)for(const k of Object.keys(HUD_DEFAULTS))if(v.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};}catch(e){console.warn('HUD layout load:',e);}applyHudLayout();}
