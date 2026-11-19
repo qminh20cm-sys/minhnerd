@@ -210,6 +210,14 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
  .game-version{bottom:52px!important;left:7px!important}
 }
 
+
+/* HUD toi gian: dua thanh chi so len mep tren ban do, tranh chong voi cum dieu khien */
+.hud{position:absolute!important;top:52px!important;bottom:auto!important;left:8px!important;right:8px!important;width:auto!important;display:flex!important;justify-content:flex-start!important;align-items:center!important;gap:9px!important;margin:0!important;padding:4px 7px!important;background:#08131b99!important;border:1px solid #59707888!important;border-radius:7px!important;box-shadow:none!important;backdrop-filter:blur(3px);pointer-events:none!important}
+.hud .stat{display:flex!important;align-items:center!important;gap:4px!important;min-width:0!important;font-size:9px!important;line-height:1!important;white-space:nowrap!important}
+.hud .stat b{display:none!important}
+.hud .bar{width:clamp(42px,13vw,68px)!important;height:4px!important;margin:0!important;border:0!important;background:#071016dd!important}
+@media(max-width:520px){.hud{top:48px!important;left:6px!important;right:auto!important;gap:6px!important;padding:4px 6px!important}.hud .stat{font-size:8px!important;gap:3px!important}.hud .bar{width:clamp(38px,12vw,54px)!important;height:4px!important}}
+
 </style>
 
 </head>
