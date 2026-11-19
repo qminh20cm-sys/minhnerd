@@ -180,6 +180,16 @@ button,.menu-bar button,.controls button{touch-action:manipulation}
 .canvas-wrap{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;background:#477d52!important;border:0!important;border-radius:0!important;overflow:hidden!important}
 canvas#game{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:fill!important;z-index:1!important}
 
+
+/* iPhone Safari interaction and canvas stacking fix */
+html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;overscroll-behavior:none}
+body,button,canvas,.menu-bar,.hud,.mobile-controls,.controls,.joystick{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
+button{touch-action:manipulation!important}
+.canvas-wrap{background:#182b2c!important}
+canvas#game{z-index:0!important;pointer-events:none!important}
+.menu-bar,.hud,.mobile-controls,.action-controls{z-index:20!important}
+.joystick,.controls button{pointer-events:auto!important}
+
 </style>
 
 </head>
@@ -210,6 +220,7 @@ canvas#game{position:absolute!important;inset:0!important;display:block!importan
    <div class="canvas-wrap">
 
     <canvas id="game" width="480" height="720" aria-label="Game Pixel RPG"></canvas>
+    <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="death-screen" id="deathScreen"><div class="death-card"><h2>☠ BẠN ĐÃ BỊ HẠ</h2><p>Hành trình tạm dừng. Hãy hồi sinh để tiếp tục cuộc phiêu lưu.</p><button id="respawnBtn">↻ HỒI SINH</button></div></div>
    </div>
@@ -870,8 +881,8 @@ let last=performance.now(),uiTick=0,fpsFrames=0,fpsTime=0,fpsValue=0;
 function loop(now){
  let dt=Math.min(.04,(now-last)/1000);fpsFrames++;fpsTime+=dt;if(fpsTime>=.5){fpsValue=Math.round(fpsFrames/fpsTime);fpsFrames=0;fpsTime=0;}
  last=now;
- try{update(dt);}catch(e){console.error('Game update error:',e);state.paused=true;log('Lỗi cập nhật game: '+(e&&e.message?e.message:'unknown'));}
- try{draw();}catch(e){console.error('Game render error:',e);ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#477d52';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#fff';ctx.font='16px monospace';ctx.fillText('Lỗi hiển thị: '+(e&&e.message?e.message:'unknown'),18,40);}
+ try{update(dt);}catch(e){console.error('Game update error:',e);state.paused=true;const box=$('runtimeError');if(box){box.style.display='block';box.textContent='LỖI GAME UPDATE: '+(e&&e.stack?e.stack:e&&e.message?e.message:String(e));}}
+ try{ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.clearRect(0,0,canvas.width,canvas.height);draw();}catch(e){console.error('Game render error:',e);const box=$('runtimeError');if(box){box.style.display='block';box.textContent='LỖI GAME RENDER: '+(e&&e.stack?e.stack:e&&e.message?e.message:String(e));}}
  uiTick+=dt;
  if(uiTick>.15){try{ui();}catch(e){console.error('Game UI error:',e);}uiTick=0}
  requestAnimationFrame(loop);
@@ -963,7 +974,10 @@ document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('clic
  if(!side.querySelector('.menu-close')){const close=document.createElement('button');close.className='menu-close';close.textContent='✕ ĐÓNG';close.onclick=()=>side.classList.remove('open');side.prepend(close);}
 }));
 window.addEventListener('beforeunload',save);
+let lastTouchEnd=0;
+document.addEventListener('touchend',function(e){const now=Date.now();if(now-lastTouchEnd<=350){e.preventDefault();}lastTouchEnd=now;},{passive:false});
 document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
+
 initSettings();
 load();
 state.started=true;
@@ -973,7 +987,7 @@ if(!state.mobs.length)for(let i=0;i<7;i++)spawnMob();
 state.mapIndex=Math.min(state.mapIndex||0,maps.length-1);
 state.unlockedMaps=Math.max(1,Math.min(state.unlockedMaps||1,maps.length));
 try{updateMapUI();}catch(e){console.error('Map UI init error:',e);}
-try{draw();}catch(e){console.error('Initial render error:',e);}
+try{ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.clearRect(0,0,canvas.width,canvas.height);draw();}catch(e){console.error('Initial render error:',e);const box=$('runtimeError');if(box){box.style.display='block';box.textContent='LỖI KHỞI TẠO HIỂN THỊ: '+(e&&e.stack?e.stack:e&&e.message?e.message:String(e));}}
 requestAnimationFrame(loop);
 try{ui();}catch(e){console.error('Initial UI error:',e);}
 
