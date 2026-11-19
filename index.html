@@ -379,7 +379,7 @@ html,body{overscroll-behavior-x:none!important}
 
    <div class="logo">✦ ELDORIA</div>
 
-   <div class="sub">Pixel RPG • Combat Power Update v1.2.17</div>
+   <div class="sub">Pixel RPG • Combat Power Update v1.2.18</div>
 
   </div>
 
@@ -402,7 +402,7 @@ html,body{overscroll-behavior-x:none!important}
     <div id="rewardToast" class="reward-toast" role="status" aria-live="assertive"></div>
     <div id="bossDefeatNotice" class="boss-defeat-notice" role="status" aria-live="assertive"></div>
     <div id="rewardFeed" class="reward-feed" aria-live="polite"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.17</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.18</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ ELDORIA</h2><div class="intro-story">Hàng thiên niên kỷ đã trôi qua, nhưng mỗi khi nhắc về cuộc Đại Hỗn Chiến trên lục địa Eldric, nhân loại vẫn không khỏi rùng mình kinh hãi. Những cánh đồng chất đầy thi thể, máu nhuộm đỏ đất trời, tiếng binh khí va chạm chát chúa hòa cùng tiếng gào thét bi ai và những luồng ma pháp xé toạc không gian—tất cả địa ngục trần gian ấy chỉ là hệ quả từ sự thức tỉnh của Chúa tể Hắc ám Halphys, kẻ vừa phá vỡ phong ấn cổ đại sau hàng thế kỷ bị giam cầm.
@@ -920,7 +920,7 @@ function spawnMob(boss=false,forcedKind=null){
  const power=boss?1:leader?5:elite?2:1;
  const hp=boss?Math.max(1,Math.round(map.hp*scale*15)):Math.max(1,Math.round(map.hp*scale*rand(.9,1.1)*power));
  const mobName=boss?map.boss:map.mob;
- state.mobs.push({x,y,hp,max:hp,boss,elite,leader,kind,name:mobName,level:mobLevel,spd:boss?24+state.mapIndex*7:rand(18,27)+state.mapIndex*5,atk:boss?Math.max(1,Math.round(map.atk*scale*15)):Math.max(1,Math.round(map.atk*scale*power)),rewardScale:scale,rewardMultiplier:boss?50:leader?20:elite?10:1,hit:0,attackAt:0,dead:false,dir:rand(0,Math.PI*2),wanderTimer:rand(.4,2.2),phase:rand(0,6.28)});
+ state.mobs.push({x,y,hp,max:hp,boss,elite,leader,kind,name:mobName,level:mobLevel,spd:boss?24+state.mapIndex*7:rand(18,27)+state.mapIndex*5,atk:boss?Math.max(1,Math.round(map.atk*scale*15)):Math.max(1,Math.round(map.atk*scale*power)),rewardScale:scale,rewardMultiplier:boss?35:leader?20:elite?10:1,hit:0,attackAt:0,dead:false,dir:rand(0,Math.PI*2),wanderTimer:rand(.4,2.2),phase:rand(0,6.28)});
 
 }
 
