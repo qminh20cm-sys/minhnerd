@@ -243,7 +243,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 }
 
 
-/* v1.5.0 — separated combat-control zones, inspired by the reference layout */
+/* v1.6.0 — separated combat-control zones, inspired by the reference layout */
 .canvas-wrap{isolation:isolate}
 .canvas-wrap::after{content:"";position:absolute;z-index:10;left:0;right:0;bottom:0;height:126px;background:linear-gradient(180deg,transparent 0%,rgba(5,12,18,.34) 22%,rgba(5,12,18,.88) 100%);pointer-events:none}
 .canvas-wrap>.hud{position:absolute!important;top:7px!important;left:7px!important;right:7px!important;z-index:16!important;display:flex!important;justify-content:flex-start!important;align-items:center!important;gap:10px!important;flex-wrap:nowrap!important;width:auto!important;margin:0!important;padding:5px 8px!important;background:rgba(5,13,20,.88)!important;border:1px solid rgba(150,180,180,.5)!important;border-radius:8px!important;pointer-events:none!important}
@@ -273,7 +273,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 }
 
 
-/* v1.5.0: single layout owner for all combat controls */
+/* v1.6.0: single layout owner for all combat controls */
 .canvas-wrap{position:absolute!important;inset:0!important;overflow:hidden!important;isolation:isolate!important}
 .canvas-wrap>canvas#game{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:fill!important;z-index:0!important}
 .canvas-wrap>.combat-ui{position:absolute!important;inset:0!important;z-index:16!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;padding:7px!important;pointer-events:none!important}
@@ -311,7 +311,7 @@ html,body{overscroll-behavior-x:none!important}
 
 
 /* AFK HUD Designer */
-/* v1.5.0 — icon-only circular combat controls with separated default positions */
+/* v1.6.0 — icon-only circular combat controls with separated default positions */
 .canvas-wrap>.combat-ui .mobile-controls{position:absolute!important;inset:0!important;width:100%!important;max-width:none!important;display:block!important;pointer-events:none!important}
 .canvas-wrap>.combat-ui .mobile-controls .joystick{position:absolute!important;pointer-events:auto!important}
 .canvas-wrap>.combat-ui .mobile-controls .controls{position:static!important;display:block!important;pointer-events:none!important}
@@ -347,7 +347,7 @@ html,body{overscroll-behavior-x:none!important}
 
 .hud-edit-active .canvas-wrap{outline:2px solid #ffe36b}.hud-edit-active .combat-ui [id]{cursor:move!important}.hud-edit-active .combat-ui .stat,.hud-edit-active .combat-ui button{outline:1px dashed #ffe36b}
 
-/* v1.5.0 HUD and inventory refinements */
+/* v1.6.0 HUD and inventory refinements */
 .canvas-wrap>#mapBanner{top:18.8%!important;left:51.9%!important;right:auto!important;transform:translateX(-50%)!important;z-index:24!important}
 .canvas-wrap>#mapBanner.show{animation:mapBannerFadeV150 2s ease both}
 @keyframes mapBannerFadeV150{0%{opacity:0;top:18.2%}12%{opacity:1;top:18.8%}72%{opacity:1;top:18.8%}100%{opacity:0;top:18.2%}}
@@ -362,6 +362,7 @@ html,body{overscroll-behavior-x:none!important}
 .inventory-power-arrow.power-up{color:#65ef91}
 .inventory-power-arrow.power-down{color:#ff626d}
 .canvas-wrap>.combat-ui #joystick,.canvas-wrap>.combat-ui button{touch-action:none!important}
+.skill-learning-list{display:grid;gap:8px}.skill-learning-card{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:9px;padding:9px;background:linear-gradient(110deg,#142a35,#1b303a);border:1px solid #405c67;border-radius:8px}.skill-learning-icon{width:36px;height:36px;display:grid;place-items:center;background:#0b1b24;border:1px solid #5a7781;border-radius:8px;font-size:21px}.skill-learning-card b{display:block;color:#eaf4f0;font-size:12px}.skill-learning-card small{display:block;color:#9db3b7;font-size:9px;margin-top:3px}.skill-learning-status{font-size:8px;font-weight:bold;color:#62d9e8;border:1px solid #267c8b;border-radius:5px;padding:4px 5px;white-space:nowrap}
 </style>
 
 </head>
@@ -375,7 +376,7 @@ html,body{overscroll-behavior-x:none!important}
 
    <div class="logo">✦ THẾ GIỚI HẮC ÁM</div>
 
-   <div class="sub">Pixel RPG • Combat Power Update v1.5.0</div>
+   <div class="sub">Pixel RPG • Combat Power Update v1.6.0</div>
 
   </div>
 
@@ -387,7 +388,7 @@ html,body{overscroll-behavior-x:none!important}
 
   <main class="panel gamebox">
 
-   <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Nhiệm vụ" title="Nhiệm vụ">🎯</button><button data-menu="3" aria-label="Auto" title="Auto">⚔️</button><button data-menu="4" aria-label="Túi đồ" title="Túi đồ">🎒</button><button data-menu="5" aria-label="Cài đặt" title="Cài đặt">⚙</button></nav>
+   <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Nhiệm vụ" title="Nhiệm vụ">🎯</button><button data-menu="3" aria-label="Kỹ năng" title="Kỹ năng">✨</button><button data-menu="4" aria-label="Túi đồ" title="Túi đồ">🎒</button><button data-menu="5" aria-label="Cài đặt" title="Cài đặt">⚙</button></nav>
 
    <div class="canvas-wrap">
 
@@ -396,7 +397,7 @@ html,body{overscroll-behavior-x:none!important}
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
     <div id="rewardToast" class="reward-toast" role="status" aria-live="assertive"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.5.0</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.6.0</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ THẾ GIỚI HẮC ÁM</h2><div class="intro-story">Hàng thiên niên kỷ đã trôi qua, nhưng mỗi khi nhắc về cuộc Đại Hỗn Chiến trên lục địa Eldric, nhân loại vẫn không khỏi rùng mình kinh hãi. Những cánh đồng chất đầy thi thể, máu nhuộm đỏ đất trời, tiếng binh khí va chạm chát chúa hòa cùng tiếng gào thét bi ai và những luồng ma pháp xé toạc không gian—tất cả địa ngục trần gian ấy chỉ là hệ quả từ sự thức tỉnh của Chúa tể Hắc ám Halphys, kẻ vừa phá vỡ phong ấn cổ đại sau hàng thế kỷ bị giam cầm.
@@ -482,24 +483,16 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
 
    <section class="panel">
 
-    <div class="heading">⚙ AUTO FARMING</div>
-
-    <div class="row"><span>Trạng thái</span><b class="value" id="autoStatus">Đang tự săn</b></div>
-
-    <div class="row"><span>Thời gian chơi</span><b class="value" id="duration">00:00</b></div>
-
-    <div class="row"><span>Quái đã hạ</span><b class="value" id="kills">0</b></div>
-
-    <div class="row"><span>EXP nhận được</span><b class="value" id="earned">0</b></div>
-
-    <div class="row"><span>Vật phẩm</span><b class="value" id="loot">0</b></div>
-
-    <div class="muted" style="font-size:10px;line-height:1.5;margin-top:8px">
-
-     Auto tự tìm mục tiêu trong tầm nhìn, tiến lại gần và tấn công. Offline reward được tính khi mở lại game.
-
+    <div class="heading">✨ KỸ NĂNG NHÂN VẬT</div>
+    <div class="muted" style="font-size:10px;line-height:1.5;margin-bottom:10px">Khám phá và học các kỹ năng mới để mở rộng phong cách chiến đấu. Cây kỹ năng sẽ được cập nhật thêm.</div>
+    <div class="skill-learning-list">
+     <div class="skill-learning-card"><span class="skill-learning-icon">⚔️</span><div><b>Kiếm khí</b><small>Kỹ năng tấn công cận chiến</small></div><span class="skill-learning-status">SẮP RA MẮT</span></div>
+     <div class="skill-learning-card"><span class="skill-learning-icon">🔥</span><div><b>Hỏa cầu</b><small>Ma pháp gây sát thương</small></div><span class="skill-learning-status">SẮP RA MẮT</span></div>
+     <div class="skill-learning-card"><span class="skill-learning-icon">🏹</span><div><b>Phá tiễn</b><small>Kỹ năng tấn công tầm xa</small></div><span class="skill-learning-status">SẮP RA MẮT</span></div>
+     <div class="skill-learning-card"><span class="skill-learning-icon">🗡️</span><div><b>Ảnh kích</b><small>Đòn đánh nhanh và chí mạng</small></div><span class="skill-learning-status">SẮP RA MẮT</span></div>
+     <div class="skill-learning-card"><span class="skill-learning-icon">🛡️</span><div><b>Hộ thể</b><small>Tăng khả năng phòng thủ</small></div><span class="skill-learning-status">SẮP RA MẮT</span></div>
+     <div class="skill-learning-card"><span class="skill-learning-icon">💚</span><div><b>Sinh lực</b><small>Hỗ trợ hồi phục và sinh tồn</small></div><span class="skill-learning-status">SẮP RA MẮT</span></div>
     </div>
-
    </section>
 
    <section class="panel">
@@ -626,7 +619,8 @@ function currentMap(){
 }
 
 const TOWN={name:"THỊ TRẤN ABORNE",difficulty:"An toàn",mob:"Không có",hp:0,atk:0,xp:0,gold:0,color:"#344c3e",path:"#b49a6b",water:"#397c83",boss:""};
-function showMapBanner(name){const el=$("mapBanner");if(!el)return;el.textContent=name;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");}
+let townSafeLabelStartedAt=performance.now();
+function showMapBanner(name){if(name===TOWN.name)townSafeLabelStartedAt=performance.now();const el=$("mapBanner");if(!el)return;el.textContent=name;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");}
 function inTown(){return !!state.inTown;}
 // Thị trấn và Đồng cỏ xanh luôn mở; các bản đồ sau tăng 20 cấp mỗi bản đồ.
 function requiredMapLevel(i){return i<=0?1:i*20;}
@@ -635,7 +629,7 @@ const CLASS_DATA=[{name:'Chiến binh',icon:'⚔️',desc:'Công kích và phòn
 function openClassModal(){renderClassOptions();$('classModal').classList.add('show');}
 function renderClassOptions(){$('classOptions').innerHTML=CLASS_DATA.map(c=>'<button class="class-option" data-class="'+c.name+'"><span>'+c.icon+' '+c.name+'<small>'+c.desc+'</small></span><b>'+(state.characterClass===c.name?'ĐANG CHỌN':'Chọn')+'</b></button>').join('');}
 function chooseClass(name){if(!CLASS_DATA.some(c=>c.name===name))return;state.characterClass=name;derive();$('classModal').classList.remove('show');renderCharacter();ui();save();log('Bạn đã chuyển class thành '+name+'.');}
-function openNpcDialog(id){const data={alden:{name:'Trưởng trấn Alden',icon:'👑',line:'Chào cậu, ta là Alden, thị trưởng của Aborne. Cậu muốn làm gì?',choices:[['Tôi muốn nhận nhiệm vụ',()=>{closeNpcDialog();storyAction();}],['Không có gì, cảm ơn',closeNpcDialog]]},healer:{name:'Y sĩ',icon:'🧑‍⚕️',line:'Chào cậu. Ta có thể giúp cậu hồi phục trước khi lên đường.',choices:[['Hồi phục HP và MP',()=>{closeNpcDialog();townHeal();}],['Không cần, cảm ơn',closeNpcDialog]]},merchant:{name:'Pelio',icon:'🧔',line:'Chào mừng! Ta là Pelio. Cậu muốn mua vật phẩm nào?',choices:[['Xem cửa hàng',()=>{closeNpcDialog();$('townShopModal').classList.add('show');}],['Để lần khác',closeNpcDialog]]},blacksmith:{name:'Thợ rèn',icon:'⚒️',line:'Trang bị của cậu cần được chăm sóc chứ? Ta có thể rèn lại các dòng phụ.',choices:[['Mở lò rèn',()=>{closeNpcDialog();openBlacksmith();}],['Không cần, cảm ơn',closeNpcDialog]]},syrupp:{name:'Syrupp',icon:'🧙',line:'Ta là Syrupp. Ta có thể giúp cậu thay đổi con đường chiến đấu. Cậu muốn chọn class nào?',choices:[['Thay đổi class',()=>{closeNpcDialog();openClassModal();}],['Không có gì, cảm ơn',closeNpcDialog]]}}[id];if(!data)return;$('npcTitle').textContent=data.name;$('npcPortrait').textContent=data.icon;$('npcLine').textContent=data.line;$('npcChoices').innerHTML='';data.choices.forEach(([label,action])=>{const b=document.createElement('button');b.textContent=label;b.onclick=action;$('npcChoices').appendChild(b);});$('npcDialog').classList.add('show');}
+function openNpcDialog(id){const data={alden:{name:'Trưởng trấn Alden',icon:'👑',line:'Chào cậu, ta là Alden, thị trưởng của Aborne. Cậu muốn làm gì?',choices:[['Tôi muốn nhận nhiệm vụ',()=>{closeNpcDialog();storyAction();}],['Không có gì, cảm ơn',closeNpcDialog]]},healer:{name:'Mục sư Rafael',icon:'🧑‍⚕️',line:'Chào cậu. Ta có thể giúp cậu hồi phục trước khi lên đường.',choices:[['Hồi phục HP và MP',()=>{closeNpcDialog();townHeal();}],['Không cần, cảm ơn',closeNpcDialog]]},merchant:{name:'Chủ cửa hàng Pelio',icon:'🧔',line:'Chào mừng! Ta là Pelio. Cậu muốn mua vật phẩm nào?',choices:[['Xem cửa hàng',()=>{closeNpcDialog();$('townShopModal').classList.add('show');}],['Để lần khác',closeNpcDialog]]},blacksmith:{name:'Thợ Rèn Homes',icon:'⚒️',line:'Trang bị của cậu cần được chăm sóc chứ? Ta có thể rèn lại các dòng phụ.',choices:[['Mở lò rèn',()=>{closeNpcDialog();openBlacksmith();}],['Không cần, cảm ơn',closeNpcDialog]]},syrupp:{name:'Người hướng dẫn Syrupp',icon:'🧙',line:'Ta là Syrupp. Ta có thể giúp cậu thay đổi con đường chiến đấu. Cậu muốn chọn class nào?',choices:[['Thay đổi class',()=>{closeNpcDialog();openClassModal();}],['Không có gì, cảm ơn',closeNpcDialog]]}}[id];if(!data)return;$('npcTitle').textContent=data.name;$('npcPortrait').textContent=data.icon;$('npcLine').textContent=data.line;$('npcChoices').innerHTML='';data.choices.forEach(([label,action])=>{const b=document.createElement('button');b.textContent=label;b.onclick=action;$('npcChoices').appendChild(b);});$('npcDialog').classList.add('show');}
 function closeNpcDialog(){$('npcDialog').classList.remove('show');}
 function interactTownNpc(id){if(!inTown())return;state.townNpcVisited=state.townNpcVisited||[];if(!state.townNpcVisited.includes(id)){state.townNpcVisited.push(id);save();}openNpcDialog(id);}
 function enterTown(){npcWalkTarget=null;state.inTown=true;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=540;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
@@ -766,7 +760,7 @@ function updateMapUI(){
 
 function selectMap(i){
  npcWalkTarget=null;
- if(i===-1){enterTown();return;}
+ if(i===-1){enterTown();document.querySelector('.side')?.classList.remove('open');return;}
  if(!canEnterMap(i)){log("Chưa thể dịch chuyển! "+maps[i]?.name+" yêu cầu nhân vật đạt cấp "+requiredMapLevel(i)+".");updateMapUI();return;}
 
  state.inTown=false;state.mapIndex=i;
@@ -791,7 +785,7 @@ function selectMap(i){
 
  updateMapUI();
  showMapBanner(currentMap().name);
-
+ document.querySelector('.side')?.classList.remove('open');
  save();
 
 }
@@ -999,10 +993,10 @@ function drawTownWorld(){
  // Bảng tên và NPC
  ctx.fillStyle="#2a211c";ctx.fillRect(145,55,190,48);ctx.fillStyle="#d9bd7a";ctx.fillRect(149,59,182,40);ctx.fillStyle="#382a20";ctx.font="bold 18px monospace";ctx.textAlign="center";ctx.fillText("ABORNE",240,84);ctx.textAlign="left";
  pixelPerson(240,220,"#b58a4c",false);ctx.fillStyle="#fff0b0";ctx.font="bold 12px monospace";ctx.textAlign="center";ctx.fillText("TRƯỞNG TRẤN ALDEN",240,190);ctx.textAlign="left";
- pixelPerson(110,365,"#8fb7c7",false);ctx.fillStyle="#e5f4ff";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("Y SĨ",110,337);ctx.textAlign="left";
- pixelPerson(370,365,"#c68c65",false);ctx.fillStyle="#ffe0b0";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("PELIO",370,337);ctx.textAlign="left";
- pixelPerson(370,520,"#b7b7c4",false);ctx.fillStyle="#f0e8ff";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("THỢ RÈN",370,492);ctx.textAlign="left";pixelPerson(110,520,"#9c8bd4",false);ctx.fillStyle="#e8ddff";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("SYRUPP",110,492);ctx.textAlign="left";
- ctx.fillStyle="#fff4d0";ctx.font="12px monospace";ctx.textAlign="center";ctx.fillText("Nơi nghỉ chân an toàn • Chọn dịch vụ bên dưới",240,680);ctx.textAlign="left";
+ pixelPerson(110,365,"#8fb7c7",false);ctx.fillStyle="#e5f4ff";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("MỤC SƯ RAFAEL",110,337);ctx.textAlign="left";
+ pixelPerson(370,365,"#c68c65",false);ctx.fillStyle="#ffe0b0";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("CHỦ CỬA HÀNG PELIO",370,337);ctx.textAlign="left";
+ pixelPerson(370,520,"#b7b7c4",false);ctx.fillStyle="#f0e8ff";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("THỢ RÈN HOMES",370,492);ctx.textAlign="left";pixelPerson(110,520,"#9c8bd4",false);ctx.fillStyle="#e8ddff";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("NGƯỜI HƯỚNG DẪN SYRUPP",110,492);ctx.textAlign="left";
+ ctx.globalAlpha=Math.min(1,(performance.now()-townSafeLabelStartedAt)/700);ctx.fillStyle="#42eaff";ctx.font="bold 15px monospace";ctx.textAlign="center";ctx.shadowColor="#00dfff";ctx.shadowBlur=8;ctx.fillText("KHU VỰC AN TOÀN",240,680);ctx.shadowBlur=0;ctx.globalAlpha=1;ctx.textAlign="left";
 }
 
 function drawMob(m){
@@ -1299,7 +1293,7 @@ joy.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();jo
 let lastNpcTap={id:null,time:0};
 canvas.addEventListener('pointerdown',e=>{
  e.preventDefault();const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;
- if(inTown()){let npc=null,best=30;for(const n of TOWN_NPCS){const d=Math.hypot(n.x-x,n.y-y);if(d<best){npc=n;best=d;}}if(npc){const now=performance.now();if(lastNpcTap.id===npc.id&&now-lastNpcTap.time<=500){npcWalkTarget=npc;lastNpcTap={id:null,time:0};log('Đang đi đến gặp '+({alden:'Trưởng trấn Alden',healer:'Y sĩ',merchant:'Pelio',blacksmith:'Thợ rèn',syrupp:'Syrupp'}[npc.id])+'.');}else lastNpcTap={id:npc.id,time:now};}else lastNpcTap={id:null,time:0};return;}
+ if(inTown()){let npc=null,best=30;for(const n of TOWN_NPCS){const d=Math.hypot(n.x-x,n.y-y);if(d<best){npc=n;best=d;}}if(npc){const now=performance.now();if(lastNpcTap.id===npc.id&&now-lastNpcTap.time<=500){npcWalkTarget=npc;lastNpcTap={id:null,time:0};log('Đang đi đến gặp '+({alden:'Trưởng trấn Alden',healer:'Mục sư Rafael',merchant:'Chủ cửa hàng Pelio',blacksmith:'Thợ Rèn Homes',syrupp:'Người hướng dẫn Syrupp'}[npc.id])+'.');}else lastNpcTap={id:npc.id,time:now};}else lastNpcTap={id:null,time:0};return;}
  let picked=null,best=42;for(const m of state.mobs){if(m.dead)continue;const d=Math.hypot(m.x-x,m.y-y);if(d<best){best=d;picked=m;}}if(picked){state.target=picked;state.pendingAction=null;log('Đã chọn mục tiêu: '+(picked.boss?currentMap().boss:currentMap().mob)+'.');}
 });
 
@@ -1311,7 +1305,7 @@ document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('clic
 window.addEventListener('beforeunload',save);
 document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
 
-/* v1.5.0: reduce accidental horizontal edge navigation while playing */
+/* v1.6.0: reduce accidental horizontal edge navigation while playing */
 (function(){
  let edgeTouch=null;
  const EDGE=28,THRESHOLD=8;
