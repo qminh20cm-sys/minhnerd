@@ -571,20 +571,20 @@ function loadHudLayout(){try{const v=JSON.parse(localStorage.getItem(HUD_LAYOUT_
 function applyHudLayout(){
  const canvas=document.querySelector('.canvas-wrap'),gamebox=document.querySelector('.gamebox');
  const hud=document.querySelector('.combat-ui>.hud'),bottom=document.querySelector('.combat-ui>.combat-bottom');
- if(hud)hud.style.display='contents';
- if(bottom)bottom.style.display='contents';
- document.querySelectorAll('.combat-ui .mobile-controls,.combat-ui .mobile-controls .controls,.combat-ui .action-controls').forEach(el=>el.style.display='contents');
+ if(hud)hud.style.setProperty('display','contents','important');
+ if(bottom)bottom.style.setProperty('display','contents','important');
+ document.querySelectorAll('.combat-ui .mobile-controls,.combat-ui .mobile-controls .controls,.combat-ui .action-controls').forEach(el=>el.style.setProperty('display','contents','important'));
  for(const [k,get] of Object.entries(hudTargets)){
   const el=get(),v=hudLayout[k];if(!el||!v)continue;
   const base=k==='menuBar'?gamebox:canvas;if(!base)continue;
-  el.style.position='absolute';el.style.left=v.x+'%';el.style.top=v.y+'%';el.style.right='auto';el.style.bottom='auto';
-  el.style.width=v.width+'px';el.style.height=v.height+'px';
-  el.style.minWidth='0';el.style.minHeight='0';el.style.maxWidth='none';el.style.maxHeight='none';
-  el.style.transform='translate(-50%,-50%) scale('+(v.scale/100)+')';el.style.transformOrigin='center center';
-  el.style.opacity=String(v.opacity/100);el.style.display=v.visible?'':'none';
-  el.style.borderRadius=v.shape==='circle'?'50%':v.shape==='square'?'0':v.shape==='pill'?'999px':'10px';
-  if(v.color)el.style.backgroundColor=v.color;
-  el.style.zIndex=k==='menuBar'?'25':'20';
+  const set=(p,val)=>el.style.setProperty(p,String(val),'important');
+  set('position','absolute');set('left',v.x+'%');set('top',v.y+'%');set('right','auto');set('bottom','auto');
+  set('width',v.width+'px');set('height',v.height+'px');set('min-width','0');set('min-height','0');set('max-width','none');set('max-height','none');
+  set('transform','translate(-50%,-50%) scale('+(v.scale/100)+')');set('transform-origin','center center');
+  set('opacity',v.opacity/100);set('display',v.visible?'':'none');
+  set('border-radius',v.shape==='circle'?'50%':v.shape==='square'?'0':v.shape==='pill'?'999px':'10px');
+  if(v.color)set('background-color',v.color);
+  set('z-index',k==='menuBar'?'25':'20');
  }
 }
 function saveHudLayout(){localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:4,items:hudLayout}));applyHudLayout();}
