@@ -518,18 +518,19 @@ const W=480,H=720,keys={};
 const $=id=>document.getElementById(id);
 
 const HUD_LAYOUT_KEY='afkHudLayoutV1';
+// HUD chính thức: cấu hình cố định từ afk-adventure-hud.json phiên bản 4.
 const HUD_DEFAULTS={
- hpStat:{x:20.543352589071848,y:14.681672723502034,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- mpStat:{x:51.93057063168395,y:14.541552171187067,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- xpStat:{x:84.06507261929389,y:14.541552171187067,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- joystick:{x:25.027246310926948,y:84.74034135643537,width:72,height:72,scale:100,opacity:100,visible:true,shape:'circle',color:'#17303b'},
- mobileAttack:{x:85.31059654145511,y:90.20491996051075,width:64,height:64,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- autoBtn:{x:88.548966341149,y:65.96463098559028,width:50,height:50,scale:88,opacity:100,visible:true,shape:'circle',color:'#245b42'},
- skillBtn:{x:84.56329359127047,y:77.17401326321337,width:50,height:50,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- potionBtn:{x:64.88401182008587,y:81.79787924350403,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- mpPotionBtn:{x:59.40371416465125,y:92.30668013976243,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ hpStat:{x:20.543352589071848,y:14.681672723502034,width:92,height:32,scale:134,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ mpStat:{x:51.93057063168395,y:14.541552171187067,width:92,height:32,scale:138,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ xpStat:{x:82.94753086419753,y:14.76311336717428,width:90,height:32,scale:132,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ joystick:{x:22.37654320987654,y:85.74450084602368,width:72,height:72,scale:152,opacity:100,visible:true,shape:'circle',color:'#17303b'},
+ mobileAttack:{x:82.71604938271605,y:89.63620981387479,width:64,height:64,scale:132,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ autoBtn:{x:90.97222222222221,y:67.34348561759728,width:50,height:50,scale:88,opacity:100,visible:true,shape:'circle',color:'#245b42'},
+ skillBtn:{x:84.56329359127047,y:77.17401326321337,width:50,height:50,scale:131,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ potionBtn:{x:63.73456790123456,y:82.95262267343485,width:46,height:46,scale:133,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ mpPotionBtn:{x:59.40371416465125,y:92.30668013976243,width:46,height:46,scale:122,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
  chatToggle:{x:89.04716830793876,y:22.528241921353967,width:52,height:52,scale:70,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- menuBar:{x:50,y:6.1345114541803385,width:240,height:34,scale:150,opacity:100,visible:true,shape:'rounded',color:'#203541'}
+ menuBar:{x:51.08024691358024,y:6.556683587140438,width:240,height:34,scale:150,opacity:100,visible:true,shape:'rounded',color:'#203541'}
 };
 const hudTargets={
  hpStat:()=>$('hpStat'),mpStat:()=>$('mpStat'),xpStat:()=>$('xpStat'),
@@ -537,8 +538,7 @@ const hudTargets={
  skillBtn:()=>$('skillBtn'),potionBtn:()=>$('potionBtn'),mpPotionBtn:()=>$('mpPotionBtn'),
  chatToggle:()=>$('chatToggle'),menuBar:()=>document.querySelector('.menu-bar')
 };
-let hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS));
-function loadHudLayout(){try{const v=JSON.parse(localStorage.getItem(HUD_LAYOUT_KEY)||'null');if(v&&v.version===6&&v.items)for(const k of Object.keys(HUD_DEFAULTS))if(v.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};}catch(e){console.warn('HUD layout load:',e);}applyHudLayout();}
+const hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS));
 function applyHudLayout(){
  const canvas=document.querySelector('.canvas-wrap'),gamebox=document.querySelector('.gamebox');
  const hud=document.querySelector('.combat-ui>.hud'),bottom=document.querySelector('.combat-ui>.combat-bottom');
@@ -558,74 +558,10 @@ function applyHudLayout(){
   set('z-index',k==='menuBar'?'25':'20');
  }
 }
-function saveHudLayout(){localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:6,items:hudLayout}));applyHudLayout();}
-function setupHudDesigner(){
- loadHudLayout();
- window.addEventListener('storage',e=>{if(e.key===HUD_LAYOUT_KEY){try{const v=JSON.parse(e.newValue||'null');if(v&&v.version===6){for(const k of Object.keys(HUD_DEFAULTS))if(v.items?.[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};applyHudLayout();}}catch(err){console.warn('HUD sync:',err);}}});
- const panel=document.querySelector('.settings-panel');
- if(panel&&!$('hudTransferTools')){
-  const group=document.createElement('div');group.className='settings-group';group.id='hudTransferTools';
-  group.innerHTML='<b>🎛️ HUD tùy chỉnh</b><small>Nhập tệp JSON đã xuất từ HUD Designer trên PC để áp dụng bố cục này trên thiết bị.</small><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button type="button" id="hudImportBtn" class="small">Nhập HUD JSON</button><button type="button" id="hudExportBtn" class="small">Xuất HUD JSON</button></div><input id="hudImportFile" type="file" accept=".json,application/json" hidden>';
-  const account=panel.querySelector('.settings-group:last-of-type');if(account)panel.insertBefore(group,account);else panel.appendChild(group);
-  $('hudImportBtn').addEventListener('click',()=>$('hudImportFile').click());
-  const editBtn=document.createElement('button');editBtn.type='button';editBtn.id='hudEditToggle';editBtn.className='small';editBtn.textContent='✥ Chỉnh HUD trực tiếp';group.querySelector('div').appendChild(editBtn);
-  const editor=document.createElement('div');editor.id='hudEditorPanel';editor.style.cssText='display:none;position:absolute;z-index:95;left:6px;right:6px;top:6px;max-height:42%;overflow:auto;padding:7px;background:#101d26f5;border:2px solid #d2b477;border-radius:9px;box-shadow:0 6px 24px #000b;color:#fff;font:11px monospace;pointer-events:auto';
-  editor.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><b style="color:#ffe09a">🎛️ CHỈNH HUD TRỰC TIẾP</b><div style="display:flex;gap:5px"><button type="button" id="hudEditExpand" class="small">Mở công cụ</button><button type="button" id="hudEditClose" class="small">Xong</button></div></div><div id="hudEditTools" style="display:none"><div style="display:flex;gap:6px;align-items:center;margin-top:7px"><label for="hudEditSelect">Thành phần</label><select id="hudEditSelect" style="flex:1;min-width:0;background:#172b35;color:#fff;padding:6px;border:1px solid #58717a;border-radius:5px"></select></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px"><label>Rộng <input id="hudEditWidth" type="range" min="30" max="260" style="width:100%"></label><label>Cao <input id="hudEditHeight" type="range" min="28" max="180" style="width:100%"></label><label>Phóng to <input id="hudEditScale" type="range" min="50" max="180" style="width:100%"></label><label>Độ mờ <input id="hudEditOpacity" type="range" min="20" max="100" style="width:100%"></label></div><div style="display:flex;gap:6px;margin-top:7px"><button type="button" id="hudEditSave" class="small">💾 Lưu HUD</button><button type="button" id="hudEditReset" class="small">↺ Mặc định</button><button type="button" id="hudEditCollapse" class="small">Thu gọn</button></div></div><small id="hudEditHint" style="display:block;color:#b5c6c7;margin-top:5px">Chế độ kéo: chạm giữ trực tiếp nút trên màn hình rồi di chuyển. Công cụ có thể thu gọn để không che các nút phía dưới.</small>';
-  const canvasWrap=document.querySelector('.canvas-wrap');if(canvasWrap){canvasWrap.appendChild(editor);canvasWrap.style.position='relative';}
-  const editNames={hpStat:'Thanh HP',mpStat:'Thanh MP',xpStat:'Thanh EXP',joystick:'Joystick',mobileAttack:'Nút đánh',autoBtn:'Auto',skillBtn:'Kỹ năng',potionBtn:'Potion HP',mpPotionBtn:'Potion MP',chatToggle:'Chat',menuBar:'Thanh menu'};
-  const select=editor.querySelector('#hudEditSelect');select.innerHTML=Object.entries(editNames).map(([k,v])=>'<option value="'+k+'">'+v+'</option>').join('');
-  let editing=false,drag=null,selected='hpStat';
-  const editTargets=Object.keys(hudTargets);
-  function getEditElement(k){return hudTargets[k]?.();}
-  function syncEditorFields(){const v=hudLayout[selected];if(!v)return;editor.querySelector('#hudEditWidth').value=v.width;editor.querySelector('#hudEditHeight').value=v.height;editor.querySelector('#hudEditScale').value=v.scale;editor.querySelector('#hudEditOpacity').value=v.opacity;select.value=selected;}
-  function chooseHud(k){if(!hudLayout[k])return;const old=getEditElement(selected);if(old)old.style.outline='';selected=k;const el=getEditElement(k);if(el)el.style.outline='2px dashed #ffe36b';syncEditorFields();}
-  function setEditing(on){
-   editing=on;editor.style.display=on?'block':'none';
-   editor.querySelector('#hudEditTools').style.display='none';
-   editor.querySelector('#hudEditExpand').textContent='Mở công cụ';
-   editBtn.textContent=on?'✥ Đang chỉnh HUD':'✥ Chỉnh HUD trực tiếp';
-   editBtn.classList.toggle('active',on);
-   document.querySelector('.side')?.classList.remove('open');
-   document.body.classList.toggle('hud-editing',on);
-   for(const k of editTargets){const el=getEditElement(k);if(!el)continue;
-    if(on){el.style.setProperty('pointer-events','auto','important');el.style.setProperty('touch-action','none','important');}
-    else{el.style.removeProperty('pointer-events');el.style.removeProperty('touch-action');el.style.outline='';}
-   }
-   if(on)chooseHud(selected);else drag=null;
-  }
-  const hudTools=editor.querySelector('#hudEditTools');
-  const toggleHudTools=show=>{hudTools.style.display=show?'block':'none';editor.querySelector('#hudEditExpand').textContent=show?'Ẩn công cụ':'Mở công cụ';};
-  editor.querySelector('#hudEditExpand').addEventListener('click',()=>toggleHudTools(hudTools.style.display==='none'));
-  editor.querySelector('#hudEditCollapse').addEventListener('click',()=>toggleHudTools(false));
-  editBtn.addEventListener('click',()=>setEditing(!editing));editor.querySelector('#hudEditClose').addEventListener('click',()=>setEditing(false));
-  select.addEventListener('change',()=>chooseHud(select.value));
-  for(const [id,key] of [['hudEditWidth','width'],['hudEditHeight','height'],['hudEditScale','scale'],['hudEditOpacity','opacity']])editor.querySelector('#'+id).addEventListener('input',e=>{hudLayout[selected][key]=Number(e.target.value);applyHudLayout();chooseHud(selected);});
-  editor.querySelector('#hudEditSave').addEventListener('click',()=>{saveHudLayout();alert('Đã lưu bố cục HUD trên thiết bị này.');});
-  editor.querySelector('#hudEditReset').addEventListener('click',()=>{hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS));saveHudLayout();chooseHud(selected);});
-  const editorRoot=document.querySelector('.gamebox');
-  editorRoot?.addEventListener('pointerdown',e=>{
-   if(!editing||e.target.closest('#hudEditorPanel'))return;
-   let k=null;
-   for(const key of editTargets){const el=getEditElement(key);if(el&&(el===e.target||el.contains(e.target))){k=key;break;}}
-   if(!k)return;
-   e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();chooseHud(k);
-   const base=k==='menuBar'?editorRoot:canvasWrap;
-   drag={key:k,pointerId:e.pointerId,base};
-   try{editorRoot.setPointerCapture(e.pointerId);}catch{}
-  },{capture:true});
-  editorRoot?.addEventListener('pointermove',e=>{
-   if(!editing||!drag||drag.pointerId!==e.pointerId)return;
-   const r=drag.base.getBoundingClientRect(),v=hudLayout[drag.key];
-   v.x=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100));
-   v.y=Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100));
-   applyHudLayout();
-  },{capture:true});
-  ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>editorRoot?.addEventListener(ev,e=>{
-   if(drag&&drag.pointerId===e.pointerId){drag=null;saveHudLayout();}
-  },{capture:true}));
-  $('hudImportFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(![4,5,6].includes(data.version)||!data.items)throw Error('Tệp không đúng định dạng HUD v4');for(const k of Object.keys(HUD_DEFAULTS))if(data.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...data.items[k]};saveHudLayout();alert('Đã nhập HUD thành công!');}catch(err){alert('Không thể nhập HUD: '+err.message);}e.target.value='';});
-  $('hudExportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({version:4,items:hudLayout},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='afk-adventure-hud.json';a.click();URL.revokeObjectURL(url);});
- }
+function setupHudLayout(){
+ applyHudLayout();
+ // Ghi đè bố cục cũ trên từng thiết bị bằng HUD chuẩn mới.
+ try{localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:7,items:hudLayout}));}catch(e){console.warn('HUD layout save:',e);}
 }
 
 // Đưa modal ra khỏi gamebox để không bị bảng menu che do stacking context.
@@ -1413,7 +1349,7 @@ document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
 document.addEventListener('contextmenu',e=>{if(e.target.closest('button,canvas,[role=button],.menu-bar,.controls'))e.preventDefault();});
 document.addEventListener('selectstart',e=>{if(!e.target.closest('input,textarea,select'))e.preventDefault();});
 
-setupHudDesigner();
+setupHudLayout();
 initSettings();
 const hadSave=!!localStorage.getItem("afkAdventureSave");
 load();
