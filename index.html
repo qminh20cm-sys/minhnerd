@@ -270,6 +270,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
     <div class="map-info" id="mapInfo">Đồng cỏ xanh • Dễ • Thưởng cơ bản</div>
 
     <div class="row"><span>Tiến độ ải</span><b class="value" id="mapProgress">0/10 quái</b></div>
+    <div id="townActions" style="display:grid;gap:7px;margin-top:10px"><div class="heading">🏘 DỊCH VỤ THỊ TRẤN</div><div class="muted" style="font-size:10px">Trưởng trấn Alden đang chờ gặp bạn tại quảng trường.</div><button id="townHeal" class="small">💚 Y sĩ: Hồi phục HP / MP (miễn phí)</button><button id="townBuyHp" class="small">🧪 Mua Potion HP — 15 vàng</button><button id="townBuyMp" class="small">💧 Mua Potion MP — 12 vàng</button></div>
 
    </section>
 
@@ -354,7 +355,7 @@ const joystick={x:0,y:0,active:false};
 
 const state={
 
-started:false,paused:false,auto:true,mapIndex:0,unlockedMaps:1,progressionVersion:2,silver:0,
+started:false,paused:false,auto:true,inTown:true,mapIndex:0,unlockedMaps:1,progressionVersion:2,silver:0,mapKillCounts:[0,0,0],storyQuestStage:0,
 
 mapKills:0,respawnTimer:0,level:1,xp:0,nextXp:20,maxLevel:200,
 
@@ -371,10 +372,15 @@ bossSpawned:false,bossDefeated:false,bossesDefeated:0,questClaims:[],pendingActi
 };
 
 function currentMap(){
-
- return maps[Math.min(state.mapIndex,maps.length-1)];
-
+ return maps[Math.max(0,Math.min(state.mapIndex,maps.length-1))];
 }
+
+const TOWN={name:"Thị trấn Aborne",difficulty:"An toàn",mob:"Không có",hp:0,atk:0,xp:0,gold:0,color:"#344c3e",path:"#b49a6b",water:"#397c83",boss:""};
+function inTown(){return !!state.inTown;}
+function enterTown(){state.inTown=true;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=540;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
+function leaveTown(i){if(i<0||i>=state.unlockedMaps)return;state.inTown=false;state.mapIndex=i;state.mapKills=0;state.bossSpawned=false;state.bossDefeated=false;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=360;state.auto=true;for(let n=0;n<7;n++)spawnMob();updateMapUI();save();log("Bạn rời Aborne, tiến đến "+currentMap().name+".");}
+function townHeal(){if(!inTown())return;state.hp=state.maxHp;state.mp=state.maxMp;save();ui();log("Y sĩ thị trấn đã hồi phục hoàn toàn HP và MP cho bạn.");}
+function townBuy(kind){if(!inTown())return;const item=kind==="hp"?{cost:15,key:"potions",name:"Dược phẩm HP"}:{cost:12,key:"mpPotions",name:"Dược phẩm MP"};if(state.gold<item.cost){log("Không đủ vàng để mua "+item.name+".");return;}state.gold-=item.cost;state[item.key]=(state[item.key]||0)+1;save();ui();log("Đã mua 1 "+item.name+" với giá "+item.cost+" vàng.");}
 
 const SLOTS=[['helm','Mũ'],['armor','Áo giáp'],['pants','Quần'],['gloves','Găng tay'],['boots','Giày'],['main','Tay chính'],['off','Tay phụ'],['relic','Tạo vật']],POTS=[['attack','Tấn công','+2 song công'],['defense','Phòng thủ','+20 HP, +1 song giáp'],['agility','Nhanh nhạy','+0,3% tốc đánh, +0,1% chí mạng'],['intelligence','Thông minh','+2 MP, +0,1% hồi chiêu']];
 function norm(){state.potentialStats=state.potentialStats||{attack:0,defense:0,agility:0,intelligence:0};state.potential=state.potential||0;state.equipped=state.equipped||{};state.inventory=state.inventory||[];state.mpPotions=state.mpPotions||0;state.baseAtk=state.baseAtk??state.atk??12;state.baseDef=state.baseDef??state.def??2;state.baseMaxHp=state.baseMaxHp??state.maxHp??100;state.baseMaxMp=state.baseMaxMp??state.maxMp??40;state.baseMagic=state.baseMagic??6;state.baseMagicArmor=state.baseMagicArmor??state.baseDef??2;state.baseMoveSpeed=state.baseMoveSpeed??150;state.silver=state.silver||0;state.maxLevel=200;state.level=Math.min(200,state.level||1);if(state.level>=200)state.nextXp=0;}
@@ -398,13 +404,13 @@ function rollGear(){const slots=['helm','armor','pants','gloves','boots','main',
 function lootDrop(x,y){const r=Math.random();if(r<.22){state.potions++;dropNotice(x,y,'🧪','Dược phẩm HP','+1');log('🎁 Rơi dược phẩm HP!')}else if(r<.38){state.mpPotions++;dropNotice(x,y,'💧','Dược phẩm MP','+1');log('🎁 Rơi dược phẩm MP!')}else if(r<.62){const n=Math.floor(rand(3,9+state.mapIndex*5));state.gold+=n;dropNotice(x,y,'🪙','Vàng','+'+n);log('🪙 Rơi '+n+' vàng!')}else if(r<.82){const it=rollGear();state.inventory.push(it);dropNotice(x,y,'🎁',it.name,itemDesc(it));log('⚔ Rơi '+it.name+'!')}else{const n=Math.floor(rand(2,6));state.gold+=n;dropNotice(x,y,'🪙','Vàng','+'+n);log('🪙 Rơi '+n+' vàng!')}}
 function drinkMp(){if(state.mpPotions&&state.mp<state.maxMp){state.mpPotions--;state.mp=Math.min(state.maxMp,state.mp+45);save();ui();log('Đã dùng dược phẩm MP.')}else log('Không thể dùng lúc này.')}
 function updateMapUI(){
-
  const sel=$('mapSelect');
 
  if(!sel)return;
 
  sel.innerHTML='';
 
+ const townOpt=document.createElement("option");townOpt.value="-1";townOpt.textContent="🏘 Thị trấn Aborne (Khu an toàn)";sel.appendChild(townOpt);
  maps.forEach((m,i)=>{
 
   const o=document.createElement('option');
@@ -419,19 +425,18 @@ function updateMapUI(){
 
  });
 
- sel.value=state.mapIndex;
-
- $('mapInfo').textContent=`${currentMap().name} • ${currentMap().difficulty} • Quái: ${currentMap().mob} • Thưởng: ${currentMap().xp} EXP / ${currentMap().gold} vàng`;
-
- $('mapProgress').textContent=`${state.mapKills}/10 quái`;
+ sel.value=inTown()?"-1":String(state.mapIndex);
+ $('mapInfo').textContent=inTown()?"Khu vực an toàn • Hồi phục, nhận nhiệm vụ và mua vật phẩm.":`${currentMap().name} • ${currentMap().difficulty} • Quái: ${currentMap().mob} • Thưởng: ${currentMap().xp} EXP / ${currentMap().gold} vàng`;
+ $('mapProgress').textContent=inTown()?"Khu vực an toàn":`${state.mapKills}/10 quái`;
+ const actions=$('townActions');if(actions)actions.style.display=inTown()?"grid":"none";
 
 }
 
 function selectMap(i){
-
+ if(i===-1){enterTown();return;}
  if(i<0||i>=state.unlockedMaps)return;
 
- state.mapIndex=i;
+ state.inTown=false;state.mapIndex=i;
 
  state.mapKills=0;
 
@@ -497,7 +502,7 @@ function load(){
   state.dead=false;state.paused=false;state.pendingAction=null;
   if(state.hp<=0){state.hp=Math.ceil(state.maxHp*.65);state.player.x=240;state.player.y=360;}
 
-  state.mapIndex=Number.isFinite(state.mapIndex)?state.mapIndex:0;
+  state.mapIndex=Number.isFinite(state.mapIndex)?state.mapIndex:0;state.inTown=true;state.mapKillCounts=Array.isArray(state.mapKillCounts)?state.mapKillCounts:[0,0,0];
 
   state.unlockedMaps=Math.max(1,state.unlockedMaps||1);
 
@@ -540,7 +545,7 @@ function load(){
 function rand(a,b){return Math.random()*(b-a)+a}
 
 function spawnMob(boss=false){
-
+ if(inTown())return;
  const map=currentMap();
 
  let x,y,tries=0;
@@ -572,7 +577,7 @@ function spawnMob(boss=false){
 }
 
 function drawWorld(){
-
+ if(inTown()){drawTownWorld();return;}
  const map=currentMap();
 
  ctx.fillStyle=map.color;
@@ -643,6 +648,25 @@ function pixelPerson(x,y,main='#5a9be8',isPlayer=false){
  }
 }
 
+function drawTownWorld(){
+ ctx.fillStyle="#344c3e";ctx.fillRect(0,0,W,H);
+ for(let y=0;y<H;y+=36){for(let x=0;x<W;x+=36){ctx.fillStyle=((x+y)/36)%2?"#3b5945":"#385340";ctx.fillRect(x,y,34,34);}}
+ ctx.fillStyle="#b49a6b";ctx.beginPath();ctx.moveTo(0,390);ctx.bezierCurveTo(110,350,160,420,250,385);ctx.bezierCurveTo(340,350,390,410,480,370);ctx.lineTo(480,470);ctx.bezierCurveTo(370,500,330,445,240,480);ctx.bezierCurveTo(140,515,80,455,0,500);ctx.closePath();ctx.fill();
+ // Nhà dân
+ const houses=[[35,115,"#9b6650"],[335,105,"#8b7655"],[40,535,"#9a7852"],[350,530,"#725d4d"]];
+ for(const [x,y,c] of houses){ctx.fillStyle="#4a3329";ctx.fillRect(x-5,y+32,112,70);ctx.fillStyle=c;ctx.fillRect(x,y+25,102,70);ctx.fillStyle="#5b382d";ctx.beginPath();ctx.moveTo(x-10,y+28);ctx.lineTo(x+50,y-15);ctx.lineTo(x+112,y+28);ctx.closePath();ctx.fill();ctx.fillStyle="#f3d18a";ctx.fillRect(x+15,y+45,18,20);ctx.fillRect(x+68,y+45,18,20);ctx.fillStyle="#453329";ctx.fillRect(x+42,y+62,20,33);}
+ // Giếng và quảng trường
+ ctx.fillStyle="#5a5144";ctx.fillRect(190,300,100,48);ctx.fillStyle="#8c9c99";ctx.fillRect(198,305,84,34);ctx.fillStyle="#3e777a";ctx.fillRect(204,311,72,22);ctx.fillStyle="#5a5144";ctx.fillRect(187,294,106,9);
+ // Cây
+ for(const [x,y] of [[25,275],[440,270],[135,190],[320,235],[130,610],[420,620]]){ctx.fillStyle="#60432f";ctx.fillRect(x-4,y,8,30);ctx.fillStyle="#4c8956";ctx.beginPath();ctx.arc(x,y-3,22,0,Math.PI*2);ctx.fill();ctx.fillStyle="#70a963";ctx.beginPath();ctx.arc(x-7,y-10,10,0,Math.PI*2);ctx.fill();}
+ // Bảng tên và NPC
+ ctx.fillStyle="#2a211c";ctx.fillRect(145,55,190,48);ctx.fillStyle="#d9bd7a";ctx.fillRect(149,59,182,40);ctx.fillStyle="#382a20";ctx.font="bold 18px monospace";ctx.textAlign="center";ctx.fillText("ABORNE",240,84);ctx.textAlign="left";
+ pixelPerson(240,220,"#b58a4c",false);ctx.fillStyle="#fff0b0";ctx.font="bold 12px monospace";ctx.textAlign="center";ctx.fillText("TRƯỞNG TRẤN ALDEN",240,190);ctx.textAlign="left";
+ pixelPerson(110,365,"#8fb7c7",false);ctx.fillStyle="#e5f4ff";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("Y SĨ",110,337);ctx.textAlign="left";
+ pixelPerson(370,365,"#c68c65",false);ctx.fillStyle="#ffe0b0";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("THƯƠNG NHÂN",370,337);ctx.textAlign="left";
+ ctx.fillStyle="#fff4d0";ctx.font="12px monospace";ctx.textAlign="center";ctx.fillText("Nơi nghỉ chân an toàn • Chọn dịch vụ bên dưới",240,680);ctx.textAlign="left";
+}
+
 function drawMob(m){
  ctx.fillStyle='#17232988';ctx.beginPath();ctx.ellipse(m.x,m.y+12,m.boss?25:17,7,0,0,Math.PI*2);ctx.fill();
  const bob=Math.sin(performance.now()/170+(m.phase||m.x))*2+Math.sin(performance.now()/280+(m.phase||0))*1.4;
@@ -703,7 +727,7 @@ function nearest(){
 
 }
 function attack(skill=false,arrived=false){
- if(state.dead||!state.started||state.paused)return;
+ if(inTown()||state.dead||!state.started||state.paused)return;
  const now=performance.now(),p=state.player;
  if(skill){if(state.mp<10||now-state.lastSkill<1600*(1-(state.cooldownReduction||0)))return;}else if(now-state.lastAttack<420/Math.max(.25,state.attackSpeed||1))return;
  const m=(state.target&&!state.target.dead&&state.mobs.includes(state.target))?state.target:nearest();
@@ -717,7 +741,7 @@ function attack(skill=false,arrived=false){
  m.hp=Math.max(0,m.hp-dmg);m.hit=.24;state.hp=Math.min(state.maxHp,state.hp+dmg*((skill?state.omnivamp:state.lifesteal+state.omnivamp)/100));if(critical)floatText(m.x,m.y-36,'CHÍ MẠNG!','#ffe36b');
  particle(m.x,m.y,skill?'#9be7ff':'#ffe08a');floatText(m.x,m.y-20,'-'+dmg,skill?'#9be7ff':'#fff0a8');
  if(m.hp<=0&&!m.dead){
-  m.dead=true;state.kills++;if(!m.boss){state.mapKills++;state.respawnTimer=Math.max(state.respawnTimer,.8);}
+  m.dead=true;state.kills++;if(!m.boss){state.mapKills++;state.mapKillCounts=state.mapKillCounts||[0,0,0];state.mapKillCounts[state.mapIndex]=(state.mapKillCounts[state.mapIndex]||0)+1;state.respawnTimer=Math.max(state.respawnTimer,.8);}
   const map=currentMap(),xp=m.boss?map.bossXp:map.xp;
   addExperience(xp);state.earned+=xp;state.gold+=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));state.loot++;if(!m.boss)state.gels++;lootDrop(m.x,m.y);
   floatText(m.x,m.y-32,'+'+xp+' EXP','#ffe27a');log((m.boss?'Guardian bị đánh bại! ':'Hạ '+map.mob+'! ')+'+'+xp+' EXP');
@@ -729,6 +753,7 @@ function attack(skill=false,arrived=false){
 
 function update(dt){
  if(!state.started||state.paused||state.dead)return;
+ if(inTown()){state.hp=Math.min(state.maxHp,state.hp+state.maxHp*.035*dt);state.mp=Math.min(state.maxMp,state.mp+state.maxMp*.05*dt);}
  state.elapsed+=dt;state.attackAnim=Math.max(0,state.attackAnim-dt);state.skillFlash=Math.max(0,state.skillFlash-dt);
  state.hitFlash=Math.max(0,state.hitFlash-dt);state.levelUpFx=Math.max(0,state.levelUpFx-dt);
  const p=state.player;let dx=joystick.x,dy=joystick.y;
@@ -743,7 +768,7 @@ function update(dt){
    else attack(a.skill,true);
   }
  }
- if(state.auto&&!state.pendingAction){
+ if(!inTown()&&state.auto&&!state.pendingAction){
   const m=(state.target&&!state.target.dead&&state.mobs.includes(state.target))?state.target:nearest();
   if(m){state.target=m;const d=Math.hypot(m.x-p.x,m.y-p.y);if(d>42){p.x+=(m.x-p.x)/d*(state.moveSpeed||150)*.67*dt;p.y+=(m.y-p.y)/d*(state.moveSpeed||150)*.67*dt;moving=true;}else attack(false);}
  }
@@ -878,7 +903,7 @@ window.addEventListener('keyup',e=>keys[e.code]=false);
 $('mpPotionBtn').onclick=drinkMp;$('itemModalClose').onclick=closeItem;$('itemEquipBtn').onclick=()=>{if(selectedItemIndex!==null)equip(selectedItemIndex)};$('itemSellBtn').onclick=sellItem;$('itemDropBtn').onclick=discardItem;$('itemLockBtn').onclick=toggleItemLock;document.addEventListener('click',e=>{const p=e.target.closest('[data-potential]');if(p)spendPoint(p.dataset.potential);const q=e.target.closest('[data-item-index]');if(q)openItem(+q.dataset.itemIndex);const z=e.target.closest('[data-unequip]');if(z)unequip(z.dataset.unequip);const quest=e.target.closest('[data-quest-claim]');if(quest)claimQuest(quest.dataset.questClaim);});
 $('respawnBtn').onclick=()=>{
  state.dead=false;state.paused=false;state.hp=Math.max(1,Math.round(state.maxHp*.65));
- state.player.x=240;state.player.y=360;state.pendingAction=null;state.target=null;
+ state.player.x=240;state.player.y=360;state.inTown=true;state.mobs=[];state.auto=false;state.pendingAction=null;state.target=null;
  $('deathScreen').classList.remove('show');
  for(let i=0;i<7;i++)if(state.mobs.filter(m=>!m.boss).length<7)spawnMob();
  log('Bạn đã hồi sinh và có thể tiếp tục chiến đấu.');save();ui();
@@ -903,6 +928,7 @@ $('potionBtn').onclick=()=>{if(state.potions>0&&state.hp<state.maxHp){state.poti
 
 
 $('mapSelect').addEventListener('change',e=>selectMap(Number(e.target.value)));
+$('townHeal').addEventListener('click',townHeal);$('townBuyHp').addEventListener('click',()=>townBuy("hp"));$('townBuyMp').addEventListener('click',()=>townBuy("mp"));
 
 const joy=$('joystick'),stick=$('stick');
 
@@ -960,7 +986,7 @@ load();
 state.started=true;
 state.paused=false;
 state.dead=false;
-if(!state.mobs.length)for(let i=0;i<7;i++)spawnMob();
+if(!state.inTown&&!state.mobs.length)for(let i=0;i<7;i++)spawnMob();
 state.mapIndex=Math.min(state.mapIndex||0,maps.length-1);
 state.unlockedMaps=Math.max(1,Math.min(state.unlockedMaps||1,maps.length));
 try{updateMapUI();}catch(e){console.error('Map UI init error:',e);}
