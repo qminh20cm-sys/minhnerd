@@ -440,7 +440,7 @@ function compareItemPower(it){
  const simulated={...state.equipped,[it.slot]:it};
  const after=calculateCombatPower(simulated),delta=after-before;
  const cls=delta>0?'power-up':delta<0?'power-down':'power-even';
- const verdict=delta>0?'MẠNH HƠN — NÊN ƯU TIÊN':'MẠNH YẾU TƯƠNG ĐƯƠNG / THẤP HƠN';
+ const verdict=delta>0?'MẠNH HƠN — NÊN ƯU TIÊN':delta<0?'YẾU HƠN — CHƯA NÊN ĐỔI':'NGANG CHIẾN LỰC';
  return '<div class="power-compare"><b>⚖️ SO SÁNH CHIẾN LỰC</b><div>Hiện tại: <b>'+before.toLocaleString('vi-VN')+'</b></div><div>Nếu trang bị món này: <b>'+after.toLocaleString('vi-VN')+'</b></div><div class="'+cls+'">Chênh lệch: '+(delta>0?'+':'')+delta.toLocaleString('vi-VN')+' điểm</div><div class="'+cls+'">'+verdict+'</div><small style="color:#9fb7ba">Mô phỏng thay thế món đang mặc ở cùng vị trí, tính cả class và toàn bộ trang bị còn lại.</small></div>';
 }
 
