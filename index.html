@@ -945,9 +945,9 @@ function ui(){
  $('xpText').textContent=state.level>=200?'MAX CẤP':state.xp+'/'+state.nextXp;
  $('xpBar').style.width=(state.level>=200?100:state.xp/state.nextXp*100)+'%';
 
- $('level').textContent='Lv. '+state.level+' / 200';
- $('attack').textContent=state.atk;
- $('defense').textContent=state.def;renderPotentialUI();renderCombatStats();
+ // Ba ô level/attack/defense thuộc giao diện cũ đã bị loại khỏi HTML.
+ // Không truy cập chúng trong ui() vì sẽ gây TypeError mỗi khi nhân vật lên cấp.
+ renderPotentialUI();renderCombatStats();
  $('gold').textContent=state.gold+' G';
 
  $('potions').textContent=state.potions+' bình';
