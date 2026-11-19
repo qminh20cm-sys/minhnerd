@@ -579,16 +579,44 @@ function setupHudDesigner(){
   function getEditElement(k){return hudTargets[k]?.();}
   function syncEditorFields(){const v=hudLayout[selected];if(!v)return;editor.querySelector('#hudEditWidth').value=v.width;editor.querySelector('#hudEditHeight').value=v.height;editor.querySelector('#hudEditScale').value=v.scale;editor.querySelector('#hudEditOpacity').value=v.opacity;select.value=selected;}
   function chooseHud(k){if(!hudLayout[k])return;const old=getEditElement(selected);if(old)old.style.outline='';selected=k;const el=getEditElement(k);if(el)el.style.outline='2px dashed #ffe36b';syncEditorFields();}
-  function setEditing(on){editing=on;editor.style.display=on?'block':'none';editBtn.textContent=on?'✥ Đang chỉnh HUD':'✥ Chỉnh HUD trực tiếp';editBtn.classList.toggle('active',on);document.querySelector('.side')?.classList.remove('open');if(on){chooseHud(selected);}else{for(const k of editTargets){const el=getEditElement(k);if(el)el.style.outline='';}drag=null;}}
+  function setEditing(on){
+   editing=on;editor.style.display=on?'block':'none';
+   editBtn.textContent=on?'✥ Đang chỉnh HUD':'✥ Chỉnh HUD trực tiếp';
+   editBtn.classList.toggle('active',on);
+   document.querySelector('.side')?.classList.remove('open');
+   document.body.classList.toggle('hud-editing',on);
+   for(const k of editTargets){const el=getEditElement(k);if(!el)continue;
+    if(on){el.style.setProperty('pointer-events','auto','important');el.style.setProperty('touch-action','none','important');}
+    else{el.style.removeProperty('pointer-events');el.style.removeProperty('touch-action');el.style.outline='';}
+   }
+   if(on)chooseHud(selected);else drag=null;
+  }
   editBtn.addEventListener('click',()=>setEditing(!editing));editor.querySelector('#hudEditClose').addEventListener('click',()=>setEditing(false));
   select.addEventListener('change',()=>chooseHud(select.value));
   for(const [id,key] of [['hudEditWidth','width'],['hudEditHeight','height'],['hudEditScale','scale'],['hudEditOpacity','opacity']])editor.querySelector('#'+id).addEventListener('input',e=>{hudLayout[selected][key]=Number(e.target.value);applyHudLayout();chooseHud(selected);});
   editor.querySelector('#hudEditSave').addEventListener('click',()=>{saveHudLayout();alert('Đã lưu bố cục HUD trên thiết bị này.');});
   editor.querySelector('#hudEditReset').addEventListener('click',()=>{hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS));saveHudLayout();chooseHud(selected);});
   const editorRoot=document.querySelector('.gamebox');
-  editorRoot?.addEventListener('pointerdown',e=>{if(!editing||e.target.closest('#hudEditorPanel'))return;let k=null;for(const key of editTargets){const el=getEditElement(key);if(el&&(el===e.target||el.contains(e.target))){k=key;break;}}if(!k)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();chooseHud(k);const base=k==='menuBar'?editorRoot:canvasWrap;drag={key:k,pointerId:e.pointerId,base};try{e.target.setPointerCapture(e.pointerId);}catch{}},{capture:true});
-  editorRoot?.addEventListener('pointermove',e=>{if(!editing||!drag||drag.pointerId!==e.pointerId)return;const r=drag.base.getBoundingClientRect(),v=hudLayout[drag.key];v.x=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100));v.y=Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100));applyHudLayout();},{capture:true});
-  ['pointerup','pointercancel'].forEach(ev=>editorRoot?.addEventListener(ev,e=>{if(drag&&drag.pointerId===e.pointerId){drag=null;saveHudLayout();}},{capture:true}));
+  editorRoot?.addEventListener('pointerdown',e=>{
+   if(!editing||e.target.closest('#hudEditorPanel'))return;
+   let k=null;
+   for(const key of editTargets){const el=getEditElement(key);if(el&&(el===e.target||el.contains(e.target))){k=key;break;}}
+   if(!k)return;
+   e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();chooseHud(k);
+   const base=k==='menuBar'?editorRoot:canvasWrap;
+   drag={key:k,pointerId:e.pointerId,base};
+   try{editorRoot.setPointerCapture(e.pointerId);}catch{}
+  },{capture:true});
+  editorRoot?.addEventListener('pointermove',e=>{
+   if(!editing||!drag||drag.pointerId!==e.pointerId)return;
+   const r=drag.base.getBoundingClientRect(),v=hudLayout[drag.key];
+   v.x=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100));
+   v.y=Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100));
+   applyHudLayout();
+  },{capture:true});
+  ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>editorRoot?.addEventListener(ev,e=>{
+   if(drag&&drag.pointerId===e.pointerId){drag=null;saveHudLayout();}
+  },{capture:true}));
   $('hudImportFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(![4,5,6].includes(data.version)||!data.items)throw Error('Tệp không đúng định dạng HUD v4');for(const k of Object.keys(HUD_DEFAULTS))if(data.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...data.items[k]};saveHudLayout();alert('Đã nhập HUD thành công!');}catch(err){alert('Không thể nhập HUD: '+err.message);}e.target.value='';});
   $('hudExportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({version:4,items:hudLayout},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='afk-adventure-hud.json';a.click();URL.revokeObjectURL(url);});
  }
