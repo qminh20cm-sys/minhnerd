@@ -1,80 +1,56 @@
-<!doctype html>
-<html lang="vi">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>AFK Adventure - UI Designer</title>
-<style>
-:root{color-scheme:dark;--gold:#d7b66c;--bg:#101820;--panel:#192832;--line:#52636b}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#edf2ef;font:14px system-ui,sans-serif}
-header{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}h1{font-size:18px;margin:0;color:#ffe0a0}header small{color:#9eafb5}
-main{display:grid;grid-template-columns:minmax(300px,1fr) 310px;gap:16px;max-width:1100px;margin:16px auto;padding:0 14px}
-.preview-wrap{display:flex;justify-content:center;align-items:flex-start;background:#0b1116;border:1px solid var(--line);border-radius:12px;padding:16px;min-height:650px}
-#preview{width:min(100%,390px);aspect-ratio:9/16;position:relative;overflow:hidden;border:2px solid #796747;border-radius:16px;background:linear-gradient(#6d7d73 0 42%,#7e7153 42% 100%);box-shadow:0 12px 40px #0008;touch-action:none}
-.scene{position:absolute;inset:20% 0 22%;display:grid;place-items:center;color:#f6e8c3;text-shadow:0 2px 5px #000;font-weight:700;background:radial-gradient(ellipse,#b9a66b66,transparent 65%)}
-.item{position:absolute;min-width:42px;min-height:30px;padding:7px 9px;border:1px solid #c9a968;border-radius:9px;background:#17242de8;color:#fff;text-align:center;font-size:11px;cursor:grab;user-select:none;touch-action:none;white-space:nowrap}
-.item.selected{outline:2px solid #ffe08a;box-shadow:0 0 0 4px #ffe08a33}.item.hidden{opacity:.25;text-decoration:line-through}
-#hud{left:4%;top:4%;display:flex;gap:5px}#joystick{left:20%;top:84%;width:72px;height:72px;border-radius:50%;background:#17232dcc;display:grid;place-items:center}#joystick:after{content:"";width:32px;height:32px;border-radius:50%;background:#d8b96e}
-#attack{left:36%;top:89%}#skills{right:4%;top:80%;display:grid;grid-template-columns:repeat(2,48px);gap:4px}#skills span{display:grid;place-items:center;background:#803b70;border-radius:50%;width:40px;height:40px}
-#menu{right:4%;top:5%}#chat{left:50%;top:7%}#map{right:4%;top:17%}
-aside{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;height:max-content;position:sticky;top:12px}
-h2{font-size:15px;margin:0 0 12px;color:#ffe0a0}.field{margin:12px 0}.field label{display:flex;justify-content:space-between;gap:8px;margin-bottom:6px;color:#c8d4d7}.field input[type=range]{width:100%;accent-color:var(--gold)}
-select,button{font:inherit;color:#f5f5ef;background:#243640;border:1px solid #65747a;border-radius:8px;padding:9px}select{width:100%}button{cursor:pointer}button.primary{background:#69542e;border-color:var(--gold)}.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:14px}.actions button:last-child{grid-column:1/-1}
-.hint{color:#9eafb5;font-size:12px;line-height:1.5;margin-top:12px}
-@media(max-width:760px){main{grid-template-columns:1fr}.preview-wrap{min-height:0;padding:8px}#preview{width:min(100%,360px)}aside{position:static}}
-
-/* Circular icon-only controls preview */
-#attack{width:58px;height:58px;min-width:58px;min-height:58px;padding:0;border-radius:50%;display:grid;place-items:center;font-size:25px}
-#skills{right:auto;display:grid;grid-template-columns:repeat(2,46px);gap:5px;width:max-content;padding:0;border:0;background:transparent}
-#skills span{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;font-size:20px;background:radial-gradient(circle at 35% 28%,#425d69,#1a303b 75%);border:2px solid #78939b}
-
-</style></head>
-<body>
-<header><div><h1>AFK ADVENTURE · UI DESIGNER</h1><small>Kéo thả bố cục · lưu và đồng bộ bằng tệp cấu hình</small></div><button onclick="location.href='index.html'">← Quay lại game</button></header>
-<main><section class="preview-wrap"><div id="preview" aria-label="Bản xem trước HUD">
-<div class="scene">KHU VỰC CHIẾN ĐẤU</div>
-<div class="item" id="hud" data-key="hud">HP　MP　EXP</div>
-<div class="item" id="joystick" data-key="joystick">JOYSTICK</div>
-<div class="item" id="attack" data-key="mobileAttack">⚔️</div>
-<div class="item" id="skills" data-key="actionControls"><span>⚡</span><span>✨</span><span>❤️</span><span>💧</span></div>
-<div class="item" id="menu" data-key="menuBar">MENU</div>
-<div class="item" id="chat" data-key="chatToggle">CHAT</div>
-<div class="item" id="map" data-key="mapBanner">BẢN ĐỒ</div>
-</div></section>
-<aside><h2>THUỘC TÍNH THÀNH PHẦN</h2>
-<select id="elementSelect"><option value="hud">Thanh HP / MP / EXP</option><option value="joystick">Joystick</option><option value="mobileAttack">Nút đánh</option><option value="actionControls">Cụm AUTO / kỹ năng / thuốc</option><option value="menuBar">Thanh menu</option><option value="chatToggle">Nút chat</option><option value="mapBanner">Tên bản đồ</option></select>
-<div class="field"><label>Kích thước <b id="scaleValue">100%</b></label><input id="scale" type="range" min="50" max="180" value="100"></div>
-<div class="field"><label>Độ trong suốt <b id="opacityValue">100%</b></label><input id="opacity" type="range" min="20" max="100" value="100"></div>
-<div class="field"><label><input id="visible" type="checkbox" checked> Hiển thị thành phần</label></div>
-<div class="actions"><button class="primary" id="save">Lưu bố cục</button><button id="reset">Mặc định</button><button id="export">Xuất cấu hình JSON</button><button id="import">Nhập cấu hình JSON</button><input id="file" type="file" accept="application/json,.json" hidden></div>
-<p class="hint">Kéo trực tiếp các thành phần trong khung xem trước. Bố cục lưu trên trình duyệt hiện tại. Muốn chuyển giữa PC và iPhone, hãy xuất JSON ở thiết bị này rồi nhập JSON ở thiết bị kia.</p><p class="hint" id="status">Chưa có thay đổi chưa lưu.</p>
-</aside></main>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AFK Adventure HUD Studio</title><style>
+:root{color-scheme:dark;--bg:#0b1218;--p:#172630;--p2:#203541;--line:#3b5360;--gold:#dfbd76;--muted:#9eb2ba}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eef4f2;font:14px system-ui}header{height:60px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;background:#111c24;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}.brand{font-weight:800;letter-spacing:.1em;color:#ffe2a3}.brand small{display:block;font-size:10px;color:var(--muted);font-weight:400}button,select,input{font:inherit;color:inherit}button{background:#263d49;border:1px solid #536d79;border-radius:8px;padding:8px 11px;cursor:pointer}button:hover{border-color:var(--gold)}.primary{background:#725a30;border-color:var(--gold)}.app{max-width:1500px;margin:auto;padding:14px;display:grid;grid-template-columns:230px minmax(340px,1fr) 280px;gap:12px;min-height:calc(100vh - 60px)}.panel{background:var(--p);border:1px solid var(--line);border-radius:11px;overflow:hidden}.panel h2{font-size:11px;letter-spacing:.12em;color:var(--gold);padding:13px;margin:0;border-bottom:1px solid var(--line)}.palette{padding:9px;display:grid;gap:6px}.part{display:flex;align-items:center;gap:9px;text-align:left;background:var(--p2);width:100%}.ico{width:28px;height:28px;display:grid;place-items:center;background:#101b22;border-radius:7px;font-size:17px}.part small{display:block;color:var(--muted);font-size:10px}.center{display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0}.toolbar{width:100%;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px;background:var(--p);border:1px solid var(--line);border-radius:9px}.toolbar button{font-size:11px}.stage{width:100%;flex:1;min-height:650px;display:flex;align-items:center;justify-content:center;padding:14px;background:radial-gradient(ellipse,#263c46,#0a1116 72%);border:1px solid var(--line);border-radius:10px}.phone{height:min(78vh,820px);aspect-ratio:9/16;max-width:100%;position:relative;overflow:hidden;border:7px solid #263640;border-radius:25px;background:linear-gradient(#365a47 0 55%,#b49b6d 55% 70%,#365a47 70%);box-shadow:0 15px 45px #0009;touch-action:none}.phone:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#142c2733 2px,transparent 2px),linear-gradient(90deg,#142c2733 2px,transparent 2px);background-size:40px 40px;pointer-events:none}.sceneLabel{position:absolute;top:44%;width:100%;text-align:center;color:#f6e8bd;text-shadow:0 2px 4px #000;font-weight:bold;letter-spacing:.1em}.element{position:absolute;display:flex;align-items:center;justify-content:center;min-width:18px;min-height:18px;border:1px solid #91aab0;background:#263f4c;color:white;box-shadow:0 3px 9px #0008;user-select:none;cursor:grab;touch-action:none;white-space:nowrap}.element.selected{outline:2px solid #ffdf8a;outline-offset:3px;z-index:99!important}.element[data-key=hpStat],.element[data-key=mpStat],.element[data-key=xpStat]{flex-direction:column;font-size:9px}.bar{width:72%;height:5px;border-radius:5px;background:linear-gradient(90deg,#54cf7b 65%,#24343a 65%)}.element[data-key=joystick]{background:radial-gradient(circle,#6b9da5,#203843 70%);border:3px solid #90b7bc}.element[data-key=joystick]:after{content:"";width:42%;height:42%;border-radius:50%;background:#a5dce0;border:2px solid #d5f7f7}.right .fields{padding:13px;display:grid;gap:10px}.field label{display:flex;justify-content:space-between;font-size:11px;color:#cfdddf;margin-bottom:4px}.field output{color:var(--gold)}.field input[type=range]{width:100%;accent-color:var(--gold)}.field input[type=color]{width:100%;height:32px;background:#101b22;border:1px solid var(--line);border-radius:6px}.field select,.field input[type=text]{width:100%;padding:8px;background:#101b22;border:1px solid var(--line);border-radius:6px}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.check{display:flex;gap:8px;align-items:center;font-size:12px}.actions{padding:0 13px 12px;display:grid;grid-template-columns:1fr 1fr;gap:6px}.actions button{font-size:11px}.hint,.status{font-size:11px;color:var(--muted);line-height:1.5;padding:0 13px 12px}.status{color:#9bd9b2;padding-top:10px}@media(max-width:1000px){.app{grid-template-columns:190px minmax(300px,1fr)}.right{grid-column:1/-1}}@media(max-width:650px){.app{display:flex;flex-direction:column;padding:7px}.stage{min-height:590px}.phone{height:68vh}.left{order:2}.center{order:1}.right{order:3}}
+</style></head><body>
+<header><div class="brand">AFK ADVENTURE <small>HUD DESIGNER · PC STUDIO</small></div><div><button id="back">← Về game</button> <button class="primary" id="exportTop">Xuất HUD JSON</button></div></header>
+<div class="app"><section class="panel left"><h2>THÀNH PHẦN HUD</h2><div class="palette" id="palette"></div><p class="hint">Chọn đối tượng hoặc kéo trực tiếp trên màn hình mô phỏng.</p></section>
+<section class="center"><div class="toolbar"><div><button id="undo">↶ Hoàn tác</button> <button id="redo">↷ Làm lại</button> <button id="reset">↺ Mặc định</button></div><button id="save">Lưu trên PC</button></div><div class="stage"><div class="phone" id="phone"><div class="sceneLabel">KHU VỰC CHIẾN ĐẤU</div><div id="elements"></div></div></div><p class="hint">Mô phỏng màn hình dọc 9:16. Từng thành phần có thể kéo thả độc lập.</p></section>
+<section class="panel right"><h2>THUỘC TÍNH ĐỐI TƯỢNG</h2><div class="fields">
+<div class="field"><label>Đối tượng</label><select id="selected"></select></div><div class="field"><label>Icon / nội dung</label><input id="icon" type="text" maxlength="20"></div>
+<div class="two"><div class="field"><label>X <output id="xO"></output></label><input id="x" type="range" min="0" max="100"></div><div class="field"><label>Y <output id="yO"></output></label><input id="y" type="range" min="0" max="100"></div></div>
+<div class="two"><div class="field"><label>Rộng <output id="wO"></output></label><input id="width" type="range" min="24" max="240"></div><div class="field"><label>Cao <output id="hO"></output></label><input id="height" type="range" min="20" max="180"></div></div>
+<div class="two"><div class="field"><label>Scale <output id="sO"></output></label><input id="scale" type="range" min="50" max="180"></div><div class="field"><label>Độ mờ <output id="oO"></output></label><input id="opacity" type="range" min="10" max="100"></div></div>
+<div class="field"><label>Hình dạng</label><select id="shape"><option value="circle">Tròn</option><option value="rounded">Bo góc</option><option value="square">Vuông</option><option value="pill">Viên thuốc</option></select></div>
+<div class="field"><label>Màu nền</label><input id="color" type="color"></div><label class="check"><input id="visible" type="checkbox"> Hiển thị</label></div>
+<div class="actions"><button id="duplicate">Nhân đôi</button><button id="restore">Khôi phục</button><button id="import">Nhập JSON</button><button id="export">Xuất JSON</button><input id="file" type="file" accept=".json,application/json" hidden></div><div class="status" id="status">Sẵn sàng.</div></section></div>
 <script>
-const KEY='afkHudLayoutV1';
-const defaults={
- hud:{"x":49.64102720602965,"y":76.1547636422254,"scale":100,"opacity":100,"visible":true},
- joystick:{"x":12,"y":86,"scale":100,"opacity":100,"visible":true},
- mobileAttack:{"x":89,"y":68,"scale":100,"opacity":100,"visible":true},
- actionControls:{"x":82,"y":86,"scale":100,"opacity":100,"visible":true},
- menuBar:{"x":47.17949500450721,"y":4.153897204038369,"scale":100,"opacity":100,"visible":true},
- chatToggle:{"x":90.05129300631009,"y":4.5000543243252284,"scale":100,"opacity":100,"visible":true},
- mapBanner:{"x":11.897442157451923,"y":10.615512005018383,"scale":100,"opacity":100,"visible":true},
-};
-let layout=structuredClone(defaults),selected='hud',drag=null;
-const preview=document.getElementById('preview'),status=document.getElementById('status');
-function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&v.version===3)for(const k of Object.keys(defaults))layout[k]={...defaults[k],...(v.items?.[k]||{})};}catch{}}
-function render(){for(const [k,v] of Object.entries(layout)){const el=document.querySelector('[data-key="'+k+'"]');el.style.left=v.x+'%';el.style.top=v.y+'%';el.style.right='auto';el.style.transform='translate(-50%,-50%) scale('+v.scale/100+')';el.style.opacity=v.opacity/100;el.classList.toggle('hidden',!v.visible);el.classList.toggle('selected',k===selected);}
-const v=layout[selected];document.getElementById('elementSelect').value=selected;document.getElementById('scale').value=v.scale;document.getElementById('opacity').value=v.opacity;document.getElementById('visible').checked=v.visible;document.getElementById('scaleValue').textContent=v.scale+'%';document.getElementById('opacityValue').textContent=v.opacity+'%';}
-function persist(){localStorage.setItem(KEY,JSON.stringify({version:3,items:layout}));status.textContent='Đã lưu bố cục trên thiết bị này.';}
-function choose(k){selected=k;render();}
-document.querySelectorAll('.item').forEach(el=>{el.addEventListener('pointerdown',e=>{e.preventDefault();choose(el.dataset.key);drag={key:selected,id:e.pointerId};el.setPointerCapture(e.pointerId);});el.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const r=preview.getBoundingClientRect(),v=layout[drag.key];v.x=Math.max(2,Math.min(98,(e.clientX-r.left)/r.width*100));v.y=Math.max(2,Math.min(98,(e.clientY-r.top)/r.height*100));render();});el.addEventListener('pointerup',()=>drag=null);el.addEventListener('pointercancel',()=>drag=null);});
-document.getElementById('elementSelect').onchange=e=>choose(e.target.value);
-document.getElementById('scale').oninput=e=>{layout[selected].scale=+e.target.value;render();};
-document.getElementById('opacity').oninput=e=>{layout[selected].opacity=+e.target.value;render();};
-document.getElementById('visible').onchange=e=>{layout[selected].visible=e.target.checked;render();};
-document.getElementById('save').onclick=persist;
-document.getElementById('reset').onclick=()=>{layout=structuredClone(defaults);render();persist();};
-document.getElementById('export').onclick=()=>{const blob=new Blob([JSON.stringify({version:2,items:layout},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='afk-adventure-hud.json';a.click();URL.revokeObjectURL(a.href);status.textContent='Đã xuất cấu hình JSON.';};
-document.getElementById('import').onclick=()=>document.getElementById('file').click();
-document.getElementById('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const v=JSON.parse(await f.text());if(v.version!==3||!v.items)throw Error('Sai định dạng');for(const k of Object.keys(defaults))if(v.items[k])layout[k]={...defaults[k],...v.items[k]};render();persist();}catch(err){status.textContent='Không thể nhập: '+err.message;}e.target.value='';};
-load();render();
+const KEY='afkHudLayoutV1', $=id=>document.getElementById(id);
+const defs={
+hpStat:{name:'Thanh HP',icon:'❤️ HP',x:18,y:5,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+mpStat:{name:'Thanh MP',icon:'💧 MP',x:50,y:5,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+xpStat:{name:'Thanh EXP',icon:'⭐ EXP',x:82,y:5,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+joystick:{name:'Joystick',icon:'',x:14,y:84,width:72,height:72,scale:100,opacity:100,visible:true,shape:'circle',color:'#17303b'},
+mobileAttack:{name:'Nút đánh',icon:'⚔️',x:88,y:68,width:64,height:64,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+autoBtn:{name:'AUTO',icon:'⚡',x:72,y:84,width:50,height:50,scale:100,opacity:100,visible:true,shape:'circle',color:'#245b42'},
+skillBtn:{name:'Kỹ năng',icon:'✨',x:84,y:84,width:50,height:50,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+potionBtn:{name:'Bình HP',icon:'❤️',x:72,y:94,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+mpPotionBtn:{name:'Bình MP',icon:'💧',x:84,y:94,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+chatToggle:{name:'Chat',icon:'💬',x:92,y:10,width:52,height:52,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+mapBanner:{name:'Tên bản đồ',icon:'ABORNE',x:50,y:15,width:190,height:48,scale:100,opacity:100,visible:true,shape:'rounded',color:'#dfc080'},
+menuBar:{name:'Thanh menu',icon:'👤 🗺️ 🎯 ⚔️ 🎒 ⚙️',x:50,y:5,width:380,height:48,scale:100,opacity:100,visible:true,shape:'rounded',color:'#203541'}};
+let layout=structuredClone(defs),selected='mobileAttack',drag=null,undo=[],redo=[];
+const phone=$('phone');
+function say(t){$('status').textContent=t}
+function snapshot(){undo.push(JSON.stringify(layout));if(undo.length>50)undo.shift();redo=[]}
+function choose(k){selected=k;render()}
+function draw(){ $('elements').innerHTML=Object.entries(layout).map(([k,v])=>'<div class="element '+(k===selected?'selected':'')+'" data-key="'+k+'" style="left:'+v.x+'%;top:'+v.y+'%;width:'+v.width+'px;height:'+v.height+'px;transform:translate(-50%,-50%) scale('+(v.scale/100)+');opacity:'+(v.opacity/100)+';border-radius:'+(v.shape==='circle'?'50%':v.shape==='pill'?'999px':v.shape==='square'?'0':'10px')+';background:'+v.color+';display:'+(v.visible?'flex':'none')+'">'+(k.endsWith('Stat')?'<span>'+v.icon+'</span><i class="bar"></i>':v.icon)+'</div>').join('');
+ document.querySelectorAll('.element').forEach(el=>{el.onpointerdown=e=>{e.preventDefault();snapshot();choose(el.dataset.key);drag={key:el.dataset.key,id:e.pointerId};el.setPointerCapture(e.pointerId)};el.onpointermove=e=>{if(!drag||drag.id!==e.pointerId)return;const r=phone.getBoundingClientRect(),v=layout[drag.key];v.x=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100));v.y=Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100));const n=document.querySelector('.element[data-key="'+drag.key+'"]');n.style.left=v.x+'%';n.style.top=v.y+'%';fields()};el.onpointerup=el.onpointercancel=()=>drag=null});
+}
+function palette(){$('palette').innerHTML=Object.entries(layout).map(([k,v])=>'<button class="part" data-k="'+k+'"><span class="ico">'+(v.icon||'◉')+'</span><span>'+v.name+'<small>'+k+'</small></span></button>').join('');document.querySelectorAll('.part').forEach(b=>b.onclick=()=>choose(b.dataset.k))}
+function fields(){const v=layout[selected];$('selected').innerHTML=Object.entries(layout).map(([k,a])=>'<option value="'+k+'">'+a.name+'</option>').join('');$('selected').value=selected;for(const k of ['icon','x','y','width','height','scale','opacity','shape','color','visible'])$(k).type==='checkbox'?$(k).checked=v[k]:$(k).value=v[k];$('xO').textContent=Math.round(v.x)+'%';$('yO').textContent=Math.round(v.y)+'%';$('wO').textContent=v.width+'px';$('hO').textContent=v.height+'px';$('sO').textContent=v.scale+'%';$('oO').textContent=v.opacity+'%'}
+function render(){draw();palette();fields()}
+$('selected').onchange=e=>choose(e.target.value);
+for(const k of ['icon','x','y','width','height','scale','opacity','shape','color','visible'])$(k).oninput=e=>{snapshot();layout[selected][k]=k==='visible'?e.target.checked:(['x','y','width','height','scale','opacity'].includes(k)?+e.target.value:e.target.value);draw();fields()};
+$('reset').onclick=()=>{snapshot();layout=structuredClone(defs);selected='mobileAttack';render();say('Đã khôi phục mặc định.')};
+$('restore').onclick=()=>{snapshot();layout[selected]={...defs[selected]};render();say('Đã khôi phục đối tượng.')};
+$('duplicate').onclick=()=>{snapshot();const k=selected+'Copy';layout[k]={...layout[selected],name:layout[selected].name+' (bản sao)',x:Math.min(95,layout[selected].x+5),y:Math.min(95,layout[selected].y+5)};selected=k;render();say('Đã nhân đôi trong bản xem trước. Bản sao không xuất vào game.')};
+$('undo').onclick=()=>{if(!undo.length)return;redo.push(JSON.stringify(layout));layout=JSON.parse(undo.pop());render()};
+$('redo').onclick=()=>{if(!redo.length)return;undo.push(JSON.stringify(layout));layout=JSON.parse(redo.pop());render()};
+$('save').onclick=()=>{localStorage.setItem(KEY,JSON.stringify(payload()));say('Đã lưu trên trình duyệt PC.')};
+function payload(){const items={};for(const k of Object.keys(defs)){const v=layout[k];items[k]=Object.fromEntries(['x','y','width','height','scale','opacity','visible','shape','color'].map(p=>[p,v[p]]))}return {version:4,items}}
+function exportJson(){const b=new Blob([JSON.stringify(payload(),null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='afk-adventure-hud.json';a.click();URL.revokeObjectURL(a.href);say('Đã xuất afk-adventure-hud.json')}
+$('export').onclick=$('exportTop').onclick=exportJson;$('import').onclick=()=>$('file').click();
+$('file').onchange=async e=>{try{const d=JSON.parse(await e.target.files[0].text());if(d.version!==4||!d.items)throw Error('Không đúng cấu hình HUD v4');snapshot();for(const k of Object.keys(defs))if(d.items[k])layout[k]={...defs[k],...d.items[k]};render();say('Đã nhập cấu hình.')}catch(err){say('Lỗi: '+err.message)}e.target.value=''};
+$('back').onclick=()=>location.href='index.html';
+try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d?.version===4)for(const k of Object.keys(defs))if(d.items?.[k])layout[k]={...defs[k],...d.items[k]}}catch{}
+render();
 </script></body></html>
