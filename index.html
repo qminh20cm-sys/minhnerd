@@ -38,7 +38,8 @@ button.active{background:#28684e;border-color:#72e0ad;color:#dffff0}
 
 .panel{background:linear-gradient(180deg,#1c303c,#14232d);border:2px solid var(--line);border-radius:10px;padding:12px;box-shadow:0 8px 24px #0005}
 
-.gamebox{padding:8px;position:relative}
+ .gamebox{padding:8px;position:relative}
+.boss-defeat-notice{position:absolute;left:50%;top:43%;transform:translate(-50%,-50%) scale(.96);z-index:28;max-width:92%;padding:9px 13px;border:1px solid #ff6464;border-radius:8px;background:#19090ddd;color:#ff5555;font:bold clamp(12px,3.1vw,18px)/1.3 monospace;text-align:center;text-shadow:0 0 6px #ff2222,0 0 14px #ff2222;box-shadow:0 0 18px #ff252577;opacity:0;pointer-events:none;white-space:normal}.boss-defeat-notice.show{animation:bossNoticeFade 2.6s ease-out forwards}@keyframes bossNoticeFade{0%{opacity:0;transform:translate(-50%,-50%) scale(.96)}10%{opacity:1;transform:translate(-50%,-50%) scale(1)}72%{opacity:1}100%{opacity:0;transform:translate(-50%,-58%) scale(1.02)}}
 
 .game-version{position:absolute;right:8px;top:auto;bottom:5px;z-index:18;padding:2px 4px;color:#b9c5c2;font:8px/1 ui-monospace,Consolas,monospace;opacity:.62;letter-spacing:.2px;pointer-events:none;user-select:none}
 .reward-feed{position:absolute;left:7px;top:auto;bottom:5px;z-index:18;display:flex;flex-direction:column;gap:2px;pointer-events:none;max-width:46%}.gain-line{font:bold 10px/1.2 ui-monospace,Consolas,monospace;text-shadow:0 1px 3px #071018,0 0 4px #071018;white-space:nowrap;animation:gainFade 2.6s ease-out forwards}@keyframes gainFade{0%{opacity:0;transform:translateY(3px)}10%{opacity:1;transform:translateY(0)}72%{opacity:1}100%{opacity:0;transform:translateY(-5px)}}
@@ -194,7 +195,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 .action-controls button{min-height:43px!important;background:#263e4beF;backdrop-filter:blur(5px);box-shadow:0 2px 8px #0008}
 .chat-toggle{top:58px!important;right:10px!important}
 .chat-panel{top:102px!important;right:10px!important}
-.game-version{left:8px!important;right:auto!important;bottom:55px!important;z-index:12!important}
+
 @media(max-width:520px){
  .menu-bar{top:calc(6px + env(safe-area-inset-top))!important;left:5px!important;right:5px!important}
  .menu-bar button{min-height:36px!important;font-size:17px!important;padding:4px 1px!important}
@@ -207,7 +208,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
  .action-controls button{min-height:39px!important;padding:4px 2px!important;font-size:10px!important}
  .chat-toggle{top:49px!important;right:7px!important}
  .chat-panel{top:92px!important;right:7px!important}
- .game-version{bottom:52px!important;left:7px!important}
+ 
 }
 
 
@@ -399,8 +400,9 @@ html,body{overscroll-behavior-x:none!important}
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
     <div id="rewardToast" class="reward-toast" role="status" aria-live="assertive"></div>
+    <div id="bossDefeatNotice" class="boss-defeat-notice" role="status" aria-live="assertive"></div>
     <div id="rewardFeed" class="reward-feed" aria-live="polite"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.12</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.15</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ THẾ GIỚI HẮC ÁM</h2><div class="intro-story">Hàng thiên niên kỷ đã trôi qua, nhưng mỗi khi nhắc về cuộc Đại Hỗn Chiến trên lục địa Eldric, nhân loại vẫn không khỏi rùng mình kinh hãi. Những cánh đồng chất đầy thi thể, máu nhuộm đỏ đất trời, tiếng binh khí va chạm chát chúa hòa cùng tiếng gào thét bi ai và những luồng ma pháp xé toạc không gian—tất cả địa ngục trần gian ấy chỉ là hệ quả từ sự thức tỉnh của Chúa tể Hắc ám Halphys, kẻ vừa phá vỡ phong ấn cổ đại sau hàng thế kỷ bị giam cầm.
@@ -582,16 +584,16 @@ document.body.appendChild($('blacksmithModal'));
 document.body.appendChild($('townShopModal'));
 
 const maps=[
-{name:'ĐỒNG CỎ XANH',difficulty:'Dễ',mob:'Slime',hp:32,atk:5,xp:12,gold:4,color:'#477d52',path:'#9b875c',water:'#397c83',boss:'Forest Guardian',bossHp:260,bossAtk:14,bossXp:120,bossGold:80},
-{name:'HANG ĐỘNG',difficulty:'Trung bình',mob:'Thạch quái',hp:62,atk:10,xp:25,gold:9,color:'#4d5966',path:'#8b8175',water:'#344f67',boss:'Cave Golem',bossHp:520,bossAtk:23,bossXp:260,bossGold:180},
-{name:'THUNG LŨNG TÀN TRO',difficulty:'Khó',mob:'Hỏa linh',hp:105,atk:18,xp:45,gold:17,color:'#704b42',path:'#b17b52',water:'#69434b',boss:'Ash Warden',bossHp:900,bossAtk:36,bossXp:520,bossGold:360},
-{name:'MIỆNG NÚI LỬA',difficulty:'Khó',mob:'Quái vật map 4',hp:160,atk:27,xp:70,gold:28,color:'#53634b',path:'#9b875c',water:'#397c83',boss:'Boss map 4',bossHp:1300,bossAtk:48,bossXp:800,bossGold:520},
-{name:'THÀNH LORAND',difficulty:'Rất khó',mob:'Quái vật map 5',hp:230,atk:38,xp:100,gold:40,color:'#5d5368',path:'#887c9c',water:'#465a78',boss:'Boss map 5',bossHp:1900,bossAtk:65,bossXp:1100,bossGold:720},
-{name:'MỎM ĐÁ CỔ NGỮ',difficulty:'Rất khó',mob:'Quái vật map 6',hp:320,atk:52,xp:140,gold:55,color:'#6c5147',path:'#a27c5c',water:'#5b4b62',boss:'Boss map 6',bossHp:2700,bossAtk:85,bossXp:1500,bossGold:950},
-{name:'CỔ MỘ HÀN BĂNG',difficulty:'Ác mộng',mob:'Quái vật map 7',hp:440,atk:70,xp:190,gold:75,color:'#4d526d',path:'#8b829e',water:'#3d5776',boss:'Boss map 7',bossHp:3700,bossAtk:110,bossXp:2000,bossGold:1250},
-{name:'RẠN NỨT TỬ VONG',difficulty:'Ác mộng',mob:'Quái vật map 8',hp:600,atk:92,xp:250,gold:100,color:'#694b58',path:'#a17b7e',water:'#57465e',boss:'Boss map 8',bossHp:5000,bossAtk:145,bossXp:2600,bossGold:1600},
-{name:'NÚI THÁNH',difficulty:'Huyền thoại',mob:'Quái vật map 9',hp:820,atk:120,xp:330,gold:130,color:'#55475c',path:'#9881a5',water:'#4b4c76',boss:'Boss map 9',bossHp:6800,bossAtk:185,bossXp:3400,bossGold:2100},
-{name:'LỤC ĐỊA VĨNH HẰNG',difficulty:'Huyền thoại',mob:'Quái vật map 10',hp:1100,atk:155,xp:430,gold:170,color:'#4a3f54',path:'#987c98',water:'#4a4c70',boss:'Boss map 10',bossHp:9000,bossAtk:235,bossXp:4500,bossGold:2800}
+{name:'ĐỒNG CỎ XANH',difficulty:'Dễ',minLevel:1,maxLevel:20,mob:'Slime',hp:32,atk:5,xp:12,gold:4,color:'#477d52',path:'#9b875c',water:'#397c83',boss:'VUA SLIME',bossHp:260,bossAtk:14,bossXp:120,bossGold:80},
+{name:'HANG ĐỘNG',difficulty:'Trung bình',minLevel:21,maxLevel:40,mob:'Thạch quái',hp:62,atk:10,xp:25,gold:9,color:'#4d5966',path:'#8b8175',water:'#344f67',boss:'Cave Golem',bossHp:520,bossAtk:23,bossXp:260,bossGold:180},
+{name:'THUNG LŨNG TÀN TRO',difficulty:'Khó',minLevel:41,maxLevel:60,mob:'Hỏa linh',hp:105,atk:18,xp:45,gold:17,color:'#704b42',path:'#b17b52',water:'#69434b',boss:'Ash Warden',bossHp:900,bossAtk:36,bossXp:520,bossGold:360},
+{name:'MIỆNG NÚI LỬA',difficulty:'Khó',minLevel:61,maxLevel:80,mob:'Quái vật map 4',hp:160,atk:27,xp:70,gold:28,color:'#53634b',path:'#9b875c',water:'#397c83',boss:'Boss map 4',bossHp:1300,bossAtk:48,bossXp:800,bossGold:520},
+{name:'THÀNH LORAND',difficulty:'Rất khó',minLevel:81,maxLevel:100,mob:'Quái vật map 5',hp:230,atk:38,xp:100,gold:40,color:'#5d5368',path:'#887c9c',water:'#465a78',boss:'Boss map 5',bossHp:1900,bossAtk:65,bossXp:1100,bossGold:720},
+{name:'MỎM ĐÁ CỔ NGỮ',difficulty:'Rất khó',minLevel:101,maxLevel:120,mob:'Quái vật map 6',hp:320,atk:52,xp:140,gold:55,color:'#6c5147',path:'#a27c5c',water:'#5b4b62',boss:'Boss map 6',bossHp:2700,bossAtk:85,bossXp:1500,bossGold:950},
+{name:'CỔ MỘ HÀN BĂNG',difficulty:'Ác mộng',minLevel:121,maxLevel:140,mob:'Quái vật map 7',hp:440,atk:70,xp:190,gold:75,color:'#4d526d',path:'#8b829e',water:'#3d5776',boss:'Boss map 7',bossHp:3700,bossAtk:110,bossXp:2000,bossGold:1250},
+{name:'RẠN NỨT TỬ VONG',difficulty:'Ác mộng',minLevel:141,maxLevel:160,mob:'Quái vật map 8',hp:600,atk:92,xp:250,gold:100,color:'#694b58',path:'#a17b7e',water:'#57465e',boss:'Boss map 8',bossHp:5000,bossAtk:145,bossXp:2600,bossGold:1600},
+{name:'NÚI THÁNH',difficulty:'Huyền thoại',minLevel:161,maxLevel:180,mob:'Quái vật map 9',hp:820,atk:120,xp:330,gold:130,color:'#55475c',path:'#9881a5',water:'#4b4c76',boss:'Boss map 9',bossHp:6800,bossAtk:185,bossXp:3400,bossGold:2100},
+{name:'LỤC ĐỊA VĨNH HẰNG',difficulty:'Huyền thoại',minLevel:181,maxLevel:200,mob:'Quái vật map 10',hp:1100,atk:155,xp:430,gold:170,color:'#4a3f54',path:'#987c98',water:'#4a4c70',boss:'Boss map 10',bossHp:9000,bossAtk:235,bossXp:4500,bossGold:2800}
 ];
 
 const joystick={x:0,y:0,active:false,pointerId:null};
@@ -615,7 +617,7 @@ elapsed:0,lastSave:Date.now(),lastAttack:0,lastPotion:0,lastSkill:0,
 
 player:{x:240,y:360,face:1},mobs:[],groundItems:[],particles:[],floating:[],target:null,attackAnim:0,skillFlash:0,
 
-bossSpawned:false,bossDefeated:false,bossesDefeated:0,questClaims:[],pendingAction:null,lastHitSkill:false,walkTime:0,moveBlend:0,hitFlash:0,levelUpFx:0,dead:false
+bossSpawned:false,bossDefeated:false,bossesDefeated:0,bossSpawnTimer:60,questClaims:[],pendingAction:null,lastHitSkill:false,walkTime:0,moveBlend:0,hitFlash:0,levelUpFx:0,dead:false
 
 };
 
@@ -638,7 +640,7 @@ function openNpcDialog(id){const data={alden:{name:'Trưởng trấn Alden',icon
 function closeNpcDialog(){$('npcDialog').classList.remove('show');}
 function interactTownNpc(id){if(!inTown())return;npcWalkTarget=null;pickupWalkTarget=null;joystick.x=joystick.y=0;joystick.active=false;joystick.pointerId=null;stick.style.transform='translate(0,0)';state.pendingAction=null;state.paused=false;state.townNpcVisited=state.townNpcVisited||[];if(!state.townNpcVisited.includes(id)){state.townNpcVisited.push(id);save();}openNpcDialog(id);$('npcDialog').classList.add('show');}
 function enterTown(){npcWalkTarget=null;state.inTown=true;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=540;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
-function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu cấp "+requiredMapLevel(i)+".");return;}state.inTown=false;state.mapIndex=i;state.mapKills=0;state.bossSpawned=false;state.bossDefeated=false;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=360;state.auto=true;for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+".");}
+function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu cấp "+requiredMapLevel(i)+".");return;}state.inTown=false;state.mapIndex=i;state.mapKills=0;state.bossSpawned=false;state.bossDefeated=false;state.bossSpawnTimer=60;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=360;state.auto=true;for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+".");}
 const MAIN_QUESTS=[
 {id:'q1',title:'Khởi đầu từ tro tàn',map:0,goal:10,objective:'Đánh bại 10 Slime tại Đồng cỏ xanh và trò chuyện với các NPC trong thị trấn.',rewardXp:120,rewardGold:80,kind:'starter'},
 {id:'q2',title:'Tiếng Vọng Của Thép Rỉ',map:1,goal:10,objective:'Đánh bại 10 Thạch quái tại Hang động đá và thu thập 5 Quặng Sắt để thợ rèn chế tạo trang bị mới.',rewardXp:260,rewardGold:160,kind:'ore'},
@@ -784,6 +786,7 @@ function selectMap(i){
  state.mapKills=0;
 
  state.bossSpawned=false;
+ state.bossSpawnTimer=60;
 
  state.bossDefeated=false;
 
@@ -807,6 +810,7 @@ function selectMap(i){
 }
 
 function showRewardToast(message){const el=$('rewardToast');if(!el)return;el.textContent=message;el.classList.add('show');clearTimeout(showRewardToast.timer);showRewardToast.timer=setTimeout(()=>el.classList.remove('show'),2600);}
+function showBossDefeatNotice(name){const el=$('bossDefeatNotice');if(!el)return;el.textContent='ĐÃ TIÊU DIỆT "'+String(name).toUpperCase()+'" !!!';el.classList.remove('show');void el.offsetWidth;el.classList.add('show');clearTimeout(showBossDefeatNotice.timer);showBossDefeatNotice.timer=setTimeout(()=>el.classList.remove('show'),2600);}
 
 function log(s){
 
@@ -906,20 +910,15 @@ function spawnMob(boss=false){
 
  }while(Math.hypot(x-state.player.x,y-state.player.y)<110&&tries<30);
 
- const hp=boss?map.bossHp:Math.round(map.hp*rand(.85,1.15));
- const mobLevel=Math.max(1,1+state.mapIndex*15+Math.floor(rand(0,3)));
-
- state.mobs.push({
-
-  x,y,hp,max:hp,boss,level:boss?mobLevel+2:mobLevel,
-
-  spd:boss?24+state.mapIndex*7:rand(18,27)+state.mapIndex*5,
-
-  atk:boss?map.bossAtk:map.atk,
-
-  hit:0,attackAt:0,dead:false,dir:rand(0,Math.PI*2),wanderTimer:rand(.4,2.2),phase:rand(0,6.28)
-
- });
+ const mobLevel=Math.floor(rand(map.minLevel||1,(map.maxLevel||20)+1));
+ const elite=!boss&&Math.random()<.045;
+ const leader=!boss&&!elite&&Math.random()<.009;
+ const kind=boss?'boss':leader?'leader':elite?'elite':'normal';
+ const scale=mobLevel/Math.max(1,((map.minLevel||1)+(map.maxLevel||20))/2);
+ const power=boss?1:leader?5:elite?2:1;
+ const hp=boss?map.bossHp:Math.max(1,Math.round(map.hp*scale*rand(.9,1.1)*power));
+ const mobName=boss?map.boss:map.mob;
+ state.mobs.push({x,y,hp,max:hp,boss,elite,leader,kind,name:mobName,level:mobLevel,spd:boss?24+state.mapIndex*7:rand(18,27)+state.mapIndex*5,atk:boss?map.bossAtk:Math.max(1,Math.round(map.atk*scale*power)),rewardScale:scale,rewardMultiplier:boss?50:leader?20:elite?10:1,hit:0,attackAt:0,dead:false,dir:rand(0,Math.PI*2),wanderTimer:rand(.4,2.2),phase:rand(0,6.28)});
 
 }
 
@@ -1043,7 +1042,7 @@ function drawMob(m){
 
  ctx.fillStyle='#e45e67';ctx.fillRect(m.x-19,barY+1,38*Math.max(0,m.hp/m.max),3);
  ctx.restore();
- const mobName=m.boss?currentMap().boss:currentMap().mob;ctx.save();ctx.font='bold 10px monospace';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#08131b';ctx.strokeText(mobName+' Lvl.'+(m.level||1),m.x,barY-5);ctx.fillStyle=m.boss?'#ffd98a':'#f2f6ef';ctx.fillText(mobName+' Lvl.'+(m.level||1),m.x,barY-5);ctx.restore();
+ const mobName=m.name||(m.boss?currentMap().boss:currentMap().mob),label=m.boss?mobName.toUpperCase():mobName+' Lvl.'+(m.level||1);ctx.save();ctx.font=m.boss?'bold 13px monospace':'bold 10px monospace';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#08131b';ctx.shadowBlur=m.boss?13:m.leader?12:m.elite?10:0;ctx.shadowColor=m.boss?'#ff3030':m.leader?'#ffd52e':m.elite?'#b34cff':'transparent';ctx.strokeText(label,m.x,barY-5);ctx.fillStyle=m.boss?'#ff4141':m.leader?'#ffe45c':m.elite?'#d58aff':'#f2f6ef';ctx.fillText(label,m.x,barY-5);ctx.restore();
 }
 
 function particle(x,y,color){
@@ -1095,11 +1094,11 @@ function attack(skill=false,arrived=false){
  m.hp=Math.max(0,m.hp-dmg);m.hit=.24;state.hp=Math.min(state.maxHp,state.hp+dmg*((skill?state.omnivamp:state.lifesteal+state.omnivamp)/100));particle(m.x,m.y,skill?'#c18cff':'#ffad45');floatText(m.x,m.y-20,'-'+dmg,critical?'#ff354f':skill?'#c18cff':'#ffad45',{critical});
  if(m.hp<=0&&!m.dead){
   m.dead=true;state.kills++;if(!m.boss){state.mapKills++;state.mapKillCounts=state.mapKillCounts||Array(10).fill(0);state.mapKillCounts[state.mapIndex]=(state.mapKillCounts[state.mapIndex]||0)+1;if(Math.random()<.03){spawnGroundItem('gem',m.x,m.y);log('💎 Quái vật làm rơi Đá quý!');}if(state.mainQuestAccepted&&state.mainQuestIndex<3&&state.mapIndex===MAIN_QUESTS[state.mainQuestIndex].map){state.mainQuestKills=(state.mainQuestKills||0)+1;if(state.mainQuestIndex===1&&Math.random()<.55){spawnGroundItem('ore',m.x,m.y);log('⛏️ Quái vật làm rơi Quặng Sắt.');}}state.respawnTimer=Math.max(state.respawnTimer,.8);}
-  const map=currentMap(),xp=m.boss?map.bossXp:map.xp;
-  addExperience(xp);state.earned+=xp;const killGold=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));spawnGroundItem('gold',m.x,m.y,{amount:killGold});state.loot++;lootDrop(m.x,m.y);
-  showGain('+'+xp+' EXP','#72e08a');log((m.boss?'Guardian bị đánh bại! ':'Hạ '+map.mob+'! ')+'+'+xp+' EXP');
-  if(m.boss){state.bossDefeated=true;state.bossesDefeated=(state.bossesDefeated||0)+1;state.mapBossesDefeated=state.mapBossesDefeated||Array(10).fill(false);state.mapBossesDefeated[state.mapIndex]=true;if(state.mainQuestAccepted&&state.mainQuestIndex===2&&state.mapIndex===2)state.mainQuestBossDefeated=true;log('CHIẾN THẮNG! Thủ lĩnh bản đồ đã bị đánh bại.');updateMapUI();}
-  else if(state.mapKills>=10&&!state.bossSpawned){state.bossSpawned=true;spawnMob(true);log('Thủ lĩnh '+map.boss+' đã xuất hiện!');}
+  const map=currentMap(),baseXp=Math.max(1,Math.round(map.xp*(m.rewardScale||1))),baseGold=Math.max(1,Math.floor(rand(map.gold*.7,map.gold*1.4)*(m.rewardScale||1))),mult=m.rewardMultiplier||1;
+  const xp=Math.round(baseXp*mult),killGold=Math.round(baseGold*mult);
+  addExperience(xp);state.earned+=xp;spawnGroundItem('gold',m.x,m.y,{amount:killGold});state.loot++;lootDrop(m.x,m.y);
+  showGain('+'+xp+' EXP',m.boss?'#ff7777':m.leader?'#ffe45c':m.elite?'#d58aff':'#72e08a');log((m.boss?'Đã hạ boss '+map.boss+'! ':m.leader?'Hạ quái đầu đàn! ':m.elite?'Hạ tinh anh! ':'Hạ '+map.mob+'! ')+'+'+xp+' EXP · +'+killGold+' vàng');
+  if(m.boss){state.bossDefeated=true;state.bossSpawned=false;state.bossSpawnTimer=60;state.bossesDefeated=(state.bossesDefeated||0)+1;state.mapBossesDefeated=state.mapBossesDefeated||Array(10).fill(false);state.mapBossesDefeated[state.mapIndex]=true;if(state.mainQuestAccepted&&state.mainQuestIndex===2&&state.mapIndex===2)state.mainQuestBossDefeated=true;showBossDefeatNotice(map.boss);log('CHIẾN THẮNG! '+map.boss+' đã bị đánh bại.');updateMapUI();}
   
  }
 }
@@ -1122,6 +1121,12 @@ function update(dt){
   else{const d=Math.hypot(m.x-p.x,m.y-p.y),r=a.state.attackRange;
    if(d>r-2){const step=Math.min(d-r+2,(state.moveSpeed||150)*1.4*dt);p.x+=(m.x-p.x)/d*step;p.y+=(m.y-p.y)/d*step;p.face=m.x<p.x?-1:1;moving=true;}
    else attack(a.skill,true);
+  }
+ }
+ if(!inTown()){
+  state.bossSpawnTimer=(state.bossSpawnTimer==null?60:state.bossSpawnTimer)-dt;
+  if(state.bossSpawnTimer<=0&&!state.mobs.some(m=>m.boss&&!m.dead)){
+   spawnMob(true);state.bossSpawned=true;state.bossDefeated=false;state.bossSpawnTimer=60;log('BOSS '+currentMap().boss.toUpperCase()+' ĐÃ XUẤT HIỆN!');
   }
  }
  if(!inTown()&&state.auto&&!state.pendingAction){
@@ -1188,17 +1193,8 @@ function draw(){
  ctx.font='11px monospace';
  if(settings.fps){ctx.textAlign='right';ctx.fillStyle='#fff';ctx.fillText(fpsValue+' FPS',W-10,18);ctx.textAlign='left';}
 
- if(state.bossSpawned&&!state.bossDefeated){
-  ctx.fillStyle='#25152c';
-  ctx.fillRect(115,26,250,8);
-  ctx.fillStyle='#bd6bd4';
-  let b=state.mobs.find(m=>m.boss);
-  if(b)ctx.fillRect(116,27,248*Math.max(0,b.hp/b.max),6);
-  ctx.fillStyle='#f1d8ff';
-  ctx.textAlign='center';
-  ctx.fillText(currentMap().boss.toUpperCase(),240,22);
-  ctx.textAlign='left';
- }
+ const activeBoss=state.mobs.find(m=>m.boss&&!m.dead);
+ if(activeBoss){ctx.save();ctx.textAlign='center';ctx.font='bold 13px monospace';ctx.shadowColor='#ff2424';ctx.shadowBlur=12;ctx.fillStyle='#ff4a4a';ctx.fillText(currentMap().boss.toUpperCase(),240,21);ctx.shadowBlur=0;ctx.fillStyle='#251018';ctx.fillRect(105,27,270,10);ctx.fillStyle='#ff333d';ctx.shadowColor='#ff2222';ctx.shadowBlur=8;ctx.fillRect(107,29,266*Math.max(0,activeBoss.hp/activeBoss.max),6);ctx.restore();}
 }
 
 function questDefinitions(){return MAIN_QUESTS;}
