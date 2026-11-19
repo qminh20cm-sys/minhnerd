@@ -538,8 +538,6 @@ function load(){
 
    const gain=Math.floor(offline/12*rate*(5+state.level));
 
-   state.xp+=gain;
-
    state.earned+=gain;
 
    addExperience(gain);
