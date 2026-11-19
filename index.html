@@ -175,6 +175,11 @@ button,.menu-bar button,.controls button{touch-action:manipulation}
 .overlay .modal{position:relative;z-index:26;pointer-events:auto}
 #startBtn{position:relative;z-index:27;min-height:48px;touch-action:manipulation}
 
+/* Keep the game canvas visible and paintable on mobile Safari */
+.gamebox{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;overflow:hidden!important}
+.canvas-wrap{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;background:#477d52!important;border:0!important;border-radius:0!important;overflow:hidden!important}
+canvas#game{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:fill!important;z-index:1!important}
+
 </style>
 
 </head>
@@ -865,10 +870,10 @@ let last=performance.now(),uiTick=0,fpsFrames=0,fpsTime=0,fpsValue=0;
 function loop(now){
  let dt=Math.min(.04,(now-last)/1000);fpsFrames++;fpsTime+=dt;if(fpsTime>=.5){fpsValue=Math.round(fpsFrames/fpsTime);fpsFrames=0;fpsTime=0;}
  last=now;
- update(dt);
- draw();
+ try{update(dt);}catch(e){console.error('Game update error:',e);state.paused=true;log('Lỗi cập nhật game: '+(e&&e.message?e.message:'unknown'));}
+ try{draw();}catch(e){console.error('Game render error:',e);ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#477d52';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#fff';ctx.font='16px monospace';ctx.fillText('Lỗi hiển thị: '+(e&&e.message?e.message:'unknown'),18,40);}
  uiTick+=dt;
- if(uiTick>.15){ui();uiTick=0}
+ if(uiTick>.15){try{ui();}catch(e){console.error('Game UI error:',e);}uiTick=0}
  requestAnimationFrame(loop);
 }
 
@@ -967,9 +972,10 @@ state.dead=false;
 if(!state.mobs.length)for(let i=0;i<7;i++)spawnMob();
 state.mapIndex=Math.min(state.mapIndex||0,maps.length-1);
 state.unlockedMaps=Math.max(1,Math.min(state.unlockedMaps||1,maps.length));
-updateMapUI();
-ui();
+try{updateMapUI();}catch(e){console.error('Map UI init error:',e);}
+try{draw();}catch(e){console.error('Initial render error:',e);}
 requestAnimationFrame(loop);
+try{ui();}catch(e){console.error('Initial UI error:',e);}
 
 })();
 </script>
