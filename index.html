@@ -547,18 +547,18 @@ const $=id=>document.getElementById(id);
 
 const HUD_LAYOUT_KEY='afkHudLayoutV1';
 const HUD_DEFAULTS={
- hpStat:{x:20.543352589071848,y:14.681672723502034,width:92,height:32,scale:83,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- mpStat:{x:51.93057063168395,y:14.541552171187067,width:92,height:32,scale:83,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- xpStat:{x:84.06507261929389,y:14.541552171187067,width:92,height:32,scale:83,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- joystick:{x:27.020092188459614,y:87.54268826210428,width:72,height:72,scale:87,opacity:100,visible:true,shape:'circle',color:'#17303b'},
- mobileAttack:{x:85.31059654145511,y:90.20491996051075,width:64,height:64,scale:74,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- autoBtn:{x:90.29269223009997,y:70.72861217314336,width:50,height:50,scale:68,opacity:100,visible:true,shape:'circle',color:'#245b42'},
- skillBtn:{x:83.56687065250414,y:79.41588864972748,width:50,height:50,scale:72,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- potionBtn:{x:66.12953574224709,y:84.4601109419105,width:46,height:46,scale:74,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- mpPotionBtn:{x:66.62773770903686,y:93.56773838533445,width:46,height:46,scale:71,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ hpStat:{x:20.543352589071848,y:14.681672723502034,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ mpStat:{x:51.93057063168395,y:14.541552171187067,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ xpStat:{x:84.06507261929389,y:14.541552171187067,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ joystick:{x:25.027246310926948,y:84.74034135643537,width:72,height:72,scale:100,opacity:100,visible:true,shape:'circle',color:'#17303b'},
+ mobileAttack:{x:85.31059654145511,y:90.20491996051075,width:64,height:64,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ autoBtn:{x:88.548966341149,y:65.96463098559028,width:50,height:50,scale:88,opacity:100,visible:true,shape:'circle',color:'#245b42'},
+ skillBtn:{x:84.56329359127047,y:77.17401326321337,width:50,height:50,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ potionBtn:{x:64.88401182008587,y:81.79787924350403,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ mpPotionBtn:{x:59.40371416465125,y:92.30668013976243,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
  chatToggle:{x:89.04716830793876,y:22.528241921353967,width:52,height:52,scale:70,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
  mapBanner:{x:49.688623770756394,y:22.948592888193794,width:190,height:48,scale:64,opacity:100,visible:true,shape:'rounded',color:'#dfc080'},
- menuBar:{x:50,y:6.1345114541803385,width:240,height:34,scale:100,opacity:100,visible:true,shape:'rounded',color:'#203541'}
+ menuBar:{x:50,y:6.1345114541803385,width:240,height:34,scale:150,opacity:100,visible:true,shape:'rounded',color:'#203541'}
 };
 const hudTargets={
  hpStat:()=>$('hpStat'),mpStat:()=>$('mpStat'),xpStat:()=>$('xpStat'),
@@ -567,7 +567,7 @@ const hudTargets={
  chatToggle:()=>$('chatToggle'),mapBanner:()=>$('mapBanner'),menuBar:()=>document.querySelector('.menu-bar')
 };
 let hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS));
-function loadHudLayout(){try{const v=JSON.parse(localStorage.getItem(HUD_LAYOUT_KEY)||'null');if(v&&v.version===5&&v.items)for(const k of Object.keys(HUD_DEFAULTS))if(v.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};}catch(e){console.warn('HUD layout load:',e);}applyHudLayout();}
+function loadHudLayout(){try{const v=JSON.parse(localStorage.getItem(HUD_LAYOUT_KEY)||'null');if(v&&v.version===6&&v.items)for(const k of Object.keys(HUD_DEFAULTS))if(v.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};}catch(e){console.warn('HUD layout load:',e);}applyHudLayout();}
 function applyHudLayout(){
  const canvas=document.querySelector('.canvas-wrap'),gamebox=document.querySelector('.gamebox');
  const hud=document.querySelector('.combat-ui>.hud'),bottom=document.querySelector('.combat-ui>.combat-bottom');
@@ -587,17 +587,17 @@ function applyHudLayout(){
   set('z-index',k==='menuBar'?'25':'20');
  }
 }
-function saveHudLayout(){localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:5,items:hudLayout}));applyHudLayout();}
+function saveHudLayout(){localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:6,items:hudLayout}));applyHudLayout();}
 function setupHudDesigner(){
  loadHudLayout();
- window.addEventListener('storage',e=>{if(e.key===HUD_LAYOUT_KEY){try{const v=JSON.parse(e.newValue||'null');if(v&&v.version===5){for(const k of Object.keys(HUD_DEFAULTS))if(v.items?.[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};applyHudLayout();}}catch(err){console.warn('HUD sync:',err);}}});
+ window.addEventListener('storage',e=>{if(e.key===HUD_LAYOUT_KEY){try{const v=JSON.parse(e.newValue||'null');if(v&&v.version===6){for(const k of Object.keys(HUD_DEFAULTS))if(v.items?.[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};applyHudLayout();}}catch(err){console.warn('HUD sync:',err);}}});
  const panel=document.querySelector('.settings-panel');
  if(panel&&!$('hudTransferTools')){
   const group=document.createElement('div');group.className='settings-group';group.id='hudTransferTools';
   group.innerHTML='<b>🎛️ HUD tùy chỉnh</b><small>Nhập tệp JSON đã xuất từ HUD Designer trên PC để áp dụng bố cục này trên thiết bị.</small><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button type="button" id="hudImportBtn" class="small">Nhập HUD JSON</button><button type="button" id="hudExportBtn" class="small">Xuất HUD JSON</button></div><input id="hudImportFile" type="file" accept=".json,application/json" hidden>';
   const account=panel.querySelector('.settings-group:last-of-type');if(account)panel.insertBefore(group,account);else panel.appendChild(group);
   $('hudImportBtn').addEventListener('click',()=>$('hudImportFile').click());
-  $('hudImportFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(![4,5].includes(data.version)||!data.items)throw Error('Tệp không đúng định dạng HUD v4');for(const k of Object.keys(HUD_DEFAULTS))if(data.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...data.items[k]};saveHudLayout();alert('Đã nhập HUD thành công!');}catch(err){alert('Không thể nhập HUD: '+err.message);}e.target.value='';});
+  $('hudImportFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(![4,5,6].includes(data.version)||!data.items)throw Error('Tệp không đúng định dạng HUD v4');for(const k of Object.keys(HUD_DEFAULTS))if(data.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...data.items[k]};saveHudLayout();alert('Đã nhập HUD thành công!');}catch(err){alert('Không thể nhập HUD: '+err.message);}e.target.value='';});
   $('hudExportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({version:4,items:hudLayout},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='afk-adventure-hud.json';a.click();URL.revokeObjectURL(url);});
  }
 }
