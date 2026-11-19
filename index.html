@@ -344,6 +344,9 @@ ctx.imageSmoothingEnabled=false;
 const W=480,H=720,keys={};
 
 const $=id=>document.getElementById(id);
+// Đưa modal ra khỏi gamebox để không bị bảng menu che do stacking context.
+document.body.appendChild($('itemModal'));
+document.body.appendChild($('townShopModal'));
 
 const maps=[
 
@@ -382,7 +385,7 @@ function currentMap(){
 const TOWN={name:"Thị trấn Aborne",difficulty:"An toàn",mob:"Không có",hp:0,atk:0,xp:0,gold:0,color:"#344c3e",path:"#b49a6b",water:"#397c83",boss:""};
 function showMapBanner(name){const el=$("mapBanner");if(!el)return;el.textContent=name;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");}
 function inTown(){return !!state.inTown;}
-function interactTownNpc(id){if(!inTown())return;if(id==="alden"){log("Bạn trò chuyện với Trưởng trấn Alden.");storyAction();}else if(id==="healer"){townHeal();}else if(id==="merchant"){$("townShopModal").classList.add("show");log("Thương nhân: Chọn vật phẩm muốn mua.");}}
+function interactTownNpc(id){if(!inTown())return;if(id==="alden"){log("Bạn trò chuyện với Trưởng trấn Alden.");storyAction();showMapBanner("ALDEN: NHIỆM VỤ ĐÃ CẬP NHẬT");}else if(id==="healer"){townHeal();showMapBanner("Y SĨ: ĐÃ HỒI PHỤC HP VÀ MP");}else if(id==="merchant"){$("townShopModal").classList.add("show");log("Thương nhân: Chọn vật phẩm muốn mua.");}}
 function enterTown(){state.inTown=true;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=540;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
 function leaveTown(i){if(i<0||i>=state.unlockedMaps)return;state.inTown=false;state.mapIndex=i;state.mapKills=0;state.bossSpawned=false;state.bossDefeated=false;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=360;state.auto=true;for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+".");}
 function storyChapter(){return [{map:0,title:"Lời gọi từ Aborne",npc:"Trưởng trấn Alden",intro:"Dạo gần đây, Slime ở Đồng cỏ xanh trở nên hung hãn. Hãy giúp ta dọn sạch chúng và tìm ra thứ đang khiến khu rừng bất ổn.",objective:"Tiêu diệt 10 Slime và đánh bại Forest Guardian.",report:"Forest Guardian đã bị đánh bại. Nhưng dấu vết năng lượng lạ vẫn còn... Hãy nghỉ ngơi, vì hành trình chỉ mới bắt đầu.",rewardXp:160,rewardGold:100},{map:1,title:"Tiếng vọng dưới lòng đất",npc:"Trưởng trấn Alden",intro:"Những rung chấn từ Hang động đá đang lan đến tận thị trấn. Thạch quái đã tràn ra gần lối vào. Hãy điều tra và hạ Cave Golem.",objective:"Tiêu diệt 10 Thạch quái và đánh bại Cave Golem.",report:"Cave Golem đã gục ngã. Trong hang có dấu tích cho thấy một thế lực đang thao túng các quái vật.",rewardXp:320,rewardGold:220},{map:2,title:"Ngọn lửa thức tỉnh",npc:"Trưởng trấn Alden",intro:"Thung lũng tro đang bùng cháy trở lại. Hỏa linh tụ tập quanh Ash Warden. Đây có thể là nguồn gốc của mọi biến động.",objective:"Tiêu diệt 10 Hỏa linh và đánh bại Ash Warden.",report:"Ash Warden đã bị đánh bại. Aborne tạm thời được an toàn, nhưng bí ẩn phía sau vẫn chưa được giải đáp.",rewardXp:650,rewardGold:450}];}
@@ -411,7 +414,7 @@ function renderPotentialUI(){$('potentialPoints').textContent=state.potential;$(
 function renderCombatStats(){const rows=[['Sức mạnh công kích',state.atk],['Sức mạnh phép thuật',state.magicDamage],['Máu',state.maxHp],['Giáp',state.def],['Giáp phép',state.magicArmor],['Tốc đánh',state.attackSpeed.toFixed(2)+'x'],['Tỉ lệ chí mạng',state.critChance.toFixed(1)+'%'],['Sát thương chí mạng',state.critDamage+'%'],['Tốc độ di chuyển',state.moveSpeed],['Hút máu',state.lifesteal+'%'],['Hút máu toàn phần',state.omnivamp+'%'],['Tầm đánh',state.attackRange],['Mana',state.maxMp],['Hồi chiêu',state.cooldownReduction*100+'%']];$('combatStats').innerHTML=rows.map(x=>'<div>'+x[0]+'<br><b>'+x[1]+'</b></div>').join('');}
 function spendPoint(k){if(state.potential<=0||!POTS.some(p=>p[0]===k))return;state.potential--;state.potentialStats[k]=(state.potentialStats[k]||0)+1;derive();renderPotentialUI();renderCombatStats();save();}
 function rollGear(){const slots=['helm','armor','pants','gloves','boots','main','off','relic'],slot=slots[Math.floor(Math.random()*8)],lv=state.level,names={helm:'Mũ',armor:'Áo giáp',pants:'Quần',gloves:'Găng tay',boots:'Giày',main:'Vũ khí',off:'Khiên',relic:'Tạo vật'},opts=[['atk',lv+1],['magic',lv+1],['hp',8+lv*3],['armor',1+Math.floor(lv/3)],['magicArmor',1+Math.floor(lv/3)],['attackSpeed',.03],['crit',.5],['critDamage',5],['moveSpeed',3],['lifesteal',.5],['omnivamp',.3],['mp',5+lv]],c=opts[Math.floor(Math.random()*opts.length)],r=Math.random(),rarity=r<.008?'Huyền thoại':r<.045?'Huyền bí':r<.18?'Cổ':r<.48?'Tinh xảo':'Thô';return {slot,name:rarity+' '+names[slot],rarity,silverValue:Math.max(5,Math.floor(({Thô:8,'Tinh xảo':25,Cổ:70,'Huyền bí':180,'Huyền thoại':600}[rarity])+lv*2)),subtitle:rarity==='Huyền thoại'?'Một trang bị được lưu truyền qua những thời đại đã mất.':'',locked:false,stats:{[c[0]]:c[1]}};}
-function lootDrop(x,y){const r=Math.random();if(r<.22){state.potions++;dropNotice(x,y,'🧪','Dược phẩm HP','+1');log('🎁 Rơi dược phẩm HP!')}else if(r<.38){state.mpPotions++;dropNotice(x,y,'💧','Dược phẩm MP','+1');log('🎁 Rơi dược phẩm MP!')}else if(r<.62){const n=Math.floor(rand(3,9+state.mapIndex*5));state.gold+=n;dropNotice(x,y,'🪙','Vàng','+'+n);log('🪙 Rơi '+n+' vàng!')}else if(r<.82){const it=rollGear();state.inventory.push(it);dropNotice(x,y,'🎁',it.name,itemDesc(it));log('⚔ Rơi '+it.name+'!')}else{const n=Math.floor(rand(2,6));state.gold+=n;dropNotice(x,y,'🪙','Vàng','+'+n);log('🪙 Rơi '+n+' vàng!')}}
+function lootDrop(x,y){const r=Math.random();if(r<.22){state.potions++;dropNotice(x,y,'🧪','Dược phẩm HP','+1');log('🎁 Rơi dược phẩm HP!')}else if(r<.38){state.mpPotions++;dropNotice(x,y,'💧','Dược phẩm MP','+1');log('🎁 Rơi dược phẩm MP!')}else if(r<.62){const n=Math.floor(rand(3,9+state.mapIndex*5));state.gold+=n;dropNotice(x,y,'🪙','Vàng','+'+n);log('🪙 Rơi '+n+' vàng!')}else if(r<.82){const it=rollGear();state.inventory.push(it);renderCharacter();dropNotice(x,y,'🎁',it.name,itemDesc(it));log('⚔ Rơi '+it.name+'!')}else{const n=Math.floor(rand(2,6));state.gold+=n;dropNotice(x,y,'🪙','Vàng','+'+n);log('🪙 Rơi '+n+' vàng!')}}
 function drinkMp(){if(state.mpPotions&&state.mp<state.maxMp){state.mpPotions--;state.mp=Math.min(state.maxMp,state.mp+45);save();ui();log('Đã dùng dược phẩm MP.')}else log('Không thể dùng lúc này.')}
 function updateMapUI(){
  const sel=$('mapSelect');
@@ -869,7 +872,7 @@ function ui(){
 
  $('level').textContent='Lv. '+state.level+' / 200';
  $('attack').textContent=state.atk;
- $('defense').textContent=state.def;renderCharacter();
+ $('defense').textContent=state.def;renderPotentialUI();renderCombatStats();
  $('gold').textContent=state.gold+' G';
 
  $('potions').textContent=state.potions+' bình';
@@ -980,7 +983,7 @@ canvas.addEventListener('pointerdown',e=>{
  e.preventDefault();
  const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;
  if(inTown()){
-  const npcs=[{id:'alden',x:240,y:220,r:43},{id:'healer',x:110,y:365,r:43},{id:'merchant',x:370,y:365,r:43}];
+  const npcs=[{id:'alden',x:240,y:220,r:68},{id:'healer',x:110,y:365,r:68},{id:'merchant',x:370,y:365,r:58}];
   let npc=null,best=Infinity;for(const n of npcs){const d=Math.hypot(n.x-x,n.y-y);if(d<n.r&&d<best){npc=n;best=d;}}
   if(npc)interactTownNpc(npc.id);
   return;
@@ -1002,6 +1005,7 @@ document.addEventListener('selectstart',e=>{if(!e.target.closest('input,textarea
 
 initSettings();
 load();
+renderCharacter();
 state.started=true;
 state.paused=false;
 state.dead=false;
