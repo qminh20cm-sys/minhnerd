@@ -40,7 +40,8 @@ button.active{background:#28684e;border-color:#72e0ad;color:#dffff0}
 
 .gamebox{padding:8px;position:relative}
 
-.game-version{position:absolute;right:5px;bottom:4px;z-index:5;padding:2px 4px;color:#b9c5c2;font:8px/1 ui-monospace,Consolas,monospace;opacity:.62;letter-spacing:.2px;pointer-events:none;user-select:none}
+.game-version{position:absolute;right:52px;top:5px;bottom:auto;z-index:5;padding:2px 4px;color:#b9c5c2;font:8px/1 ui-monospace,Consolas,monospace;opacity:.62;letter-spacing:.2px;pointer-events:none;user-select:none}
+.reward-feed{position:absolute;left:7px;top:6px;z-index:7;display:flex;flex-direction:column;gap:2px;pointer-events:none;max-width:46%}.gain-line{font:bold 10px/1.2 ui-monospace,Consolas,monospace;text-shadow:0 1px 3px #071018,0 0 4px #071018;white-space:nowrap;animation:gainFade 2.6s ease-out forwards}@keyframes gainFade{0%{opacity:0;transform:translateY(3px)}10%{opacity:1;transform:translateY(0)}72%{opacity:1}100%{opacity:0;transform:translateY(-5px)}}
 .canvas-wrap{position:relative;background:#182b2c;border:3px solid #526c69;border-radius:6px;overflow:hidden}
 
 canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
@@ -377,7 +378,7 @@ html,body{overscroll-behavior-x:none!important}
 
    <div class="logo">✦ THẾ GIỚI HẮC ÁM</div>
 
-   <div class="sub">Pixel RPG • Combat Power Update v1.6.0</div>
+   <div class="sub">Pixel RPG • Combat Power Update v1.2.12</div>
 
   </div>
 
@@ -398,7 +399,8 @@ html,body{overscroll-behavior-x:none!important}
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
     <div id="rewardToast" class="reward-toast" role="status" aria-live="assertive"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.7.0</div>
+    <div id="rewardFeed" class="reward-feed" aria-live="polite"></div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.12</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ THẾ GIỚI HẮC ÁM</h2><div class="intro-story">Hàng thiên niên kỷ đã trôi qua, nhưng mỗi khi nhắc về cuộc Đại Hỗn Chiến trên lục địa Eldric, nhân loại vẫn không khỏi rùng mình kinh hãi. Những cánh đồng chất đầy thi thể, máu nhuộm đỏ đất trời, tiếng binh khí va chạm chát chúa hòa cùng tiếng gào thét bi ai và những luồng ma pháp xé toạc không gian—tất cả địa ngục trần gian ấy chỉ là hệ quả từ sự thức tỉnh của Chúa tể Hắc ám Halphys, kẻ vừa phá vỡ phong ấn cổ đại sau hàng thế kỷ bị giam cầm.
@@ -596,6 +598,8 @@ const joystick={x:0,y:0,active:false,pointerId:null};
 const MAX_GEAR_SLOTS=62;
 const TOWN_NPCS=[{id:'alden',x:240,y:220},{id:'healer',x:110,y:365},{id:'merchant',x:370,y:365},{id:'blacksmith',x:370,y:520},{id:'syrupp',x:110,y:520}];
 let npcWalkTarget=null;
+let pickupWalkTarget=null;
+let lastDropTap={id:null,time:0};
 
 const state={
 
@@ -609,7 +613,7 @@ gold:0,gems:0,potions:3,mpPotions:2,kills:0,earned:0,loot:0,potential:0,baseAtk:
 
 elapsed:0,lastSave:Date.now(),lastAttack:0,lastPotion:0,lastSkill:0,
 
-player:{x:240,y:360,face:1},mobs:[],particles:[],floating:[],target:null,attackAnim:0,skillFlash:0,
+player:{x:240,y:360,face:1},mobs:[],groundItems:[],particles:[],floating:[],target:null,attackAnim:0,skillFlash:0,
 
 bossSpawned:false,bossDefeated:false,bossesDefeated:0,questClaims:[],pendingAction:null,lastHitSkill:false,walkTime:0,moveBlend:0,hitFlash:0,levelUpFx:0,dead:false
 
@@ -632,7 +636,7 @@ function renderClassOptions(){$('classOptions').innerHTML=CLASS_DATA.map(c=>'<bu
 function chooseClass(name){if(!CLASS_DATA.some(c=>c.name===name))return;state.characterClass=name;derive();$('classModal').classList.remove('show');renderCharacter();ui();save();log('Bạn đã chuyển class thành '+name+'.');}
 function openNpcDialog(id){const data={alden:{name:'Trưởng trấn Alden',icon:'👑',line:'Chào cậu, ta là Alden, thị trưởng của Aborne. Cậu muốn làm gì?',choices:[['Tôi muốn nhận nhiệm vụ',()=>{closeNpcDialog();storyAction();}],['Không có gì, cảm ơn',closeNpcDialog]]},healer:{name:'Mục sư Rafael',icon:'🧑‍⚕️',line:'Chào cậu. Ta có thể giúp cậu hồi phục trước khi lên đường.',choices:[['Hồi phục HP và MP',()=>{closeNpcDialog();townHeal();}],['Không cần, cảm ơn',closeNpcDialog]]},merchant:{name:'Chủ cửa hàng Pelio',icon:'🧔',line:'Chào mừng! Ta là Pelio. Cậu muốn mua vật phẩm nào?',choices:[['Xem cửa hàng',()=>{closeNpcDialog();$('townShopModal').classList.add('show');}],['Để lần khác',closeNpcDialog]]},blacksmith:{name:'Thợ Rèn Homes',icon:'⚒️',line:'Trang bị của cậu cần được chăm sóc chứ? Ta có thể rèn lại các dòng phụ.',choices:[['Mở lò rèn',()=>{closeNpcDialog();openBlacksmith();}],['Không cần, cảm ơn',closeNpcDialog]]},syrupp:{name:'Người hướng dẫn Syrupp',icon:'🧙',line:'Ta là Syrupp. Ta có thể giúp cậu thay đổi con đường chiến đấu. Cậu muốn chọn class nào?',choices:[['Thay đổi class',()=>{closeNpcDialog();openClassModal();}],['Không có gì, cảm ơn',closeNpcDialog]]}}[id];if(!data)return;$('npcTitle').textContent=data.name;$('npcPortrait').textContent=data.icon;$('npcLine').textContent=data.line;$('npcChoices').innerHTML='';data.choices.forEach(([label,action])=>{const b=document.createElement('button');b.textContent=label;b.onclick=action;$('npcChoices').appendChild(b);});$('npcDialog').classList.add('show');}
 function closeNpcDialog(){$('npcDialog').classList.remove('show');}
-function interactTownNpc(id){if(!inTown())return;state.townNpcVisited=state.townNpcVisited||[];if(!state.townNpcVisited.includes(id)){state.townNpcVisited.push(id);save();}openNpcDialog(id);}
+function interactTownNpc(id){if(!inTown())return;npcWalkTarget=null;pickupWalkTarget=null;joystick.x=joystick.y=0;joystick.active=false;joystick.pointerId=null;stick.style.transform='translate(0,0)';state.pendingAction=null;state.paused=false;state.townNpcVisited=state.townNpcVisited||[];if(!state.townNpcVisited.includes(id)){state.townNpcVisited.push(id);save();}openNpcDialog(id);$('npcDialog').classList.add('show');}
 function enterTown(){npcWalkTarget=null;state.inTown=true;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=540;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
 function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu cấp "+requiredMapLevel(i)+".");return;}state.inTown=false;state.mapIndex=i;state.mapKills=0;state.bossSpawned=false;state.bossDefeated=false;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=360;state.auto=true;for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+".");}
 const MAIN_QUESTS=[
@@ -726,7 +730,7 @@ function renderPotentialUI(){$('potentialPoints').textContent=state.potential;$(
 function renderCombatStats(){$('combatPower').textContent=calculateCombatPower(state.equipped).toLocaleString('vi-VN');const rows=[['Sức mạnh công kích',state.atk],['Sức mạnh phép thuật',state.magicDamage],['Máu',state.maxHp],['Giáp',state.def],['Giáp phép',state.magicArmor],['Tốc đánh',state.attackSpeed.toFixed(2)+'x'],['Tỉ lệ chí mạng',state.critChance.toFixed(1)+'%'],['Sát thương chí mạng',state.critDamage+'%'],['Tốc độ di chuyển',state.moveSpeed],['Hút máu',state.lifesteal+'%'],['Hút máu toàn phần',state.omnivamp+'%'],['Tầm đánh',state.attackRange],['Mana',state.maxMp],['Hồi chiêu',state.cooldownReduction*100+'%']];$('combatStats').innerHTML=rows.map(x=>'<div>'+x[0]+'<br><b>'+x[1]+'</b></div>').join('');}
 function spendPoint(k,amount=1){if(!POTS.some(p=>p[0]===k))return;amount=Math.floor(Number(amount)||1);amount=Math.max(1,Math.min(amount,state.potential));if(state.potential<amount)return;state.potential-=amount;state.potentialStats[k]=(state.potentialStats[k]||0)+amount;derive();renderCharacter();ui();save();}
 function rollGear(){const mi=Math.max(0,Math.min(9,state.mapIndex||0)),r=Math.random();let rarity;if(mi<=2)rarity=r<.55?'Thô':r<.85?'Thường':'Hiếm';else if(mi<=6)rarity=r<(.60/.90)?'Thường':'Hiếm';else rarity='Hiếm';const slots=['helm','armor','pants','gloves','boots','main','off',...(rarity==='Hiếm'?['relic']:[])],slot=slots[Math.floor(Math.random()*slots.length)],list=EQUIPMENT_CATALOG[rarity][slot],name=list[Math.floor(Math.random()*list.length)],lv=state.level||1,mapScale=1+mi*.22,stats=makeGearStats(slot,name,rarity,lv,mapScale),keys=Object.keys(stats),primaryKeys=slot==='relic'?keys:keys.slice(0,1),secondaryKeys=slot==='relic'?[]:keys.slice(1);return{slot,type:slot==='main'?'Vũ khí chính':slot==='off'?'Vũ khí phụ':slot==='relic'?'Tạo vật':({helm:'Mũ',armor:'Áo',pants:'Quần',gloves:'Găng',boots:'Giày'})[slot],name,rarity,rarityLines:keys.length,primaryKeys,secondaryKeys,sellValueGold:Math.max(5,Math.floor(({Thô:8,Thường:25,Hiếm:70}[rarity])*mapScale+lv*2)),image:name==='Kiếm Sắt'?'assets/equipment/weapons/iron_sword.png':null,subtitle:'',locked:false,stats};}
-function lootDrop(x,y){const r=Math.random();if(r<.22){state.potions++;dropNotice(x,y,'🧪','Dược phẩm HP','');recordPickup('Dược phẩm HP');log('🎁 Rơi dược phẩm HP!')}else if(r<.38){state.mpPotions++;dropNotice(x,y,'💧','Dược phẩm MP','');recordPickup('Dược phẩm MP');log('🎁 Rơi dược phẩm MP!')}else if(r<.62){const n=Math.floor(rand(3,9+state.mapIndex*5)*(1+(state.goldBonusPct||0)/100));state.gold+=n;dropNotice(x,y,'🪙','Vàng','+'+n);recordPickup('Vàng +'+n);log('🪙 Rơi '+n+' vàng!')}else if(r<.82){const it=rollGear();if(state.inventory.length<MAX_GEAR_SLOTS){state.inventory.push(it);renderCharacter();dropNotice(x,y,'','+ '+it.name,'',rarityInfo(it).color);recordPickup(it.name,it.rarity);log('⚔ Rơi '+it.name+'!')}else log('Túi đồ đầy: '+it.name+' không được nhặt.')}else{const n=Math.floor(rand(2,6)*(1+(state.goldBonusPct||0)/100));state.gold+=n;dropNotice(x,y,'🪙','Vàng','+'+n);recordPickup('Vàng +'+n);log('🪙 Rơi '+n+' vàng!')}}
+function lootDrop(x,y){const r=Math.random();if(r<.22){spawnGroundItem('hp',x,y);log('🎁 Quái vật làm rơi Dược phẩm HP!')}else if(r<.38){spawnGroundItem('mp',x,y);log('🎁 Quái vật làm rơi Dược phẩm MP!')}else if(r<.62){const n=Math.floor(rand(3,9+state.mapIndex*5)*(1+(state.goldBonusPct||0)/100));spawnGroundItem('gold',x,y,{amount:n});log('🪙 Quái vật làm rơi '+n+' vàng!')}else if(r<.82){const it=rollGear();spawnGroundItem('gear',x,y,{data:it});log('⚔ Quái vật làm rơi '+it.name+'!')}else{const n=Math.floor(rand(2,6)*(1+(state.goldBonusPct||0)/100));spawnGroundItem('gold',x,y,{amount:n});log('🪙 Quái vật làm rơi '+n+' vàng!')}}
 function drinkMp(){if(state.mpPotions&&state.mp<state.maxMp){state.mpPotions--;state.mp=Math.min(state.maxMp,state.mp+45);save();ui();log('Đã dùng dược phẩm MP.')}else log('Không thể dùng lúc này.')}
 function useBagPotion(kind){if(kind==='hp'){if(!(state.potions>0&&state.hp<state.maxHp)){log('Không thể dùng dược phẩm HP lúc này.');return;}state.potions--;state.hp=Math.min(state.maxHp,state.hp+45);log('Đã dùng dược phẩm HP từ túi đồ.');}else{if(!(state.mpPotions>0&&state.mp<state.maxMp)){log('Không thể dùng dược phẩm MP lúc này.');return;}state.mpPotions--;state.mp=Math.min(state.maxMp,state.mp+45);log('Đã dùng dược phẩm MP từ túi đồ.');}save();ui();}
 function updateMapUI(){
@@ -993,6 +997,7 @@ function drawTownWorld(){
  for(const [x,y] of [[25,275],[440,270],[135,190],[320,235],[130,610],[420,620]]){ctx.fillStyle="#60432f";ctx.fillRect(x-4,y,8,30);ctx.fillStyle="#4c8956";ctx.beginPath();ctx.arc(x,y-3,22,0,Math.PI*2);ctx.fill();ctx.fillStyle="#70a963";ctx.beginPath();ctx.arc(x-7,y-10,10,0,Math.PI*2);ctx.fill();}
  // Bảng tên và NPC
  ctx.fillStyle="#2a211c";ctx.fillRect(145,55,190,48);ctx.fillStyle="#d9bd7a";ctx.fillRect(149,59,182,40);ctx.fillStyle="#382a20";ctx.font="bold 18px monospace";ctx.textAlign="center";ctx.fillText("ABORNE",240,84);ctx.textAlign="left";
+ if(npcWalkTarget){ctx.save();const pulse=1+Math.sin(performance.now()/110)*.08;ctx.strokeStyle='#ffe36b';ctx.lineWidth=3;ctx.shadowColor='#ffe36b';ctx.shadowBlur=9;ctx.beginPath();ctx.ellipse(npcWalkTarget.x,npcWalkTarget.y+10,18*pulse,7*pulse,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
  pixelPerson(240,220,"#b58a4c",false);ctx.fillStyle="#fff0b0";ctx.font="bold 12px monospace";ctx.textAlign="center";ctx.fillText("TRƯỞNG TRẤN ALDEN",240,190);ctx.textAlign="left";
  pixelPerson(110,365,"#8fb7c7",false);ctx.fillStyle="#e5f4ff";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("MỤC SƯ RAFAEL",110,337);ctx.textAlign="left";
  pixelPerson(370,365,"#c68c65",false);ctx.fillStyle="#ffe0b0";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("CHỦ CỬA HÀNG PELIO",370,337);ctx.textAlign="left";
@@ -1038,6 +1043,11 @@ function particle(x,y,color){
 
 function floatText(x,y,t,c,style={}){if(settings.damage)state.floating.push({x,y,text:t,color:c,life:.8,...style});}
 function dropNotice(x,y,icon,name,detail,color){if(!settings.combatNames)return;state.floating.push({x,y,text:(icon?icon+' ':'')+name+(detail?' '+detail:''),color:color||'#ffe18a',life:1.8,drop:true});}
+function showGain(text,color){const host=$('rewardFeed');if(!host)return;const el=document.createElement('div');el.className='gain-line';el.textContent=text;el.style.color=color;host.appendChild(el);while(host.children.length>6)host.firstElementChild.remove();setTimeout(()=>el.remove(),2600);}
+function groundItemLabel(item){if(item.type==='gear')return item.data.name;if(item.type==='gold')return item.amount+' Vàng';if(item.type==='gem')return 'Đá quý';if(item.type==='hp')return 'Dược phẩm HP';if(item.type==='mp')return 'Dược phẩm MP';if(item.type==='ore')return 'Quặng Sắt';return 'Vật phẩm';}
+function spawnGroundItem(type,x,y,data={}){state.groundItems=Array.isArray(state.groundItems)?state.groundItems:[];const item={id:'drop-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),type,x:Math.max(18,Math.min(W-18,x+rand(-13,13))),y:Math.max(35,Math.min(H-20,y+rand(-13,13))),amount:data.amount||0,data:data.data||null,createdAt:Date.now(),fullWarned:false};state.groundItems.push(item);return item;}
+function collectGroundItem(item,automatic=false){if(!item||!state.groundItems.includes(item))return false;if(item.type==='gear'&&state.inventory.length>=MAX_GEAR_SLOTS){if(!automatic||!item.fullWarned)showRewardToast('Đang đầy ô chứa vật phẩm');item.fullWarned=true;if(pickupWalkTarget===item)pickupWalkTarget=null;return false;}if(item.type==='gear'){state.inventory.push(item.data);renderCharacter();recordPickup(item.data.name,item.data.rarity);showGain('+ '+item.data.name,rarityInfo(item.data).color);}else if(item.type==='gold'){state.gold+=item.amount;recordPickup('Vàng +'+item.amount);showGain('+'+item.amount+' VÀNG','#ffd66b');}else if(item.type==='gem'){state.gems=(state.gems||0)+1;recordPickup('Đá quý');showGain('+1 ĐÁ QUÝ','#42eaff');}else if(item.type==='hp'){state.potions++;recordPickup('Dược phẩm HP');showGain('+1 DƯỢC PHẨM HP','#ff8585');}else if(item.type==='mp'){state.mpPotions++;recordPickup('Dược phẩm MP');showGain('+1 DƯỢC PHẨM MP','#7bdfff');}else if(item.type==='ore'){state.mainQuestOre=(state.mainQuestOre||0)+1;recordPickup('Quặng Sắt');showGain('+1 QUẶNG SẮT','#d6e4e2');log('Đã nhặt Quặng Sắt: '+state.mainQuestOre+'/5.');}state.groundItems=state.groundItems.filter(x=>x!==item);if(pickupWalkTarget===item)pickupWalkTarget=null;save();ui();return true;}
+function drawGroundItem(item){const t=performance.now()/220;ctx.save();ctx.globalAlpha=.28;ctx.fillStyle='#07130f';ctx.beginPath();ctx.ellipse(item.x,item.y+8,12,4,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;const icon=item.type==='gear'?'⚔':item.type==='gold'?'🪙':item.type==='gem'?'💎':item.type==='hp'?'🧪':item.type==='mp'?'💧':'⛏';ctx.textAlign='center';ctx.font='bold 16px monospace';ctx.shadowColor='#08131b';ctx.shadowBlur=5;ctx.fillText(icon,item.x,item.y+4+Math.sin(t+item.x)*1.2);ctx.shadowBlur=0;ctx.font='bold 8px monospace';ctx.lineWidth=2;ctx.strokeStyle='#08131b';ctx.strokeText(groundItemLabel(item),item.x,item.y+19);ctx.fillStyle=item.type==='gear'?rarityInfo(item.data).color:item.type==='gem'?'#42eaff':item.type==='gold'?'#ffd66b':item.type==='ore'?'#d6e4e2':'#e8f2ee';ctx.fillText(groundItemLabel(item),item.x,item.y+19);if(pickupWalkTarget===item){ctx.strokeStyle='#ffe36b';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(item.x,item.y+9,18,7,0,0,Math.PI*2);ctx.stroke();}ctx.restore();}
 function recordPickup(name,rarity=''){state.pickupHistory=Array.isArray(state.pickupHistory)?state.pickupHistory:[];state.pickupHistory.unshift({name,rarity,at:Date.now()});if(state.pickupHistory.length>60)state.pickupHistory.length=60;renderPickupHistory();save();}
 function renderPickupHistory(){const el=$('pickupHistory');if(!el)return;const list=Array.isArray(state.pickupHistory)?state.pickupHistory:[];if(!list.length){el.innerHTML='<div class="muted">Chưa nhặt được vật phẩm nào.</div>';return;}el.innerHTML=list.map(x=>{const css=x.rarity?'rarity-'+(RARITY_DATA.find(r=>r.name===x.rarity)?.css||'tho'):'';const safe=String(x.name).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));return '<div class="pickup-history-entry"><b class="'+css+'">'+safe+'</b><small>'+new Date(x.at).toLocaleString('vi-VN')+'</small></div>';}).join('');}
 
@@ -1071,13 +1081,12 @@ function attack(skill=false,arrived=false){
  if(skill){state.mp-=state.characterClass==='Pháp sư'?8:10;state.lastSkill=now;state.skillFlash=.55;}else state.lastAttack=now;
  state.pendingAction=null;p.face=m.x<p.x?-1:1;state.attackAnim=skill?.62:.42;state.lastHitSkill=skill;
  const cls=state.characterClass||'Chiến binh';const base=skill?(cls==='Pháp sư'?state.magicDamage*2.35+12:cls==='Sát thủ'?state.atk*2.05+12:cls==='Cung thủ'?state.atk*1.85+12:state.atk*1.65+state.magicDamage*.35+12):state.atk,critical=Math.random()*100<state.critChance,dmg=Math.max(1,Math.round((base+rand(-2,4))*(critical?state.critDamage/100:1)));
- m.hp=Math.max(0,m.hp-dmg);m.hit=.24;state.hp=Math.min(state.maxHp,state.hp+dmg*((skill?state.omnivamp:state.lifesteal+state.omnivamp)/100));if(critical)floatText(m.x,m.y-36,'CHÍ MẠNG!','#ff354f',{critical:true});
- particle(m.x,m.y,skill?'#c18cff':'#ffad45');floatText(m.x,m.y-20,'-'+dmg,skill?'#c18cff':'#ffad45',{critical});
+ m.hp=Math.max(0,m.hp-dmg);m.hit=.24;state.hp=Math.min(state.maxHp,state.hp+dmg*((skill?state.omnivamp:state.lifesteal+state.omnivamp)/100));particle(m.x,m.y,skill?'#c18cff':'#ffad45');floatText(m.x,m.y-20,'-'+dmg,critical?'#ff354f':skill?'#c18cff':'#ffad45',{critical});
  if(m.hp<=0&&!m.dead){
-  m.dead=true;state.kills++;if(!m.boss){state.mapKills++;state.mapKillCounts=state.mapKillCounts||Array(10).fill(0);state.mapKillCounts[state.mapIndex]=(state.mapKillCounts[state.mapIndex]||0)+1;if(Math.random()<.03){state.gems=(state.gems||0)+1;dropNotice(m.x,m.y,'💎','Đá quý','+1','#42eaff');recordPickup('Đá quý');log('💎 Quái vật rơi 1 Đá quý!');}if(state.mainQuestAccepted&&state.mainQuestIndex<3&&state.mapIndex===MAIN_QUESTS[state.mainQuestIndex].map){state.mainQuestKills=(state.mainQuestKills||0)+1;if(state.mainQuestIndex===1&&Math.random()<.55){state.mainQuestOre=(state.mainQuestOre||0)+1;recordPickup('Quặng Sắt');log("⛏️ Nhặt được 1 Quặng Sắt.");}}state.respawnTimer=Math.max(state.respawnTimer,.8);}
+  m.dead=true;state.kills++;if(!m.boss){state.mapKills++;state.mapKillCounts=state.mapKillCounts||Array(10).fill(0);state.mapKillCounts[state.mapIndex]=(state.mapKillCounts[state.mapIndex]||0)+1;if(Math.random()<.03){spawnGroundItem('gem',m.x,m.y);log('💎 Quái vật làm rơi Đá quý!');}if(state.mainQuestAccepted&&state.mainQuestIndex<3&&state.mapIndex===MAIN_QUESTS[state.mainQuestIndex].map){state.mainQuestKills=(state.mainQuestKills||0)+1;if(state.mainQuestIndex===1&&Math.random()<.55){spawnGroundItem('ore',m.x,m.y);log('⛏️ Quái vật làm rơi Quặng Sắt.');}}state.respawnTimer=Math.max(state.respawnTimer,.8);}
   const map=currentMap(),xp=m.boss?map.bossXp:map.xp;
-  addExperience(xp);state.earned+=xp;state.gold+=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));state.loot++;lootDrop(m.x,m.y);
-  floatText(m.x,m.y-32,'+'+xp+' EXP','#72e08a');log((m.boss?'Guardian bị đánh bại! ':'Hạ '+map.mob+'! ')+'+'+xp+' EXP');
+  addExperience(xp);state.earned+=xp;const killGold=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));spawnGroundItem('gold',m.x,m.y,{amount:killGold});state.loot++;lootDrop(m.x,m.y);
+  showGain('+'+xp+' EXP','#72e08a');log((m.boss?'Guardian bị đánh bại! ':'Hạ '+map.mob+'! ')+'+'+xp+' EXP');
   if(m.boss){state.bossDefeated=true;state.bossesDefeated=(state.bossesDefeated||0)+1;state.mapBossesDefeated=state.mapBossesDefeated||Array(10).fill(false);state.mapBossesDefeated[state.mapIndex]=true;if(state.mainQuestAccepted&&state.mainQuestIndex===2&&state.mapIndex===2)state.mainQuestBossDefeated=true;log('CHIẾN THẮNG! Thủ lĩnh bản đồ đã bị đánh bại.');updateMapUI();}
   else if(state.mapKills>=10&&!state.bossSpawned){state.bossSpawned=true;spawnMob(true);log('Thủ lĩnh '+map.boss+' đã xuất hiện!');}
   
@@ -1092,8 +1101,10 @@ function update(dt){
  const p=state.player;let dx=joystick.x,dy=joystick.y;
  if(keys.KeyA||keys.ArrowLeft)dx--;if(keys.KeyD||keys.ArrowRight)dx++;if(keys.KeyW||keys.ArrowUp)dy--;if(keys.KeyS||keys.ArrowDown)dy++;
  dx=Math.max(-1,Math.min(1,dx));dy=Math.max(-1,Math.min(1,dy));let moving=false;
- if(dx||dy){npcWalkTarget=null;if(state.auto){state.auto=false;log('Đã dừng Auto vì bạn điều khiển di chuyển.');}const l=Math.hypot(dx,dy);p.x+=dx/l*(state.moveSpeed||150)*dt;p.y+=dy/l*(state.moveSpeed||150)*dt;p.face=dx<0?-1:dx>0?1:p.face;moving=true;}
- if(inTown()&&npcWalkTarget){const n=npcWalkTarget,d=Math.hypot(n.x-p.x,n.y-p.y);if(d<=40){npcWalkTarget=null;interactTownNpc(n.id);}else{const step=Math.min(d-40,(state.moveSpeed||150)*dt);p.x+=(n.x-p.x)/d*step;p.y+=(n.y-p.y)/d*step;p.face=n.x<p.x?-1:1;moving=true;}}else if(!inTown())npcWalkTarget=null;
+ if(dx||dy){npcWalkTarget=null;pickupWalkTarget=null;if(state.auto){state.auto=false;log('Đã dừng Auto vì bạn điều khiển di chuyển.');}const l=Math.hypot(dx,dy);p.x+=dx/l*(state.moveSpeed||150)*dt;p.y+=dy/l*(state.moveSpeed||150)*dt;p.face=dx<0?-1:dx>0?1:p.face;moving=true;}
+ if(inTown()&&npcWalkTarget){const n=npcWalkTarget,d=Math.hypot(n.x-p.x,n.y-p.y);if(d<=48){const id=n.id;npcWalkTarget=null;interactTownNpc(id);}else{const step=Math.min(d-42,(state.moveSpeed||150)*dt);p.x+=(n.x-p.x)/d*step;p.y+=(n.y-p.y)/d*step;p.face=n.x<p.x?-1:1;moving=true;}}else if(!inTown())npcWalkTarget=null;
+ if(!inTown()&&pickupWalkTarget){if(!state.groundItems.includes(pickupWalkTarget))pickupWalkTarget=null;else{const it=pickupWalkTarget,d=Math.hypot(it.x-p.x,it.y-p.y);if(d<=26)collectGroundItem(it,false);else{const step=Math.min(d-24,(state.moveSpeed||150)*dt);p.x+=(it.x-p.x)/d*step;p.y+=(it.y-p.y)/d*step;p.face=it.x<p.x?-1:1;moving=true;}}}
+ if(!inTown()&&state.auto&&state.groundItems.length){for(const it of [...state.groundItems]){if(it.type==='gear'&&state.inventory.length>=MAX_GEAR_SLOTS)continue;const d=Math.hypot(it.x-p.x,it.y-p.y);if(d<210){if(d<=25)collectGroundItem(it,true);else{const step=Math.min(d-23,190*dt);it.x+=(p.x-it.x)/d*step;it.y+=(p.y-it.y)/d*step;}}}}
  if(state.pendingAction){
   const a=state.pendingAction,m=a.target;
   if(!m||m.dead||!state.mobs.includes(m))state.pendingAction=null;
@@ -1119,7 +1130,7 @@ function update(dt){
    if(state.hp<=0){state.hp=0;state.dead=true;state.pendingAction=null;state.paused=true;joystick.x=joystick.y=0;$('deathScreen').classList.add('show');log('Bạn đã bị hạ gục.');save();break;}
   }
  }
- state.mobs=state.mobs.filter(m=>!m.dead);if(state.target&&state.target.dead)state.target=null;
+ state.mobs=state.mobs.filter(m=>!m.dead);if(state.target&&state.target.dead)state.target=null;state.groundItems=Array.isArray(state.groundItems)?state.groundItems:[];
  if(state.pendingAction&&state.pendingAction.target.dead)state.pendingAction=null;
  state.respawnTimer=Math.max(0,state.respawnTimer-dt);
  if(state.respawnTimer<=0&&state.mobs.filter(m=>!m.boss).length<7){spawnMob();state.respawnTimer=.65;}
@@ -1133,7 +1144,7 @@ function update(dt){
 
 function draw(){
  drawWorld();
-
+ if(!inTown())for(const item of state.groundItems)drawGroundItem(item);
  for(const m of state.mobs)drawMob(m);
  if(state.target&&!state.target.dead&&state.mobs.includes(state.target)){
   ctx.strokeStyle='#ffe36b';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(state.target.x,state.target.y+8,22,9,0,0,Math.PI*2);ctx.stroke();
@@ -1289,10 +1300,10 @@ function moveJoy(e){
 function stopJoy(e){if(e&&joystick.pointerId!==null&&e.pointerId!==joystick.pointerId)return;joystick.x=0;joystick.y=0;joystick.active=false;joystick.pointerId=null;stick.style.transform='translate(0,0)';}
 joy.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();joystick.active=true;joystick.pointerId=e.pointerId;try{joy.setPointerCapture(e.pointerId);}catch{}moveJoy(e);});joy.addEventListener('pointermove',e=>{if(joystick.active&&e.pointerId===joystick.pointerId)moveJoy(e);});['pointerup','pointercancel','lostpointercapture'].forEach(ev=>joy.addEventListener(ev,stopJoy));
 
-let lastNpcTap={id:null,time:0};
 canvas.addEventListener('pointerdown',e=>{
  e.preventDefault();const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;
- if(inTown()){let npc=null,best=30;for(const n of TOWN_NPCS){const d=Math.hypot(n.x-x,n.y-y);if(d<best){npc=n;best=d;}}if(npc){const now=performance.now();if(lastNpcTap.id===npc.id&&now-lastNpcTap.time<=500){npcWalkTarget=npc;lastNpcTap={id:null,time:0};log('Đang đi đến gặp '+({alden:'Trưởng trấn Alden',healer:'Mục sư Rafael',merchant:'Chủ cửa hàng Pelio',blacksmith:'Thợ Rèn Homes',syrupp:'Người hướng dẫn Syrupp'}[npc.id])+'.');}else lastNpcTap={id:npc.id,time:now};}else lastNpcTap={id:null,time:0};return;}
+ if(inTown()){let npc=null,best=34;for(const n of TOWN_NPCS){const d=Math.hypot(n.x-x,n.y-y);if(d<best){npc=n;best=d;}}if(npc){const now=performance.now();if(lastNpcTap.id===npc.id&&now-lastNpcTap.time<=850){lastNpcTap={id:null,time:0};const dist=Math.hypot(npc.x-state.player.x,npc.y-state.player.y);if(dist<=48)interactTownNpc(npc.id);else{joystick.x=joystick.y=0;joystick.active=false;joystick.pointerId=null;stick.style.transform='translate(0,0)';npcWalkTarget=npc;pickupWalkTarget=null;log('Đang đi đến gặp '+({alden:'Trưởng trấn Alden',healer:'Mục sư Rafael',merchant:'Chủ cửa hàng Pelio',blacksmith:'Thợ Rèn Homes',syrupp:'Người hướng dẫn Syrupp'}[npc.id])+'.');}}else lastNpcTap={id:npc.id,time:now};}else lastNpcTap={id:null,time:0};return;}
+ let drop=null,bestDrop=28;for(const item of state.groundItems||[]){const d=Math.hypot(item.x-x,item.y-y);if(d<bestDrop){bestDrop=d;drop=item;}}if(drop){const now=performance.now();if(lastDropTap.id===drop.id&&now-lastDropTap.time<=850){lastDropTap={id:null,time:0};if(Math.hypot(drop.x-state.player.x,drop.y-state.player.y)<=30)collectGroundItem(drop,false);else{pickupWalkTarget=drop;state.target=null;state.pendingAction=null;}}else lastDropTap={id:drop.id,time:now};return;}
  let picked=null,best=42;for(const m of state.mobs){if(m.dead)continue;const d=Math.hypot(m.x-x,m.y-y);if(d<best){best=d;picked=m;}}if(picked){state.target=picked;state.pendingAction=null;log('Đã chọn mục tiêu: '+(picked.boss?currentMap().boss:currentMap().mob)+'.');}
 });
 
@@ -1304,7 +1315,7 @@ document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('clic
 window.addEventListener('beforeunload',save);
 document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
 
-/* v1.7.0: unified font, class ranges, relic stats, pickup history and combat feedback */
+/* v1.2.12: manual ground loot, auto pickup, reward feed and stable NPC interaction */
 /* v1.6.0: reduce accidental horizontal edge navigation while playing */
 (function(){
  let edgeTouch=null;
