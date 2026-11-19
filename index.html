@@ -1200,7 +1200,7 @@ function ui(){
  renderPotentialUI();renderCombatStats();
  $('gold').textContent=state.gold+' G';$('inventoryGold').textContent=state.gold.toLocaleString('vi-VN');
 
- renderInventoryGrid();
+ const hpCount=$('inventoryList').querySelector('[data-potion-use="hp"] .inventory-count'),mpCount=$('inventoryList').querySelector('[data-potion-use="mp"] .inventory-count');if(hpCount)hpCount.textContent=state.potions||0;if(mpCount)mpCount.textContent=state.mpPotions||0;
  $('inventoryGems').textContent=(state.gems||0).toLocaleString('vi-VN');
 
  $('kills').textContent=state.kills;
