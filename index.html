@@ -218,6 +218,32 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 .hud .bar{width:clamp(42px,13vw,68px)!important;height:4px!important;margin:0!important;border:0!important;background:#071016dd!important}
 @media(max-width:520px){.hud{top:48px!important;left:6px!important;right:auto!important;gap:6px!important;padding:4px 6px!important}.hud .stat{font-size:8px!important;gap:3px!important}.hud .bar{width:clamp(38px,12vw,54px)!important;height:4px!important}}
 
+
+/* AFK Adventure mobile HUD: keep every combat control inside the game viewport */
+.canvas-wrap>.hud{position:absolute!important;top:7px!important;left:7px!important;right:52px!important;z-index:14!important;display:flex!important;justify-content:flex-start!important;gap:6px!important;flex-wrap:nowrap!important;width:auto!important;margin:0!important;padding:5px 7px!important;background:#07131bd9!important;border:1px solid #597078!important;border-radius:8px!important;pointer-events:none!important}
+.canvas-wrap>.hud .stat{font-size:10px!important;min-width:0;white-space:nowrap}
+.canvas-wrap>.hud .bar{width:clamp(38px,10vw,68px)!important;height:5px!important;margin-top:3px!important}
+.canvas-wrap>.mobile-controls{position:absolute!important;left:7px!important;bottom:8px!important;z-index:15!important;display:flex!important;flex:none!important;width:auto!important;justify-content:flex-start!important;align-items:flex-end!important;gap:6px!important;margin:0!important;padding:0!important}
+.canvas-wrap>.mobile-controls .joystick{width:70px!important;height:70px!important;flex:0 0 70px!important}
+.canvas-wrap>.mobile-controls .stick{width:32px!important;height:32px!important;left:17px!important;top:17px!important}
+.canvas-wrap>.mobile-controls .controls{display:flex!important;flex:0 0 auto!important;gap:4px!important}
+.canvas-wrap>.mobile-controls .controls button{min-width:58px!important;min-height:40px!important;padding:5px!important;font-size:10px!important}
+.canvas-wrap>.action-controls{position:absolute!important;right:7px!important;bottom:8px!important;z-index:15!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important;width:min(46%,190px)!important;max-width:none!important;margin:0!important;padding:0!important}
+.canvas-wrap>.action-controls button{width:100%!important;min-width:0!important;min-height:36px!important;padding:5px 3px!important;font-size:clamp(9px,2.5vw,11px)!important;line-height:1.1!important;white-space:nowrap!important}
+.canvas-wrap>.action-controls #potionBtn,.canvas-wrap>.action-controls #mpPotionBtn{min-height:32px!important}
+@media(max-width:520px){
+ .canvas-wrap{isolation:isolate}
+ .canvas-wrap>.hud{top:5px!important;left:5px!important;right:5px!important;justify-content:space-between!important;gap:3px!important;padding:4px 5px!important}
+ .canvas-wrap>.hud .stat{font-size:9px!important}
+ .canvas-wrap>.hud .bar{width:clamp(34px,12vw,55px)!important}
+ .canvas-wrap>.mobile-controls{left:5px!important;bottom:6px!important;gap:4px!important}
+ .canvas-wrap>.mobile-controls .joystick{width:64px!important;height:64px!important;flex-basis:64px!important}
+ .canvas-wrap>.mobile-controls .stick{width:30px!important;height:30px!important;left:15px!important;top:15px!important}
+ .canvas-wrap>.mobile-controls .controls button{min-width:49px!important;min-height:36px!important;font-size:9px!important}
+ .canvas-wrap>.action-controls{right:5px!important;bottom:6px!important;width:min(45%,166px)!important;gap:3px!important}
+ .canvas-wrap>.action-controls button{min-height:32px!important;font-size:9px!important;padding:4px 2px!important}
+}
+
 </style>
 
 </head>
@@ -252,14 +278,14 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
     <div id="rewardToast" class="reward-toast" role="status" aria-live="assertive"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.6</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.7</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ THẾ GIỚI HẮC ÁM</h2><div class="intro-story">Hàng thiên niên kỷ đã trôi qua, nhưng mỗi khi nhắc về cuộc Đại Hỗn Chiến trên lục địa Eldric, nhân loại vẫn không khỏi rùng mình kinh hãi. Những cánh đồng chất đầy thi thể, máu nhuộm đỏ đất trời, tiếng binh khí va chạm chát chúa hòa cùng tiếng gào thét bi ai và những luồng ma pháp xé toạc không gian—tất cả địa ngục trần gian ấy chỉ là hệ quả từ sự thức tỉnh của Chúa tể Hắc ám Halphys, kẻ vừa phá vỡ phong ấn cổ đại sau hàng thế kỷ bị giam cầm.
 
 Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc cạn những tia hy vọng cuối cùng, dùng chính sinh mạng và ý chí bất khuất để đẩy lùi bóng tối—hoặc ít nhất, là để lại một vết sẹo trên thân thể bất tử của hắn. Không một ai hay biết Halphys đã ẩn náu nơi đâu. Hắn đã trốn thoát vào màn đêm sâu thẳm, lặng lẽ gặm nhấm vết thương, chờ ngày khôi phục quyền năng nguyên thủy để giáng xuống Eldric một cơn đại hồng thủy thứ hai.</div></div></div><div class="creation-modal" id="creationModal"><div class="creation-card"><h2>⚔️ Khởi tạo nhân vật</h2><p style="font-size:12px;color:#c5d5d1">Chọn con đường chiến đấu và đặt tên cho hành trình của bạn.</p><div class="creation-classes" id="creationClasses"></div><label for="creationName">Tên nhân vật</label><input id="creationName" maxlength="18" placeholder="Nhập tên nhân vật"><button id="creationFinish" style="width:100%;margin-top:14px">Bắt đầu hành trình</button></div></div><div class="welcome-modal" id="welcomeModal"><div class="welcome-card"><h2>Chào mừng đến Eldric!</h2><p>Nhân vật của bạn đã sẵn sàng. Hãy đến gặp Trưởng trấn Alden tại thị trấn Aborne để nhận nhiệm vụ chính đầu tiên và bắt đầu hành trình.</p><button id="welcomeAlden" style="width:100%">Đến gặp Trưởng trấn Alden</button></div></div>
    <div class="death-screen" id="deathScreen"><div class="death-card"><h2>☠ BẠN ĐÃ BỊ HẠ</h2><p>Hành trình tạm dừng. Hãy hồi sinh để tiếp tục cuộc phiêu lưu.</p><button id="respawnBtn">↻ HỒI SINH</button></div></div>
-   </div>
+
 
    <div class="hud">
 
@@ -298,6 +324,8 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
     <button id="potionBtn" title="Dược phẩm HP">🧪</button>
 
     <button id="mpPotionBtn" title="Dược phẩm MP">💧</button>
+
+   </div>
 
    </div>
 
