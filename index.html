@@ -245,7 +245,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 }
 
 
-/* v1.2.12 — separated combat-control zones, inspired by the reference layout */
+/* v1.3.0 — separated combat-control zones, inspired by the reference layout */
 .canvas-wrap{isolation:isolate}
 .canvas-wrap::after{content:"";position:absolute;z-index:10;left:0;right:0;bottom:0;height:126px;background:linear-gradient(180deg,transparent 0%,rgba(5,12,18,.34) 22%,rgba(5,12,18,.88) 100%);pointer-events:none}
 .canvas-wrap>.hud{position:absolute!important;top:7px!important;left:7px!important;right:7px!important;z-index:16!important;display:flex!important;justify-content:flex-start!important;align-items:center!important;gap:10px!important;flex-wrap:nowrap!important;width:auto!important;margin:0!important;padding:5px 8px!important;background:rgba(5,13,20,.88)!important;border:1px solid rgba(150,180,180,.5)!important;border-radius:8px!important;pointer-events:none!important}
@@ -275,7 +275,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 }
 
 
-/* v1.2.12: single layout owner for all combat controls */
+/* v1.3.0: single layout owner for all combat controls */
 .canvas-wrap{position:absolute!important;inset:0!important;overflow:hidden!important;isolation:isolate!important}
 .canvas-wrap>canvas#game{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:fill!important;z-index:0!important}
 .canvas-wrap>.combat-ui{position:absolute!important;inset:0!important;z-index:16!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;padding:7px!important;pointer-events:none!important}
@@ -311,6 +311,21 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 html,body{overscroll-behavior-x:none!important}
 .wrap,.layout,.gamebox,.canvas-wrap,.combat-ui,.mobile-controls,.joystick,.action-controls,canvas#game{touch-action:none!important;overscroll-behavior-x:none!important}
 
+
+/* AFK HUD Designer */
+#hudEditToggle{position:absolute!important;top:8px!important;right:8px!important;z-index:80!important;padding:6px 9px!important;font-size:10px!important;background:#263944!important;border:1px solid #d7b66c!important;color:#ffe4a5!important;border-radius:8px!important;pointer-events:auto!important}
+#hudEditPanel{position:absolute!important;top:42px!important;right:8px!important;z-index:81!important;width:min(245px,72vw)!important;padding:10px!important;background:#101b23f2!important;border:1px solid #c4a16b!important;border-radius:10px!important;color:#fff!important;font:12px system-ui!important;box-shadow:0 8px 25px #0009!important;pointer-events:auto!important}
+#hudEditPanel[hidden]{display:none!important}
+#hudEditPanel strong{display:block;color:#ffe0a0;margin-bottom:8px}
+#hudEditPanel select,#hudEditPanel input[type=range]{width:100%;margin:5px 0 8px}
+#hudEditPanel label{display:flex;justify-content:space-between;align-items:center;gap:5px}
+#hudEditPanel .hud-edit-actions{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+#hudEditPanel .hud-edit-actions button{font-size:10px;padding:6px 3px}
+#hudEditPanel small{display:block;color:#b8c4c9;margin-top:7px}
+body.hud-editing .combat-ui,body.hud-editing .combat-ui *,body.hud-editing .menu-bar,body.hud-editing #chatToggle,body.hud-editing #mapBanner{pointer-events:auto!important;touch-action:none!important}
+body.hud-editing [data-hud-key]{outline:1px dashed #ffe08a!important;outline-offset:3px!important;cursor:move!important}
+body.hud-editing #hudEditToggle,body.hud-editing #hudEditPanel{touch-action:pan-y!important}
+
 </style>
 
 </head>
@@ -324,7 +339,7 @@ html,body{overscroll-behavior-x:none!important}
 
    <div class="logo">✦ THẾ GIỚI HẮC ÁM</div>
 
-   <div class="sub">Pixel RPG • Combat Power Update v1.2.12</div>
+   <div class="sub">Pixel RPG • Combat Power Update v1.3.0</div>
 
   </div>
 
@@ -345,7 +360,7 @@ html,body{overscroll-behavior-x:none!important}
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
     <div id="rewardToast" class="reward-toast" role="status" aria-live="assertive"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.12</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.0</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ THẾ GIỚI HẮC ÁM</h2><div class="intro-story">Hàng thiên niên kỷ đã trôi qua, nhưng mỗi khi nhắc về cuộc Đại Hỗn Chiến trên lục địa Eldric, nhân loại vẫn không khỏi rùng mình kinh hãi. Những cánh đồng chất đầy thi thể, máu nhuộm đỏ đất trời, tiếng binh khí va chạm chát chúa hòa cùng tiếng gào thét bi ai và những luồng ma pháp xé toạc không gian—tất cả địa ngục trần gian ấy chỉ là hệ quả từ sự thức tỉnh của Chúa tể Hắc ám Halphys, kẻ vừa phá vỡ phong ấn cổ đại sau hàng thế kỷ bị giam cầm.
@@ -353,6 +368,20 @@ html,body{overscroll-behavior-x:none!important}
 Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc cạn những tia hy vọng cuối cùng, dùng chính sinh mạng và ý chí bất khuất để đẩy lùi bóng tối—hoặc ít nhất, là để lại một vết sẹo trên thân thể bất tử của hắn. Không một ai hay biết Halphys đã ẩn náu nơi đâu. Hắn đã trốn thoát vào màn đêm sâu thẳm, lặng lẽ gặm nhấm vết thương, chờ ngày khôi phục quyền năng nguyên thủy để giáng xuống Eldric một cơn đại hồng thủy thứ hai.</div></div></div><div class="creation-modal" id="creationModal"><div class="creation-card"><h2>⚔️ Khởi tạo nhân vật</h2><p style="font-size:12px;color:#c5d5d1">Chọn con đường chiến đấu và đặt tên cho hành trình của bạn.</p><div class="creation-classes" id="creationClasses"></div><label for="creationName">Tên nhân vật</label><input id="creationName" maxlength="18" placeholder="Nhập tên nhân vật"><button id="creationFinish" style="width:100%;margin-top:14px">Bắt đầu hành trình</button></div></div><div class="welcome-modal" id="welcomeModal"><div class="welcome-card"><h2>Chào mừng đến Eldric!</h2><p>Nhân vật của bạn đã sẵn sàng. Hãy đến gặp Trưởng trấn Alden tại thị trấn Aborne để nhận nhiệm vụ chính đầu tiên và bắt đầu hành trình.</p><button id="welcomeAlden" style="width:100%">Đến gặp Trưởng trấn Alden</button></div></div>
    <div class="death-screen" id="deathScreen"><div class="death-card"><h2>☠ BẠN ĐÃ BỊ HẠ</h2><p>Hành trình tạm dừng. Hãy hồi sinh để tiếp tục cuộc phiêu lưu.</p><button id="respawnBtn">↻ HỒI SINH</button></div></div>
 
+
+
+   <button id="hudEditToggle" type="button">✥ SỬA HUD</button>
+   <div id="hudEditPanel" hidden>
+    <strong>THIẾT KẾ HUD</strong>
+    <select id="hudEditSelect">
+     <option value="hud">HP / MP / EXP</option><option value="joystick">Joystick</option><option value="mobileAttack">Nút đánh</option><option value="actionControls">AUTO / kỹ năng / thuốc</option><option value="chatToggle">Nút chat</option><option value="mapBanner">Tên bản đồ</option><option value="menuBar">Thanh menu</option>
+    </select>
+    <label>Kích thước <span id="hudEditScaleValue">100%</span></label><input id="hudEditScale" type="range" min="50" max="180" value="100">
+    <label>Độ trong suốt <span id="hudEditOpacityValue">100%</span></label><input id="hudEditOpacity" type="range" min="20" max="100" value="100">
+    <label><input id="hudEditVisible" type="checkbox" checked> Hiển thị</label>
+    <div class="hud-edit-actions"><button id="hudEditReset" type="button">Mặc định</button><button id="hudEditOpenFull" type="button">Trình thiết kế PC</button><button id="hudEditSave" type="button">Lưu / Xong</button></div>
+    <small>Kéo trực tiếp thành phần để đổi vị trí.</small>
+   </div>
 
    <div class="combat-ui">
     <div class="hud">
@@ -480,6 +509,62 @@ ctx.imageSmoothingEnabled=false;
 const W=480,H=720,keys={};
 
 const $=id=>document.getElementById(id);
+
+const HUD_LAYOUT_KEY='afkHudLayoutV1';
+const HUD_DEFAULTS={
+ hud:{x:25,y:5,scale:100,opacity:100,visible:true},
+ joystick:{x:17,y:82,scale:100,opacity:100,visible:true},
+ mobileAttack:{x:36,y:90,scale:100,opacity:100,visible:true},
+ actionControls:{x:83,y:82,scale:100,opacity:100,visible:true},
+ chatToggle:{x:50,y:10,scale:100,opacity:100,visible:true},
+ mapBanner:{x:50,y:18,scale:100,opacity:100,visible:true},
+ menuBar:{x:50,y:96,scale:100,opacity:100,visible:true}
+};
+let hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS)),hudEditing=false,hudDrag=null,hudSelected='joystick';
+const hudTargets={
+ hud:()=>document.querySelector('.combat-ui>.hud'),
+ joystick:()=>$('joystick'),
+ mobileAttack:()=>$('mobileAttack'),
+ actionControls:()=>document.querySelector('.combat-ui>.combat-bottom>.action-controls'),
+ chatToggle:()=>$('chatToggle'),
+ mapBanner:()=>$('mapBanner'),
+ menuBar:()=>document.querySelector('.menu-bar')
+};
+function loadHudLayout(){try{const v=JSON.parse(localStorage.getItem(HUD_LAYOUT_KEY)||'null');if(v&&v.version===1&&v.items)for(const k of Object.keys(HUD_DEFAULTS))if(v.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};}catch(e){console.warn('HUD layout load:',e);}applyHudLayout();}
+function applyHudLayout(){
+ for(const [k,get] of Object.entries(hudTargets)){const el=get(),v=hudLayout[k];if(!el||!v)continue;
+  const isMenu=k==='menuBar';const base=isMenu?document.querySelector('.gamebox'):document.querySelector('.canvas-wrap');
+  if(!base)continue;
+  el.style.position='absolute';el.style.left=v.x+'%';el.style.top=v.y+'%';el.style.right='auto';el.style.bottom='auto';
+  el.style.transform='translate(-50%,-50%) scale('+(v.scale/100)+')';el.style.transformOrigin='center center';el.style.opacity=String(v.opacity/100);
+  el.style.display=v.visible?'':'none';el.style.zIndex=k==='hud'?'18':'20';
+ }
+}
+function saveHudLayout(){localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:1,items:hudLayout}));applyHudLayout();}
+function setupHudDesigner(){
+ const toggle=$('hudEditToggle'),panel=$('hudEditPanel'),select=$('hudEditSelect'),scale=$('hudEditScale'),opacity=$('hudEditOpacity'),visible=$('hudEditVisible');
+ if(!toggle||!panel)return;
+ const labels={hud:'HP / MP / EXP',joystick:'Joystick',mobileAttack:'Nút đánh',actionControls:'AUTO / kỹ năng / thuốc',chatToggle:'Nút chat',mapBanner:'Tên bản đồ',menuBar:'Thanh menu'};
+ function refresh(){const v=hudLayout[hudSelected];select.value=hudSelected;scale.value=v.scale;opacity.value=v.opacity;visible.checked=v.visible;$('hudEditScaleValue').textContent=v.scale+'%';$('hudEditOpacityValue').textContent=v.opacity+'%';}
+ function setEditing(on){hudEditing=on;document.body.classList.toggle('hud-editing',on);panel.hidden=!on;toggle.textContent=on?'✓ XONG':'✥ SỬA HUD';if(on)refresh();else{saveHudLayout();hudDrag=null;}}
+ toggle.addEventListener('click',()=>setEditing(!hudEditing));
+ select.addEventListener('change',()=>{hudSelected=select.value;refresh();});
+ scale.addEventListener('input',()=>{hudLayout[hudSelected].scale=+scale.value;refresh();applyHudLayout();});
+ opacity.addEventListener('input',()=>{hudLayout[hudSelected].opacity=+opacity.value;refresh();applyHudLayout();});
+ visible.addEventListener('change',()=>{hudLayout[hudSelected].visible=visible.checked;applyHudLayout();});
+ $('hudEditSave').addEventListener('click',()=>{saveHudLayout();setEditing(false);});
+ $('hudEditReset').addEventListener('click',()=>{hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS));saveHudLayout();refresh();});
+ $('hudEditOpenFull').addEventListener('click',()=>{window.open('ui-editor.html','_blank','noopener');});
+ for(const [k,get] of Object.entries(hudTargets)){const el=get();if(!el)continue;
+  el.dataset.hudKey=k;
+  el.addEventListener('pointerdown',e=>{if(!hudEditing)return;e.preventDefault();e.stopImmediatePropagation();hudSelected=k;refresh();hudDrag={key:k,id:e.pointerId};if(el.setPointerCapture)try{el.setPointerCapture(e.pointerId);}catch{}},{capture:true});
+ }
+ document.addEventListener('pointermove',e=>{if(!hudEditing||!hudDrag||hudDrag.id!==e.pointerId)return;e.preventDefault();const k=hudDrag.key,isMenu=k==='menuBar',base=isMenu?document.querySelector('.gamebox'):document.querySelector('.canvas-wrap');if(!base)return;const r=base.getBoundingClientRect(),v=hudLayout[k];v.x=Math.max(2,Math.min(98,(e.clientX-r.left)/r.width*100));v.y=Math.max(2,Math.min(98,(e.clientY-r.top)/r.height*100));applyHudLayout();},{capture:true,passive:false});
+ const end=e=>{if(hudDrag&&(!e.pointerId||hudDrag.id===e.pointerId))hudDrag=null;};
+ document.addEventListener('pointerup',end,true);document.addEventListener('pointercancel',end,true);
+ loadHudLayout();
+}
+
 // Đưa modal ra khỏi gamebox để không bị bảng menu che do stacking context.
 document.body.appendChild($('itemModal'));
 document.body.appendChild($('blacksmithModal'));
@@ -1242,7 +1327,7 @@ document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('clic
 window.addEventListener('beforeunload',save);
 document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
 
-/* v1.2.12: reduce accidental horizontal edge navigation while playing */
+/* v1.3.0: reduce accidental horizontal edge navigation while playing */
 (function(){
  let edgeTouch=null;
  const EDGE=28,THRESHOLD=8;
@@ -1265,6 +1350,7 @@ document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
 document.addEventListener('contextmenu',e=>{if(e.target.closest('button,canvas,[role=button],.menu-bar,.controls'))e.preventDefault();});
 document.addEventListener('selectstart',e=>{if(!e.target.closest('input,textarea,select'))e.preventDefault();});
 
+setupHudDesigner();
 initSettings();
 const hadSave=!!localStorage.getItem("afkAdventureSave");
 load();
