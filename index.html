@@ -617,7 +617,7 @@ elapsed:0,lastSave:Date.now(),lastAttack:0,lastPotion:0,lastSkill:0,
 
 player:{x:240,y:360,face:1},mobs:[],groundItems:[],particles:[],floating:[],target:null,attackAnim:0,skillFlash:0,
 
-bossSpawned:false,bossDefeated:false,bossesDefeated:0,bossSpawnTimer:60,questClaims:[],pendingAction:null,lastHitSkill:false,walkTime:0,moveBlend:0,hitFlash:0,levelUpFx:0,dead:false
+bossSpawned:false,bossDefeated:false,bossesDefeated:0,bossSpawnTimer:180,questClaims:[],pendingAction:null,lastHitSkill:false,walkTime:0,moveBlend:0,hitFlash:0,levelUpFx:0,dead:false
 
 };
 
@@ -640,7 +640,7 @@ function openNpcDialog(id){const data={alden:{name:'Trưởng trấn Alden',icon
 function closeNpcDialog(){$('npcDialog').classList.remove('show');}
 function interactTownNpc(id){if(!inTown())return;npcWalkTarget=null;pickupWalkTarget=null;joystick.x=joystick.y=0;joystick.active=false;joystick.pointerId=null;stick.style.transform='translate(0,0)';state.pendingAction=null;state.paused=false;state.townNpcVisited=state.townNpcVisited||[];if(!state.townNpcVisited.includes(id)){state.townNpcVisited.push(id);save();}openNpcDialog(id);$('npcDialog').classList.add('show');}
 function enterTown(){npcWalkTarget=null;state.inTown=true;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=540;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
-function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu cấp "+requiredMapLevel(i)+".");return;}state.inTown=false;state.mapIndex=i;state.mapKills=0;state.bossSpawned=false;state.bossDefeated=false;state.bossSpawnTimer=60;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=360;state.auto=true;for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+".");}
+function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu cấp "+requiredMapLevel(i)+".");return;}state.inTown=false;state.mapIndex=i;state.mapKills=0;state.bossSpawned=false;state.bossDefeated=false;state.bossSpawnTimer=180;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=360;state.auto=true;for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+".");}
 const MAIN_QUESTS=[
 {id:'q1',title:'Khởi đầu từ tro tàn',map:0,goal:10,objective:'Đánh bại 10 Slime tại Đồng cỏ xanh và trò chuyện với các NPC trong thị trấn.',rewardXp:120,rewardGold:80,kind:'starter'},
 {id:'q2',title:'Tiếng Vọng Của Thép Rỉ',map:1,goal:10,objective:'Đánh bại 10 Thạch quái tại Hang động đá và thu thập 5 Quặng Sắt để thợ rèn chế tạo trang bị mới.',rewardXp:260,rewardGold:160,kind:'ore'},
@@ -916,9 +916,9 @@ function spawnMob(boss=false){
  const kind=boss?'boss':leader?'leader':elite?'elite':'normal';
  const scale=mobLevel/Math.max(1,((map.minLevel||1)+(map.maxLevel||20))/2);
  const power=boss?1:leader?5:elite?2:1;
- const hp=boss?map.bossHp:Math.max(1,Math.round(map.hp*scale*rand(.9,1.1)*power));
+ const hp=boss?Math.max(1,Math.round(map.hp*scale*15)):Math.max(1,Math.round(map.hp*scale*rand(.9,1.1)*power));
  const mobName=boss?map.boss:map.mob;
- state.mobs.push({x,y,hp,max:hp,boss,elite,leader,kind,name:mobName,level:mobLevel,spd:boss?24+state.mapIndex*7:rand(18,27)+state.mapIndex*5,atk:boss?map.bossAtk:Math.max(1,Math.round(map.atk*scale*power)),rewardScale:scale,rewardMultiplier:boss?50:leader?20:elite?10:1,hit:0,attackAt:0,dead:false,dir:rand(0,Math.PI*2),wanderTimer:rand(.4,2.2),phase:rand(0,6.28)});
+ state.mobs.push({x,y,hp,max:hp,boss,elite,leader,kind,name:mobName,level:mobLevel,spd:boss?24+state.mapIndex*7:rand(18,27)+state.mapIndex*5,atk:boss?Math.max(1,Math.round(map.atk*scale*15)):Math.max(1,Math.round(map.atk*scale*power)),rewardScale:scale,rewardMultiplier:boss?50:leader?20:elite?10:1,hit:0,attackAt:0,dead:false,dir:rand(0,Math.PI*2),wanderTimer:rand(.4,2.2),phase:rand(0,6.28)});
 
 }
 
@@ -1098,7 +1098,7 @@ function attack(skill=false,arrived=false){
   const xp=Math.round(baseXp*mult),killGold=Math.round(baseGold*mult);
   addExperience(xp);state.earned+=xp;spawnGroundItem('gold',m.x,m.y,{amount:killGold});state.loot++;lootDrop(m.x,m.y);
   showGain('+'+xp+' EXP',m.boss?'#ff7777':m.leader?'#ffe45c':m.elite?'#d58aff':'#72e08a');log((m.boss?'Đã hạ boss '+map.boss+'! ':m.leader?'Hạ quái đầu đàn! ':m.elite?'Hạ tinh anh! ':'Hạ '+map.mob+'! ')+'+'+xp+' EXP · +'+killGold+' vàng');
-  if(m.boss){state.bossDefeated=true;state.bossSpawned=false;state.bossSpawnTimer=60;state.bossesDefeated=(state.bossesDefeated||0)+1;state.mapBossesDefeated=state.mapBossesDefeated||Array(10).fill(false);state.mapBossesDefeated[state.mapIndex]=true;if(state.mainQuestAccepted&&state.mainQuestIndex===2&&state.mapIndex===2)state.mainQuestBossDefeated=true;showBossDefeatNotice(map.boss);log('CHIẾN THẮNG! '+map.boss+' đã bị đánh bại.');updateMapUI();}
+  if(m.boss){state.bossDefeated=true;state.bossSpawned=false;state.bossSpawnTimer=180;state.bossesDefeated=(state.bossesDefeated||0)+1;state.mapBossesDefeated=state.mapBossesDefeated||Array(10).fill(false);state.mapBossesDefeated[state.mapIndex]=true;if(state.mainQuestAccepted&&state.mainQuestIndex===2&&state.mapIndex===2)state.mainQuestBossDefeated=true;showBossDefeatNotice(map.boss);log('CHIẾN THẮNG! '+map.boss+' đã bị đánh bại.');updateMapUI();}
   
  }
 }
@@ -1124,9 +1124,12 @@ function update(dt){
   }
  }
  if(!inTown()){
-  state.bossSpawnTimer=(state.bossSpawnTimer==null?60:state.bossSpawnTimer)-dt;
-  if(state.bossSpawnTimer<=0&&!state.mobs.some(m=>m.boss&&!m.dead)){
-   spawnMob(true);state.bossSpawned=true;state.bossDefeated=false;state.bossSpawnTimer=60;log('BOSS '+currentMap().boss.toUpperCase()+' ĐÃ XUẤT HIỆN!');
+    const bossAlive=state.mobs.some(m=>m.boss&&!m.dead);
+  if(!bossAlive){
+   state.bossSpawnTimer=(state.bossSpawnTimer==null?180:state.bossSpawnTimer)-dt;
+   if(state.bossSpawnTimer<=0){
+    spawnMob(true);state.bossSpawned=true;state.bossDefeated=false;state.bossSpawnTimer=180;log('BOSS '+currentMap().boss.toUpperCase()+' ĐÃ XUẤT HIỆN!');
+   }
   }
  }
  if(!inTown()&&state.auto&&!state.pendingAction){
