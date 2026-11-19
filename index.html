@@ -245,7 +245,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 }
 
 
-/* v1.2.8 — separated combat-control zones, inspired by the reference layout */
+/* v1.2.11 — separated combat-control zones, inspired by the reference layout */
 .canvas-wrap{isolation:isolate}
 .canvas-wrap::after{content:"";position:absolute;z-index:10;left:0;right:0;bottom:0;height:126px;background:linear-gradient(180deg,transparent 0%,rgba(5,12,18,.34) 22%,rgba(5,12,18,.88) 100%);pointer-events:none}
 .canvas-wrap>.hud{position:absolute!important;top:7px!important;left:7px!important;right:7px!important;z-index:16!important;display:flex!important;justify-content:flex-start!important;align-items:center!important;gap:10px!important;flex-wrap:nowrap!important;width:auto!important;margin:0!important;padding:5px 8px!important;background:rgba(5,13,20,.88)!important;border:1px solid rgba(150,180,180,.5)!important;border-radius:8px!important;pointer-events:none!important}
@@ -274,6 +274,38 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
  .canvas-wrap>.action-controls button{min-height:34px!important;font-size:9px!important;padding:4px 2px!important}
 }
 
+
+/* v1.2.11: single layout owner for all combat controls */
+.canvas-wrap{position:absolute!important;inset:0!important;overflow:hidden!important;isolation:isolate!important}
+.canvas-wrap>canvas#game{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:fill!important;z-index:0!important}
+.canvas-wrap>.combat-ui{position:absolute!important;inset:0!important;z-index:16!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;padding:7px!important;pointer-events:none!important}
+.canvas-wrap>.combat-ui>.hud{position:static!important;inset:auto!important;display:flex!important;flex:0 0 auto!important;justify-content:flex-start!important;align-items:center!important;gap:12px!important;width:max-content!important;max-width:100%!important;margin:0!important;padding:5px 8px!important;background:rgba(5,13,20,.88)!important;border:1px solid rgba(150,180,190,.55)!important;border-radius:8px!important;pointer-events:none!important}
+.canvas-wrap>.combat-ui>.hud .stat{display:flex!important;flex-direction:column!important;gap:3px!important;min-width:0!important;font-size:10px!important;white-space:nowrap!important}
+.canvas-wrap>.combat-ui>.hud .stat b{display:none!important}
+.canvas-wrap>.combat-ui>.hud .bar{display:block!important;width:clamp(42px,11vw,70px)!important;height:5px!important;margin:0!important;border:0!important}
+.canvas-wrap>.combat-ui>.combat-bottom{display:flex!important;flex:0 0 auto!important;justify-content:space-between!important;align-items:flex-end!important;gap:8px!important;width:100%!important;pointer-events:none!important}
+.canvas-wrap>.combat-ui .mobile-controls{position:static!important;inset:auto!important;display:flex!important;flex:0 1 47%!important;justify-content:flex-start!important;align-items:flex-end!important;gap:6px!important;width:47%!important;max-width:190px!important;margin:0!important;padding:0!important;pointer-events:none!important}
+.canvas-wrap>.combat-ui .mobile-controls .joystick{position:relative!important;display:block!important;flex:0 0 68px!important;width:68px!important;height:68px!important;pointer-events:auto!important}
+.canvas-wrap>.combat-ui .mobile-controls .stick{width:32px!important;height:32px!important;left:16px!important;top:16px!important}
+.canvas-wrap>.combat-ui .mobile-controls .controls{display:flex!important;flex:1 1 0!important;min-width:0!important;justify-content:flex-start!important;pointer-events:auto!important}
+.canvas-wrap>.combat-ui .mobile-controls .controls button{width:100%!important;min-width:0!important;min-height:42px!important;padding:5px 3px!important;font-size:10px!important;white-space:normal!important}
+.canvas-wrap>.combat-ui .action-controls{position:static!important;inset:auto!important;display:grid!important;flex:0 1 47%!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(36px,auto))!important;gap:5px!important;width:47%!important;max-width:205px!important;margin:0!important;padding:0!important;pointer-events:auto!important}
+.canvas-wrap>.combat-ui .action-controls button{width:100%!important;min-width:0!important;min-height:38px!important;padding:5px 3px!important;font-size:10px!important;line-height:1.1!important;white-space:normal!important;pointer-events:auto!important}
+.canvas-wrap>.combat-ui button{touch-action:manipulation!important}
+@media(max-width:520px){
+ .canvas-wrap>.combat-ui{padding:5px!important}
+ .canvas-wrap>.combat-ui>.hud{gap:7px!important;padding:4px 6px!important}
+ .canvas-wrap>.combat-ui>.hud .stat{font-size:9px!important}
+ .canvas-wrap>.combat-ui>.hud .bar{width:clamp(34px,10vw,48px)!important;height:4px!important}
+ .canvas-wrap>.combat-ui>.combat-bottom{gap:4px!important}
+ .canvas-wrap>.combat-ui .mobile-controls{flex-basis:47%!important;width:47%!important;gap:4px!important}
+ .canvas-wrap>.combat-ui .mobile-controls .joystick{flex-basis:60px!important;width:60px!important;height:60px!important}
+ .canvas-wrap>.combat-ui .mobile-controls .stick{width:28px!important;height:28px!important;left:14px!important;top:14px!important}
+ .canvas-wrap>.combat-ui .mobile-controls .controls button{min-height:36px!important;font-size:9px!important;padding:4px 2px!important}
+ .canvas-wrap>.combat-ui .action-controls{flex-basis:49%!important;width:49%!important;gap:4px!important;grid-template-rows:repeat(2,minmax(32px,auto))!important}
+ .canvas-wrap>.combat-ui .action-controls button{min-height:34px!important;font-size:9px!important;padding:4px 2px!important}
+}
+
 </style>
 
 </head>
@@ -287,7 +319,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 
    <div class="logo">✦ THẾ GIỚI HẮC ÁM</div>
 
-   <div class="sub">Pixel RPG • Combat Power Update v1.2.10</div>
+   <div class="sub">Pixel RPG • Combat Power Update v1.2.11</div>
 
   </div>
 
@@ -308,7 +340,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
     <div id="rewardToast" class="reward-toast" role="status" aria-live="assertive"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.8</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.11</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ THẾ GIỚI HẮC ÁM</h2><div class="intro-story">Hàng thiên niên kỷ đã trôi qua, nhưng mỗi khi nhắc về cuộc Đại Hỗn Chiến trên lục địa Eldric, nhân loại vẫn không khỏi rùng mình kinh hãi. Những cánh đồng chất đầy thi thể, máu nhuộm đỏ đất trời, tiếng binh khí va chạm chát chúa hòa cùng tiếng gào thét bi ai và những luồng ma pháp xé toạc không gian—tất cả địa ngục trần gian ấy chỉ là hệ quả từ sự thức tỉnh của Chúa tể Hắc ám Halphys, kẻ vừa phá vỡ phong ấn cổ đại sau hàng thế kỷ bị giam cầm.
@@ -317,7 +349,8 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
    <div class="death-screen" id="deathScreen"><div class="death-card"><h2>☠ BẠN ĐÃ BỊ HẠ</h2><p>Hành trình tạm dừng. Hãy hồi sinh để tiếp tục cuộc phiêu lưu.</p><button id="respawnBtn">↻ HỒI SINH</button></div></div>
 
 
-   <div class="hud">
+   <div class="combat-ui">
+    <div class="hud">
 
     <div class="stat">❤️ HP <b id="hpText">100/100</b><div class="bar"><div class="fill hp" id="hpBar"></div></div></div>
 
@@ -326,8 +359,8 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
     <div class="stat">⭐ EXP <b id="xpText">0/50</b><div class="bar"><div class="fill xp" id="xpBar"></div></div></div>
 
    </div>
-
-   <div class="mobile-controls">
+    <div class="combat-bottom">
+     <div class="mobile-controls">
 
     <div class="joystick" id="joystick" aria-label="Joystick di chuyển">
 
@@ -344,8 +377,7 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
     </div>
 
    </div>
-
-   <div class="controls action-controls">
+     <div class="controls action-controls">
 
     <button id="autoBtn" class="active">⚡ AUTO: BẬT</button>
 
@@ -355,6 +387,8 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
 
     <button id="mpPotionBtn" title="Dược phẩm MP">💧</button>
 
+   </div>
+    </div>
    </div>
 
    </div>
