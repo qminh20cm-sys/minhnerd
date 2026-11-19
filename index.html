@@ -171,7 +171,7 @@ input,textarea,select{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 }
 
 
-.intro-modal,.creation-modal,.welcome-modal{display:none;position:fixed;inset:0;z-index:100;background:#02080df2;align-items:center;justify-content:center;padding:16px}.intro-modal.show,.creation-modal.show,.welcome-modal.show{display:flex}.intro-card,.creation-card,.welcome-card{width:min(100%,440px);max-height:88dvh;overflow:auto;padding:20px;background:linear-gradient(180deg,#293d49,#101e28);border:2px solid #c4a16b;border-radius:14px}.intro-card h2,.creation-card h2,.welcome-card h2{color:#ffe0a0;text-align:center}.intro-story{max-height:52dvh;overflow-y:auto;touch-action:pan-y;overscroll-behavior:contain;padding:12px;background:#0b171e;border:1px solid #52616a;border-radius:8px;color:#e0e8e3;font:13px/1.85 Georgia,serif;white-space:pre-line}.intro-actions{display:flex;gap:8px;margin-top:14px}.intro-actions button{flex:1}.creation-classes{display:grid;grid-template-columns:1fr 1fr;gap:8px}.creation-classes button{text-align:left}.creation-classes button.selected{border-color:#ffe08a;background:#425443}.creation-card label{display:block;margin:12px 0 6px;color:#e6d7ad}.creation-card input{width:100%;padding:11px;background:#0b171e;color:white;border:1px solid #718a91;border-radius:7px}.welcome-card p{font-size:13px;line-height:1.7;color:#d3dfda;text-align:center}.quest-locked{opacity:.62;border-style:dashed!important}.quest-progress{color:#ffe09b;font-size:11px;margin-top:6px}
+.intro-modal,.creation-modal,.welcome-modal{display:none;position:fixed;inset:0;z-index:9999;background:#02080df2;align-items:center;justify-content:center;padding:16px}.intro-modal.show,.creation-modal.show,.welcome-modal.show{display:flex}.intro-card,.creation-card,.welcome-card{position:relative;width:min(100%,440px);max-height:88dvh;overflow:auto;padding:20px;background:linear-gradient(180deg,#293d49,#101e28);border:2px solid #c4a16b;border-radius:14px}.intro-card h2,.creation-card h2,.welcome-card h2{color:#ffe0a0;text-align:center}.intro-story{max-height:52dvh;overflow-y:auto;touch-action:pan-y;overscroll-behavior:contain;padding:12px;background:#0b171e;border:1px solid #52616a;border-radius:8px;color:#e0e8e3;font:13px/1.85 Georgia,serif;white-space:pre-line}.intro-close{position:absolute;right:10px;top:8px;width:27px;min-width:27px;height:27px;padding:0;border-radius:50%;font-size:15px;line-height:1;color:#f4d89a;background:#182832;border:1px solid #b89b68}.intro-card h2{padding:0 24px}.creation-classes{display:grid;grid-template-columns:1fr 1fr;gap:8px}.creation-classes button{text-align:left}.creation-classes button.selected{border-color:#ffe08a;background:#425443}.creation-card label{display:block;margin:12px 0 6px;color:#e6d7ad}.creation-card input{width:100%;padding:11px;background:#0b171e;color:white;border:1px solid #718a91;border-radius:7px}.welcome-card p{font-size:13px;line-height:1.7;color:#d3dfda;text-align:center}.quest-locked{opacity:.62;border-style:dashed!important}.quest-current{border:1px solid #d6b56c!important;background:#293b3d!important}.quest-progress{color:#ffe09b;font-size:11px;margin-top:6px}
 .reward-toast{position:absolute;z-index:56;top:13%;left:50%;transform:translate(-50%,-8px);width:max-content;max-width:88%;padding:11px 16px;border:2px solid #f3cf72;border-radius:10px;background:linear-gradient(135deg,#35230cF2,#171d28F2);box-shadow:0 5px 22px #000b;color:#ffe8a6;text-align:center;font:bold 13px monospace;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s ease,transform .18s ease}
 .reward-toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
 
@@ -188,7 +188,7 @@ input,textarea,select{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 
    <div class="logo">✦ THẾ GIỚI HẮC ÁM</div>
 
-   <div class="sub">Pixel RPG • Main Story & New Player Update v1.2.5</div>
+   <div class="sub">Pixel RPG • Menu & Journal Update v1.2.6</div>
 
   </div>
 
@@ -200,7 +200,7 @@ input,textarea,select{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 
   <main class="panel gamebox">
 
-   <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Nhiệm vụ" title="Nhiệm vụ">🎯</button><button data-menu="3" aria-label="Auto" title="Auto">⚔️</button><button data-menu="4" aria-label="Túi đồ" title="Túi đồ">🎒</button><button data-menu="5" aria-label="Nhật ký" title="Nhật ký">📜</button><button data-menu="6" aria-label="Cài đặt" title="Cài đặt">⚙</button></nav>
+   <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Nhiệm vụ" title="Nhiệm vụ">🎯</button><button data-menu="3" aria-label="Auto" title="Auto">⚔️</button><button data-menu="4" aria-label="Túi đồ" title="Túi đồ">🎒</button><button data-menu="5" aria-label="Cài đặt" title="Cài đặt">⚙</button></nav>
 
    <div class="canvas-wrap">
 
@@ -209,12 +209,12 @@ input,textarea,select{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
     <div id="rewardToast" class="reward-toast" role="status" aria-live="assertive"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.5</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.6</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
-    <div class="intro-modal" id="introModal"><div class="intro-card"><h2>✦ THẾ GIỚI HẮC ÁM</h2><div class="intro-story">Hàng thiên niên kỷ đã trôi qua, nhưng mỗi khi nhắc về cuộc Đại Hỗn Chiến trên lục địa Eldric, nhân loại vẫn không khỏi rùng mình kinh hãi. Những cánh đồng chất đầy thi thể, máu nhuộm đỏ đất trời, tiếng binh khí va chạm chát chúa hòa cùng tiếng gào thét bi ai và những luồng ma pháp xé toạc không gian—tất cả địa ngục trần gian ấy chỉ là hệ quả từ sự thức tỉnh của Chúa tể Hắc ám Halphys, kẻ vừa phá vỡ phong ấn cổ đại sau hàng thế kỷ bị giam cầm.
+    <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ THẾ GIỚI HẮC ÁM</h2><div class="intro-story">Hàng thiên niên kỷ đã trôi qua, nhưng mỗi khi nhắc về cuộc Đại Hỗn Chiến trên lục địa Eldric, nhân loại vẫn không khỏi rùng mình kinh hãi. Những cánh đồng chất đầy thi thể, máu nhuộm đỏ đất trời, tiếng binh khí va chạm chát chúa hòa cùng tiếng gào thét bi ai và những luồng ma pháp xé toạc không gian—tất cả địa ngục trần gian ấy chỉ là hệ quả từ sự thức tỉnh của Chúa tể Hắc ám Halphys, kẻ vừa phá vỡ phong ấn cổ đại sau hàng thế kỷ bị giam cầm.
 
-Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc cạn những tia hy vọng cuối cùng, dùng chính sinh mạng và ý chí bất khuất để đẩy lùi bóng tối—hoặc ít nhất, là để lại một vết sẹo trên thân thể bất tử của hắn. Không một ai hay biết Halphys đã ẩn náu nơi đâu. Hắn đã trốn thoát vào màn đêm sâu thẳm, lặng lẽ gặm nhấm vết thương, chờ ngày khôi phục quyền năng nguyên thủy để giáng xuống Eldric một cơn đại hồng thủy thứ hai.</div><div class="intro-actions"><button id="introSkip">Bỏ qua</button><button id="introContinue">Tiếp tục</button></div></div></div><div class="creation-modal" id="creationModal"><div class="creation-card"><h2>⚔️ Khởi tạo nhân vật</h2><p style="font-size:12px;color:#c5d5d1">Chọn con đường chiến đấu và đặt tên cho hành trình của bạn.</p><div class="creation-classes" id="creationClasses"></div><label for="creationName">Tên nhân vật</label><input id="creationName" maxlength="18" placeholder="Nhập tên nhân vật"><button id="creationFinish" style="width:100%;margin-top:14px">Bắt đầu hành trình</button></div></div><div class="welcome-modal" id="welcomeModal"><div class="welcome-card"><h2>Chào mừng đến Eldric!</h2><p>Nhân vật của bạn đã sẵn sàng. Hãy đến gặp Trưởng trấn Alden tại thị trấn Aborne để nhận nhiệm vụ chính đầu tiên và bắt đầu hành trình.</p><button id="welcomeAlden" style="width:100%">Đến gặp Trưởng trấn Alden</button></div></div>
+Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc cạn những tia hy vọng cuối cùng, dùng chính sinh mạng và ý chí bất khuất để đẩy lùi bóng tối—hoặc ít nhất, là để lại một vết sẹo trên thân thể bất tử của hắn. Không một ai hay biết Halphys đã ẩn náu nơi đâu. Hắn đã trốn thoát vào màn đêm sâu thẳm, lặng lẽ gặm nhấm vết thương, chờ ngày khôi phục quyền năng nguyên thủy để giáng xuống Eldric một cơn đại hồng thủy thứ hai.</div></div></div><div class="creation-modal" id="creationModal"><div class="creation-card"><h2>⚔️ Khởi tạo nhân vật</h2><p style="font-size:12px;color:#c5d5d1">Chọn con đường chiến đấu và đặt tên cho hành trình của bạn.</p><div class="creation-classes" id="creationClasses"></div><label for="creationName">Tên nhân vật</label><input id="creationName" maxlength="18" placeholder="Nhập tên nhân vật"><button id="creationFinish" style="width:100%;margin-top:14px">Bắt đầu hành trình</button></div></div><div class="welcome-modal" id="welcomeModal"><div class="welcome-card"><h2>Chào mừng đến Eldric!</h2><p>Nhân vật của bạn đã sẵn sàng. Hãy đến gặp Trưởng trấn Alden tại thị trấn Aborne để nhận nhiệm vụ chính đầu tiên và bắt đầu hành trình.</p><button id="welcomeAlden" style="width:100%">Đến gặp Trưởng trấn Alden</button></div></div>
    <div class="death-screen" id="deathScreen"><div class="death-card"><h2>☠ BẠN ĐÃ BỊ HẠ</h2><p>Hành trình tạm dừng. Hãy hồi sinh để tiếp tục cuộc phiêu lưu.</p><button id="respawnBtn">↻ HỒI SINH</button></div></div>
    </div>
 
@@ -317,21 +317,9 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
 
    </section>
 
-   <section class="panel wide">
+   
 
-    <div class="heading">📜 NHẬT KÝ PHIÊU LƯU</div>
-
-    <div class="log" id="log">
-
-     <div>Chào mừng đến với Đồng cỏ xanh!</div>
-
-     <div>Bật Auto để nhân vật tự động săn Slime.</div>
-
-    </div>
-
-   </section>
-
-   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label><label><input type="checkbox" id="settingSound"> Âm thanh (sắp hỗ trợ)</label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
+   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label><label><input type="checkbox" id="settingSound"> Âm thanh (sắp hỗ trợ)</label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>📜 Nhật ký phiêu lưu</b><div class="log" id="log"><div>Chào mừng đến với Đồng cỏ xanh!</div><div>Bật Auto để nhân vật tự động săn Slime.</div></div></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
 
   </aside>
 
@@ -885,7 +873,7 @@ function draw(){
 }
 
 function questDefinitions(){return MAIN_QUESTS;}
-function renderQuests(){const el=$('questList');if(!el)return;const i=state.mainQuestIndex||0;el.innerHTML=MAIN_QUESTS.map((q,index)=>{if(q.future)return '<div class="item quest-locked"><strong>🔒 '+(index+1)+'. '+q.title+'</strong><div class="muted">'+(q.description||'Nội dung sẽ được mở trong bản cập nhật sau.')+'</div><div class="quest-progress">SẮP RA MẮT</div></div>';const active=index===i,done=index<i,p=mainQuestProgress(q);return '<div class="item"><strong>'+(done?'✅':active?'📜':'🔒')+' '+(index+1)+'. '+q.title+'</strong><div>'+q.objective+'</div>'+(active?'<div class="quest-progress">'+(state.mainQuestAccepted?'ĐANG THỰC HIỆN':'ĐẾN GẶP ALDEN ĐỂ NHẬN')+'</div><div class="muted">Quái vật: '+p.kills+' / '+q.goal+'</div>'+(q.kind==='starter'?'<div class="muted">NPC đã trò chuyện: '+p.extra+' / 4</div>':q.kind==='ore'?'<div class="muted">Quặng Sắt: '+p.extra+' / 5</div>':'<div class="muted">Ash Warden: '+(p.extra?'Đã đánh bại':'Chưa đánh bại')+'</div>'):'<div class="quest-progress">'+(done?'ĐÃ HOÀN THÀNH':'CHƯA MỞ KHÓA')+'</div>')+'</div>';}).join('');}
+function renderQuests(){const el=$('questList');if(!el)return;const i=state.mainQuestIndex||0;el.innerHTML=MAIN_QUESTS.map((q,index)=>{if(q.future)return '<div class="item quest-locked"><strong>🔒 '+(index+1)+'. '+q.title+'</strong><div class="muted">'+(q.description||'Nội dung sẽ được mở trong bản cập nhật sau.')+'</div><div class="quest-progress">SẮP RA MẮT</div></div>';const active=index===i,done=index<i,p=mainQuestProgress(q),reward=q.rewardXp+' EXP · '+q.rewardGold+' vàng'+(q.kind==='starter'?' · Bộ trang bị tân thủ':q.kind==='ore'?' · Kiếm Thép Rèn':'');return '<div class="item '+(active?'quest-current':'')+'"><strong>'+(done?'✅':active?'📜':'🔒')+' '+(index+1)+'. '+q.title+'</strong><div>'+q.objective+'</div><div class="muted" style="margin-top:5px">🎁 Phần thưởng: '+reward+'</div>'+(active?'<div class="quest-progress">'+(state.mainQuestAccepted?'ĐANG THỰC HIỆN':'CHƯA NHẬN — ĐẾN GẶP ALDEN')+'</div><div class="muted">Tiến độ quái: '+p.kills+' / '+q.goal+'</div>'+(q.kind==='starter'?'<div class="muted">NPC đã trò chuyện: '+p.extra+' / 4</div>':q.kind==='ore'?'<div class="muted">Quặng Sắt: '+p.extra+' / 5</div>':'<div class="muted">Ash Warden: '+(p.extra?'Đã đánh bại':'Chưa đánh bại')+'</div>'):'<div class="quest-progress">'+(done?'ĐÃ HOÀN THÀNH':'CHƯA MỞ KHÓA')+'</div>')+'</div>';}).join('');}
 
 function ui(){
  $('hpText').textContent=Math.ceil(state.hp)+'/'+state.maxHp;$('characterClassText').textContent=state.characterClass||'Chiến binh';$('characterExp').textContent='Lv. '+state.level+' / '+(state.level>=200?'MAX':state.xp+'/'+state.nextXp+' EXP');$('gems').textContent=state.gems||0;$('zone').textContent=inTown()?TOWN.name:currentMap().name;if(document.activeElement!==$('characterNameInput'))$('characterNameInput').value=settings.playerName||'Wanderer';
@@ -1044,7 +1032,7 @@ canvas.addEventListener('pointerdown',e=>{
 
 document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('click',()=>{
  const side=document.querySelector('.side'),index=Number(btn.dataset.menu),sections=[...side.querySelectorAll('section')];
- sections.forEach((el,i)=>el.classList.toggle('menu-active',i===index));side.classList.add('open');if(index===6)loadSettingsUI();
+ sections.forEach((el,i)=>el.classList.toggle('menu-active',i===index));side.classList.add('open');if(index===2)renderQuests();if(index===5)loadSettingsUI();
  if(!side.querySelector('.menu-close')){const close=document.createElement('button');close.className='menu-close';close.textContent='✕ ĐÓNG';close.onclick=()=>side.classList.remove('open');side.prepend(close);}
 }));
 window.addEventListener('beforeunload',save);
@@ -1066,11 +1054,11 @@ try{updateMapUI();showMapBanner(inTown()?TOWN.name:currentMap().name);}catch(e){
 try{ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.clearRect(0,0,canvas.width,canvas.height);draw();}catch(e){console.error('Initial render error:',e);const box=$('runtimeError');if(box){box.style.display='block';box.textContent='LỖI KHỞI TẠO HIỂN THỊ: '+(e&&e.stack?e.stack:e&&e.message?e.message:String(e));}}
 requestAnimationFrame(loop);
 try{ui();}catch(e){console.error('Initial UI error:',e);}
-if(!hadSave)$("introModal").classList.add("show");
+if(!hadSave){document.body.appendChild($("introModal"));$("introModal").classList.add("show");}
 let creationClass="Chiến binh";
 function drawCreationClasses(){$("creationClasses").innerHTML=CLASS_DATA.map(c=>'<button type="button" data-create-class="'+c.name+'" class="'+(c.name===creationClass?"selected":"")+'">'+c.icon+" "+c.name+'<small style="display:block;color:#b6c8c8;font-size:10px;margin-top:4px">'+c.desc+"</small></button>").join("");}
 function continueFromIntro(){$("introModal").classList.remove("show");drawCreationClasses();$("creationModal").classList.add("show");}
-$("introSkip").onclick=continueFromIntro;$("introContinue").onclick=continueFromIntro;
+$("introClose").onclick=continueFromIntro;
 document.addEventListener("click",e=>{const c=e.target.closest("[data-create-class]");if(c){creationClass=c.dataset.createClass;drawCreationClasses();}});
 $("creationFinish").onclick=()=>{const name=($("creationName").value||"").trim();if(!name){showRewardToast("Hãy nhập tên nhân vật!");$("creationName").focus();return;}settings.playerName=name.slice(0,18);state.characterClass=creationClass;state.characterCreated=true;saveSettings();$("creationModal").classList.remove("show");renderCharacter();ui();save();$("welcomeModal").classList.add("show");};
 $("welcomeAlden").onclick=()=>{$("welcomeModal").classList.remove("show");openNpcDialog("alden");};
