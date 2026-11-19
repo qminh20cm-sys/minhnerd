@@ -245,7 +245,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 }
 
 
-/* v1.3.1 — separated combat-control zones, inspired by the reference layout */
+/* v1.3.2 — separated combat-control zones, inspired by the reference layout */
 .canvas-wrap{isolation:isolate}
 .canvas-wrap::after{content:"";position:absolute;z-index:10;left:0;right:0;bottom:0;height:126px;background:linear-gradient(180deg,transparent 0%,rgba(5,12,18,.34) 22%,rgba(5,12,18,.88) 100%);pointer-events:none}
 .canvas-wrap>.hud{position:absolute!important;top:7px!important;left:7px!important;right:7px!important;z-index:16!important;display:flex!important;justify-content:flex-start!important;align-items:center!important;gap:10px!important;flex-wrap:nowrap!important;width:auto!important;margin:0!important;padding:5px 8px!important;background:rgba(5,13,20,.88)!important;border:1px solid rgba(150,180,180,.5)!important;border-radius:8px!important;pointer-events:none!important}
@@ -275,7 +275,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 }
 
 
-/* v1.3.1: single layout owner for all combat controls */
+/* v1.3.2: single layout owner for all combat controls */
 .canvas-wrap{position:absolute!important;inset:0!important;overflow:hidden!important;isolation:isolate!important}
 .canvas-wrap>canvas#game{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:fill!important;z-index:0!important}
 .canvas-wrap>.combat-ui{position:absolute!important;inset:0!important;z-index:16!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;padding:7px!important;pointer-events:none!important}
@@ -326,6 +326,25 @@ body.hud-editing .combat-ui,body.hud-editing .combat-ui *,body.hud-editing .menu
 body.hud-editing [data-hud-key]{outline:1px dashed #ffe08a!important;outline-offset:3px!important;cursor:move!important}
 body.hud-editing #hudEditToggle,body.hud-editing #hudEditPanel{touch-action:pan-y!important}
 
+
+/* v1.3.2 — icon-only circular combat controls with separated default positions */
+.canvas-wrap>.combat-ui .mobile-controls{position:absolute!important;inset:0!important;width:100%!important;max-width:none!important;display:block!important;pointer-events:none!important}
+.canvas-wrap>.combat-ui .mobile-controls .joystick{position:absolute!important;left:12%!important;top:86%!important;transform:translate(-50%,-50%)!important;pointer-events:auto!important}
+.canvas-wrap>.combat-ui .mobile-controls .controls{position:static!important;display:block!important;pointer-events:none!important}
+.canvas-wrap>.combat-ui .mobile-controls .controls #mobileAttack{position:absolute!important;left:89%!important;top:68%!important;transform:translate(-50%,-50%)!important;width:64px!important;height:64px!important;min-width:64px!important;min-height:64px!important;padding:0!important;border-radius:50%!important;display:grid!important;place-items:center!important;font-size:27px!important;line-height:1!important;white-space:nowrap!important;background:radial-gradient(circle at 35% 28%,#55717c,#1c3440 72%)!important;border:2px solid #9bb9bf!important;box-shadow:0 4px 12px #0009,inset 0 0 0 3px #ffffff12!important;pointer-events:auto!important}
+.canvas-wrap>.combat-ui .action-controls{position:absolute!important;left:82%!important;top:86%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;display:grid!important;grid-template-columns:repeat(2,50px)!important;grid-template-rows:repeat(2,50px)!important;gap:6px!important;width:106px!important;height:106px!important;max-width:none!important;margin:0!important;padding:0!important;pointer-events:auto!important}
+.canvas-wrap>.combat-ui .action-controls button{width:50px!important;height:50px!important;min-width:50px!important;min-height:50px!important;max-width:50px!important;max-height:50px!important;padding:0!important;border-radius:50%!important;display:grid!important;place-items:center!important;font-size:22px!important;line-height:1!important;white-space:nowrap!important;background:radial-gradient(circle at 35% 28%,#425d69,#1a303b 75%)!important;border:2px solid #78939b!important;box-shadow:0 3px 9px #0009,inset 0 0 0 2px #ffffff0d!important}
+.canvas-wrap>.combat-ui .action-controls #autoBtn.active{background:radial-gradient(circle at 35% 28%,#347e5c,#174632 75%)!important;border-color:#83e5b3!important;color:#d9ffe9!important}
+.canvas-wrap>.combat-ui .action-controls #autoBtn:not(.active){filter:saturate(.65);opacity:.82}
+.canvas-wrap>.combat-ui .action-controls button:active,.canvas-wrap>.combat-ui .mobile-controls #mobileAttack:active{transform:translate(-50%,-50%) scale(.94)!important}
+@media(max-width:520px){
+ .canvas-wrap>.combat-ui .mobile-controls .joystick{width:62px!important;height:62px!important;flex-basis:62px!important}
+ .canvas-wrap>.combat-ui .mobile-controls .stick{width:29px!important;height:29px!important;left:16px!important;top:16px!important}
+ .canvas-wrap>.combat-ui .mobile-controls .controls #mobileAttack{width:58px!important;height:58px!important;min-width:58px!important;min-height:58px!important;font-size:25px!important}
+ .canvas-wrap>.combat-ui .action-controls{grid-template-columns:repeat(2,46px)!important;grid-template-rows:repeat(2,46px)!important;width:98px!important;height:98px!important;gap:5px!important}
+ .canvas-wrap>.combat-ui .action-controls button{width:46px!important;height:46px!important;min-width:46px!important;min-height:46px!important;max-width:46px!important;max-height:46px!important;font-size:20px!important}
+}
+
 </style>
 
 </head>
@@ -339,7 +358,7 @@ body.hud-editing #hudEditToggle,body.hud-editing #hudEditPanel{touch-action:pan-
 
    <div class="logo">✦ THẾ GIỚI HẮC ÁM</div>
 
-   <div class="sub">Pixel RPG • Combat Power Update v1.3.1</div>
+   <div class="sub">Pixel RPG • Combat Power Update v1.3.2</div>
 
   </div>
 
@@ -360,7 +379,7 @@ body.hud-editing #hudEditToggle,body.hud-editing #hudEditPanel{touch-action:pan-
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
     <div id="rewardToast" class="reward-toast" role="status" aria-live="assertive"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.1</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.2</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ THẾ GIỚI HẮC ÁM</h2><div class="intro-story">Hàng thiên niên kỷ đã trôi qua, nhưng mỗi khi nhắc về cuộc Đại Hỗn Chiến trên lục địa Eldric, nhân loại vẫn không khỏi rùng mình kinh hãi. Những cánh đồng chất đầy thi thể, máu nhuộm đỏ đất trời, tiếng binh khí va chạm chát chúa hòa cùng tiếng gào thét bi ai và những luồng ma pháp xé toạc không gian—tất cả địa ngục trần gian ấy chỉ là hệ quả từ sự thức tỉnh của Chúa tể Hắc ám Halphys, kẻ vừa phá vỡ phong ấn cổ đại sau hàng thế kỷ bị giam cầm.
@@ -404,7 +423,7 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
 
     <div class="controls">
 
-     <button class="small" id="mobileAttack">⚔ ĐÁNH</button>
+     <button class="small" id="mobileAttack" title="Đánh thường" aria-label="Đánh thường">⚔️</button>
 
      
 
@@ -413,13 +432,13 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
    </div>
      <div class="controls action-controls">
 
-    <button id="autoBtn" class="active">⚡ AUTO: BẬT</button>
+    <button id="autoBtn" class="active" title="Tự động đánh" aria-label="Tự động đánh">⚡</button>
 
-    <button id="skillBtn">✧ KỸ NĂNG (10 MP)</button>
+    <button id="skillBtn" title="Sử dụng kỹ năng (10 MP)" aria-label="Sử dụng kỹ năng">✨</button>
 
-    <button id="potionBtn" title="Dược phẩm HP">🧪</button>
+    <button id="potionBtn" title="Dùng bình HP" aria-label="Dùng bình HP">❤️</button>
 
-    <button id="mpPotionBtn" title="Dược phẩm MP">💧</button>
+    <button id="mpPotionBtn" title="Dùng bình MP" aria-label="Dùng bình MP">💧</button>
 
    </div>
     </div>
@@ -513,9 +532,9 @@ const $=id=>document.getElementById(id);
 const HUD_LAYOUT_KEY='afkHudLayoutV1';
 const HUD_DEFAULTS={
  hud:{"x":49.64102720602965,"y":76.1547636422254,"scale":100,"opacity":100,"visible":true},
- joystick:{"x":24.82051751552484,"y":85.96257365957045,"scale":100,"opacity":100,"visible":true},
- mobileAttack:{"x":85.33333802834535,"y":78.57786788586,"scale":100,"opacity":100,"visible":true},
- actionControls:{"x":78.56410099909856,"y":89.19337638333221,"scale":100,"opacity":100,"visible":true},
+ joystick:{"x":12,"y":86,"scale":100,"opacity":100,"visible":true},
+ mobileAttack:{"x":89,"y":68,"scale":100,"opacity":100,"visible":true},
+ actionControls:{"x":82,"y":86,"scale":100,"opacity":100,"visible":true},
  menuBar:{"x":47.17949500450721,"y":4.153897204038369,"scale":100,"opacity":100,"visible":true},
  chatToggle:{"x":90.05129300631009,"y":4.5000543243252284,"scale":100,"opacity":100,"visible":true},
  mapBanner:{"x":11.897442157451923,"y":10.615512005018383,"scale":100,"opacity":100,"visible":true},
@@ -530,7 +549,7 @@ const hudTargets={
  mapBanner:()=>$('mapBanner'),
  menuBar:()=>document.querySelector('.menu-bar')
 };
-function loadHudLayout(){try{const v=JSON.parse(localStorage.getItem(HUD_LAYOUT_KEY)||'null');if(v&&v.version===2&&v.items)for(const k of Object.keys(HUD_DEFAULTS))if(v.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};}catch(e){console.warn('HUD layout load:',e);}applyHudLayout();}
+function loadHudLayout(){try{const v=JSON.parse(localStorage.getItem(HUD_LAYOUT_KEY)||'null');if(v&&v.version===3&&v.items)for(const k of Object.keys(HUD_DEFAULTS))if(v.items[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};}catch(e){console.warn('HUD layout load:',e);}applyHudLayout();}
 function applyHudLayout(){
  for(const [k,get] of Object.entries(hudTargets)){const el=get(),v=hudLayout[k];if(!el||!v)continue;
   const isMenu=k==='menuBar';const base=isMenu?document.querySelector('.gamebox'):document.querySelector('.canvas-wrap');
@@ -540,7 +559,7 @@ function applyHudLayout(){
   el.style.display=v.visible?'':'none';el.style.zIndex=k==='hud'?'18':'20';
  }
 }
-function saveHudLayout(){localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:2,items:hudLayout}));applyHudLayout();}
+function saveHudLayout(){localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:3,items:hudLayout}));applyHudLayout();}
 function setupHudDesigner(){
  const toggle=$('hudEditToggle'),panel=$('hudEditPanel'),select=$('hudEditSelect'),scale=$('hudEditScale'),opacity=$('hudEditOpacity'),visible=$('hudEditVisible');
  if(!toggle||!panel)return;
@@ -563,7 +582,7 @@ function setupHudDesigner(){
  const end=e=>{if(hudDrag&&(!e.pointerId||hudDrag.id===e.pointerId))hudDrag=null;};
  document.addEventListener('pointerup',end,true);document.addEventListener('pointercancel',end,true);
  loadHudLayout();
- window.addEventListener('storage',e=>{if(e.key===HUD_LAYOUT_KEY){try{const v=JSON.parse(e.newValue||'null');if(v&&v.version===1){for(const k of Object.keys(HUD_DEFAULTS))if(v.items?.[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};applyHudLayout();}}catch(err){console.warn('HUD sync:',err);}}});
+ window.addEventListener('storage',e=>{if(e.key===HUD_LAYOUT_KEY){try{const v=JSON.parse(e.newValue||'null');if(v&&v.version===3){for(const k of Object.keys(HUD_DEFAULTS))if(v.items?.[k])hudLayout[k]={...HUD_DEFAULTS[k],...v.items[k]};applyHudLayout();}}catch(err){console.warn('HUD sync:',err);}}});
  document.addEventListener('click',e=>{if(hudEditing&&e.target.closest('[data-hud-key]')){e.preventDefault();e.stopImmediatePropagation();}},true);
 }
 
@@ -1189,7 +1208,7 @@ function ui(){
  $('loot').textContent=state.loot;
 
  $('autoStatus').textContent=state.auto?'Đang tự săn':'Đã tắt';
- $('autoBtn').textContent=state.auto?'⚡ AUTO: BẬT':'⚡ AUTO: TẮT';
+ $('autoBtn').textContent='⚡';$('autoBtn').title=state.auto?'Tự động đánh: ĐANG BẬT':'Tự động đánh: ĐANG TẮT';$('autoBtn').setAttribute('aria-label',$('autoBtn').title);
  $('autoBtn').classList.toggle('active',state.auto);
  
 
@@ -1329,7 +1348,7 @@ document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('clic
 window.addEventListener('beforeunload',save);
 document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
 
-/* v1.3.1: reduce accidental horizontal edge navigation while playing */
+/* v1.3.2: reduce accidental horizontal edge navigation while playing */
 (function(){
  let edgeTouch=null;
  const EDGE=28,THRESHOLD=8;
