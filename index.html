@@ -165,6 +165,16 @@ canvas{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-heigh
 .inventory-entry button{grid-column:1/-1}
 @media(max-width:520px){.menu-bar button{font-size:18px;padding:6px 1px}.hud{top:calc(env(safe-area-inset-top) + 47px)}.mobile-controls{bottom:calc(env(safe-area-inset-bottom) + 9px)}.joystick{width:82px;height:82px;flex-basis:82px}.stick{width:38px;height:38px;left:20px;top:20px}.action-controls{bottom:calc(env(safe-area-inset-bottom) + 104px);right:10px;max-width:64%}}
 
+
+/* iOS Safari: prevent double-tap page zoom and text selection */
+html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;overscroll-behavior:none}
+body,button,.menu-bar,.hud,.controls,.mobile-controls,.gamebox,.canvas-wrap,canvas,.overlay,.modal{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+button,.menu-bar button,.controls button{touch-action:manipulation}
+.joystick,.canvas-wrap,canvas{touch-action:none}
+.overlay{z-index:25;pointer-events:auto}
+.overlay .modal{position:relative;z-index:26;pointer-events:auto}
+#startBtn{position:relative;z-index:27;min-height:48px;touch-action:manipulation}
+
 </style>
 
 </head>
@@ -204,7 +214,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-heigh
 
       <p>Một thế giới pixel nhỏ đang chờ được khám phá. Hạ Slime, tích lũy EXP, nâng cấp nhân vật và thử sức với Guardian.</p>
 
-      <button id="startBtn">▶ BẮT ĐẦU PHIÊU LƯU</button>
+      <button id="startBtn" type="button" onclick="window.startAdventure && window.startAdventure()">▶ BẮT ĐẦU PHIÊU LƯU</button>
 
       <p style="font-size:10px">Dùng joystick hoặc WASD để di chuyển • Space để đánh • Chọn ải để khám phá</p>
 
@@ -900,12 +910,17 @@ function saveSettings(){localStorage.setItem('afkSettings',JSON.stringify(settin
 function loadSettingsUI(){const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(el){if(el.type==='checkbox')el.checked=!!settings[k];else el.value=settings[k];}}}
 function initSettings(){try{Object.assign(settings,JSON.parse(localStorage.getItem('afkSettings')||'{}'));}catch{}applySettings();const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(!el)continue;el.addEventListener('input',()=>{settings[k]=el.type==='checkbox'?el.checked:(el.type==='range'?Number(el.value):el.value);saveSettings();});} $('settingsReset').onclick=()=>{Object.assign(settings,{damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,sound:false,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'});saveSettings();loadSettingsUI();};}
 function start(){
+ if(state.started)return;
  state.started=true;
- $('startScreen').classList.add('hidden');
+ const screen=$('startScreen');
+ if(screen){screen.classList.add('hidden');screen.style.display='none';screen.style.pointerEvents='none';}
  if(!state.mobs.length)for(let i=0;i<7;i++)spawnMob();
  updateMapUI();
  log('Bắt đầu hành trình tại '+currentMap().name+'!');
+ save();
+ ui();
 }
+window.startAdventure=start;
 
 $('autoBtn').onclick=()=>{
  state.auto=!state.auto;
@@ -971,6 +986,7 @@ document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('clic
  if(!side.querySelector('.menu-close')){const close=document.createElement('button');close.className='menu-close';close.textContent='✕ ĐÓNG';close.onclick=()=>side.classList.remove('open');side.prepend(close);}
 }));
 window.addEventListener('beforeunload',save);
+document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
 initSettings();
 load();
 state.mapIndex=Math.min(state.mapIndex||0,maps.length-1);
