@@ -1197,16 +1197,12 @@ function ui(){
  const hpCount=$('inventoryList').querySelector('[data-potion-use="hp"] .inventory-count'),mpCount=$('inventoryList').querySelector('[data-potion-use="mp"] .inventory-count');if(hpCount)hpCount.textContent=state.potions||0;if(mpCount)mpCount.textContent=state.mpPotions||0;
  $('inventoryGems').textContent=(state.gems||0).toLocaleString('vi-VN');
 
- $('kills').textContent=state.kills;
- $('earned').textContent=state.earned;
- $('loot').textContent=state.loot;
-
- $('autoStatus').textContent=state.auto?'Đang tự săn':'Đã tắt';
- $('autoBtn').textContent='⚡';$('autoBtn').title=state.auto?'Tự động đánh: ĐANG BẬT':'Tự động đánh: ĐANG TẮT';$('autoBtn').setAttribute('aria-label',$('autoBtn').title);
+ // Các thống kê Auto Farming không còn nằm trong menu kỹ năng.
+ $('autoBtn').textContent='⚡';
+ $('autoBtn').title=state.auto?'Tự động đánh: ĐANG BẬT':'Tự động đánh: ĐANG TẮT';$('autoBtn').setAttribute('aria-label',$('autoBtn').title);
  $('autoBtn').classList.toggle('active',state.auto);
  
 
- $('duration').textContent=new Date(state.elapsed*1000).toISOString().slice(14,19);
  renderQuests();
  $('zone').textContent=inTown()?TOWN.name:currentMap().name;
  $('mapProgress').textContent=inTown()?'Khu vực an toàn':state.mapKills+'/10 quái';
