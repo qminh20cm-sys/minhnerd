@@ -245,7 +245,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 }
 
 
-/* v1.3.0 — separated combat-control zones, inspired by the reference layout */
+/* v1.3.1 — separated combat-control zones, inspired by the reference layout */
 .canvas-wrap{isolation:isolate}
 .canvas-wrap::after{content:"";position:absolute;z-index:10;left:0;right:0;bottom:0;height:126px;background:linear-gradient(180deg,transparent 0%,rgba(5,12,18,.34) 22%,rgba(5,12,18,.88) 100%);pointer-events:none}
 .canvas-wrap>.hud{position:absolute!important;top:7px!important;left:7px!important;right:7px!important;z-index:16!important;display:flex!important;justify-content:flex-start!important;align-items:center!important;gap:10px!important;flex-wrap:nowrap!important;width:auto!important;margin:0!important;padding:5px 8px!important;background:rgba(5,13,20,.88)!important;border:1px solid rgba(150,180,180,.5)!important;border-radius:8px!important;pointer-events:none!important}
@@ -275,7 +275,7 @@ canvas#game{position:absolute!important;inset:0!important;width:100%!important;h
 }
 
 
-/* v1.3.0: single layout owner for all combat controls */
+/* v1.3.1: single layout owner for all combat controls */
 .canvas-wrap{position:absolute!important;inset:0!important;overflow:hidden!important;isolation:isolate!important}
 .canvas-wrap>canvas#game{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:fill!important;z-index:0!important}
 .canvas-wrap>.combat-ui{position:absolute!important;inset:0!important;z-index:16!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;padding:7px!important;pointer-events:none!important}
@@ -339,7 +339,7 @@ body.hud-editing #hudEditToggle,body.hud-editing #hudEditPanel{touch-action:pan-
 
    <div class="logo">✦ THẾ GIỚI HẮC ÁM</div>
 
-   <div class="sub">Pixel RPG • Combat Power Update v1.3.0</div>
+   <div class="sub">Pixel RPG • Combat Power Update v1.3.1</div>
 
   </div>
 
@@ -360,7 +360,7 @@ body.hud-editing #hudEditToggle,body.hud-editing #hudEditPanel{touch-action:pan-
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
     <div id="rewardToast" class="reward-toast" role="status" aria-live="assertive"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.0</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.1</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px monospace;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ THẾ GIỚI HẮC ÁM</h2><div class="intro-story">Hàng thiên niên kỷ đã trôi qua, nhưng mỗi khi nhắc về cuộc Đại Hỗn Chiến trên lục địa Eldric, nhân loại vẫn không khỏi rùng mình kinh hãi. Những cánh đồng chất đầy thi thể, máu nhuộm đỏ đất trời, tiếng binh khí va chạm chát chúa hòa cùng tiếng gào thét bi ai và những luồng ma pháp xé toạc không gian—tất cả địa ngục trần gian ấy chỉ là hệ quả từ sự thức tỉnh của Chúa tể Hắc ám Halphys, kẻ vừa phá vỡ phong ấn cổ đại sau hàng thế kỷ bị giam cầm.
@@ -1329,7 +1329,7 @@ document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('clic
 window.addEventListener('beforeunload',save);
 document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
 
-/* v1.3.0: reduce accidental horizontal edge navigation while playing */
+/* v1.3.1: reduce accidental horizontal edge navigation while playing */
 (function(){
  let edgeTouch=null;
  const EDGE=28,THRESHOLD=8;
