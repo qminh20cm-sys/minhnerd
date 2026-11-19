@@ -929,7 +929,7 @@ $('blacksmithClose').onclick=()=> $('blacksmithModal').classList.remove('show');
 $('mpPotionBtn').onclick=drinkMp;$('itemModalClose').onclick=closeItem;
 function runHiddenChatCommand(raw){
  const command=raw.trim().toLowerCase().replace(/\s+/g,' ');
- if(command!=='give admini itms 1 test true'&&command!=='give admin items 1 test true')return false;
+ if(command!=='give admini itms 1 test true')return false;
  const lv=Math.max(1,state.level||1),stats={atk:lv*2+8,atkPct:2+Math.floor(lv/12),crit:1+lv*.015,critDamage:5,attackSpeed:.04};
  const item={slot:'main',type:'Kiếm',name:'Kiếm Huyền thoại',rarity:'Huyền thoại',rarityLines:5,primaryKeys:['atk','atkPct'],secondaryKeys:['crit','critDamage','attackSpeed'],silverValue:Math.max(5,600+lv*2),subtitle:'Thanh kiếm được ban tặng bởi quyền năng bí ẩn.',locked:false,stats};
  state.inventory.push(item);renderCharacter();save();ui();
