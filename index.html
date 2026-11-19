@@ -8,7 +8,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-<title>AFK Adventure — Pixel RPG</title>
+<title>Thế Giới Hắc Ám</title>
 
 <style>
 
@@ -117,6 +117,21 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 canvas{width:auto;height:100%;max-width:100%;object-fit:contain;touch-action:manipulation}.hud{justify-content:space-around}
 html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%;width:100%}body{position:fixed;inset:0}.wrap{height:100dvh;overflow:hidden;overscroll-behavior:none}.canvas-wrap,.gamebox,.mobile-controls,.controls,.menu-bar,.joystick,canvas{touch-action:none;overscroll-behavior:none}.side.open{overflow-y:auto;touch-action:pan-y}
 @media(max-width:520px){.wrap{padding:calc(4px + env(safe-area-inset-top)) 5px calc(4px + env(safe-area-inset-bottom));display:flex;flex-direction:column;height:100dvh;min-height:0}.top{margin-bottom:3px;flex:none}.logo{font-size:16px}.sub{font-size:9px}.menu-bar{gap:4px;margin-bottom:4px;flex:none}.menu-bar button{padding:4px 2px;min-width:0;font-size:21px}.layout{flex:1;min-height:0}.gamebox{padding:4px;gap:3px}.canvas-wrap{height:auto;min-height:130px;max-height:40dvh;flex:1}.hud{padding:3px 1px;gap:3px;flex:none}.stat{font-size:9px}.bar{width:68px;height:6px}.mobile-controls{margin-top:2px;gap:5px;flex:none}.joystick{width:76px;height:76px;flex-basis:76px}.stick{width:36px;height:36px;left:18px;top:18px}.controls{gap:4px;flex:none}.controls button{flex:1;padding:5px 3px;font-size:10px}.side.open{left:6px;right:6px;top:max(6%,env(safe-area-inset-top));max-height:86dvh;padding:8px}.panel{padding:7px}.footer{display:none}}
+
+/* Thế Giới Hắc Ám: touch UI polish */
+*,*::before,*::after{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,select{ -webkit-user-select:text; user-select:text; }
+button,.menu-bar,.controls,.mobile-controls,.joystick,canvas{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.gamebox{min-height:0;flex:1}
+.menu-bar{width:100%;flex:none;margin:0 0 5px}
+.canvas-wrap{max-height:none;min-height:0;flex:1}
+canvas{max-height:100%;max-width:100%;width:auto;height:100%;object-fit:contain}
+@media(max-width:520px){
+ .gamebox{height:100%;min-height:0}
+ .canvas-wrap{max-height:none;min-height:0;flex:1}
+ .menu-bar{margin:0 0 3px}
+}
+
 </style>
 
 </head>
@@ -128,7 +143,7 @@ html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%
 
   <div>
 
-   <div class="logo">✦ AFK ADVENTURE</div>
+   <div class="logo">✦ THẾ GIỚI HẮC ÁM</div>
 
    <div class="sub">Pixel RPG • Settings & Mobile UI Update v1.1.6</div>
 
@@ -138,9 +153,11 @@ html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%
 
  </div>
 
- <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Auto" title="Auto">⚙️</button><button data-menu="3" aria-label="Túi đồ" title="Túi đồ">🎒</button><button data-menu="4" aria-label="Nhật ký" title="Nhật ký">📜</button><button data-menu="5" aria-label="Cài đặt" title="Cài đặt">⚙</button></nav><div class="layout">
+ <div class="layout">
 
   <main class="panel gamebox">
+
+   <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Auto" title="Auto">⚔️</button><button data-menu="3" aria-label="Túi đồ" title="Túi đồ">🎒</button><button data-menu="4" aria-label="Nhật ký" title="Nhật ký">📜</button><button data-menu="5" aria-label="Cài đặt" title="Cài đặt">⚙</button></nav>
 
    <div class="canvas-wrap">
 
@@ -150,7 +167,7 @@ html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%
 
      <div class="modal">
 
-      <h1>AFK ADVENTURE</h1>
+      <h1>THẾ GIỚI HẮC ÁM</h1>
 
       <p>Một thế giới pixel nhỏ đang chờ được khám phá. Hạ Slime, tích lũy EXP, nâng cấp nhân vật và thử sức với Guardian.</p>
 
@@ -288,7 +305,7 @@ html,body{overscroll-behavior:none;overflow:hidden;touch-action:none;height:100%
 
  </div>
 
- <div class="footer">AFK Adventure • Tiến trình được lưu trên thiết bị này • Offline rewards tối đa 8 giờ</div>
+ <div class="footer">Thế Giới Hắc Ám • Tiến trình được lưu trên thiết bị này • Offline rewards tối đa 8 giờ</div>
 
 </div>
 <script>
