@@ -187,7 +187,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 
   <main class="panel gamebox">
 
-   <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Auto" title="Auto">⚔️</button><button data-menu="3" aria-label="Túi đồ" title="Túi đồ">🎒</button><button data-menu="4" aria-label="Nhật ký" title="Nhật ký">📜</button><button data-menu="5" aria-label="Cài đặt" title="Cài đặt">⚙</button></nav>
+   <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Nhiệm vụ" title="Nhiệm vụ">🎯</button><button data-menu="3" aria-label="Auto" title="Auto">⚔️</button><button data-menu="4" aria-label="Túi đồ" title="Túi đồ">🎒</button><button data-menu="5" aria-label="Nhật ký" title="Nhật ký">📜</button><button data-menu="6" aria-label="Cài đặt" title="Cài đặt">⚙</button></nav>
 
    <div class="canvas-wrap">
 
@@ -272,6 +272,8 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
     <div class="row"><span>Tiến độ ải</span><b class="value" id="mapProgress">0/10 quái</b></div>
 
    </section>
+
+   <section class="panel"><div class="heading">🎯 NHIỆM VỤ</div><div id="questList" class="inventory-list"></div><div class="muted" style="font-size:10px;line-height:1.5;margin-top:8px">Hoàn thành mục tiêu để nhận EXP và vàng. Tiến độ được lưu cùng dữ liệu nhân vật.</div></section>
 
    <section class="panel">
 
@@ -364,7 +366,7 @@ elapsed:0,lastSave:Date.now(),lastAttack:0,lastPotion:0,lastSkill:0,
 
 player:{x:240,y:360,face:1},mobs:[],particles:[],floating:[],target:null,attackAnim:0,skillFlash:0,
 
-bossSpawned:false,bossDefeated:false,pendingAction:null,lastHitSkill:false,walkTime:0,moveBlend:0,hitFlash:0,levelUpFx:0,dead:false
+bossSpawned:false,bossDefeated:false,bossesDefeated:0,questClaims:[],pendingAction:null,lastHitSkill:false,walkTime:0,moveBlend:0,hitFlash:0,levelUpFx:0,dead:false
 
 };
 
@@ -499,7 +501,7 @@ function load(){
 
   state.unlockedMaps=Math.max(1,state.unlockedMaps||1);
 
-  state.mapKills=state.mapKills||0;
+  state.mapKills=state.mapKills||0;state.bossesDefeated=state.bossesDefeated||0;state.questClaims=Array.isArray(state.questClaims)?state.questClaims:[];
 
   state.respawnTimer=0;
 
@@ -719,7 +721,7 @@ function attack(skill=false,arrived=false){
   const map=currentMap(),xp=m.boss?map.bossXp:map.xp;
   addExperience(xp);state.earned+=xp;state.gold+=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));state.loot++;if(!m.boss)state.gels++;lootDrop(m.x,m.y);
   floatText(m.x,m.y-32,'+'+xp+' EXP','#ffe27a');log((m.boss?'Guardian bị đánh bại! ':'Hạ '+map.mob+'! ')+'+'+xp+' EXP');
-  if(m.boss){state.bossDefeated=true;state.unlockedMaps=Math.max(state.unlockedMaps,Math.min(maps.length,state.mapIndex+2));log('CHIẾN THẮNG! Đã mở khóa ải mới nếu còn.');updateMapUI();}
+  if(m.boss){state.bossDefeated=true;state.bossesDefeated=(state.bossesDefeated||0)+1;state.unlockedMaps=Math.max(state.unlockedMaps,Math.min(maps.length,state.mapIndex+2));log('CHIẾN THẮNG! Đã mở khóa ải mới nếu còn.');updateMapUI();}
   else if(state.mapKills>=10&&!state.bossSpawned){state.bossSpawned=true;spawnMob(true);log('Thủ lĩnh '+map.boss+' đã xuất hiện!');}
   
  }
@@ -816,6 +818,10 @@ function draw(){
  }
 }
 
+function questDefinitions(){return [{id:"first10",name:"Tân binh diệt quái",description:"Tiêu diệt tổng cộng 10 quái vật",goal:10,progress:state.kills||0,rewardXp:80,rewardGold:50},{id:"firstBoss",name:"Thử thách thủ lĩnh",description:"Đánh bại 1 Boss bất kỳ",goal:1,progress:state.bossesDefeated||0,rewardXp:180,rewardGold:120},{id:"level5",name:"Trưởng thành",description:"Đạt cấp độ 5",goal:5,progress:state.level||1,rewardXp:250,rewardGold:200}];}
+function renderQuests(){const el=$('questList');if(!el)return;const claimed=state.questClaims||[];el.innerHTML=questDefinitions().map(q=>{const done=q.progress>=q.goal,paid=claimed.includes(q.id);return '<div class="item"><strong>'+(paid?'✅ ':done?'🎁 ':'📌 ')+q.name+'</strong><div>'+q.description+'</div><div class="muted" style="margin:5px 0">'+Math.min(q.progress,q.goal)+' / '+q.goal+'</div><div class="muted">Thưởng: '+q.rewardXp+' EXP · '+q.rewardGold+' vàng</div><button class="small" data-quest-claim="'+q.id+'" '+(!done||paid?'disabled':'')+' style="width:100%;margin-top:7px">'+(paid?'Đã nhận thưởng':done?'Nhận thưởng':'Chưa hoàn thành')+'</button></div>';}).join("");}
+function claimQuest(id){const q=questDefinitions().find(x=>x.id===id);if(!q||(state.questClaims||[]).includes(id)||q.progress<q.goal)return;state.questClaims.push(id);state.gold+=q.rewardGold;addExperience(q.rewardXp);log('Hoàn thành nhiệm vụ '+q.name+'! Nhận '+q.rewardXp+' EXP và '+q.rewardGold+' vàng.');save();ui();}
+
 function ui(){
  $('hpText').textContent=Math.ceil(state.hp)+'/'+state.maxHp;
  $('hpBar').style.width=state.hp/state.maxHp*100+'%';
@@ -844,6 +850,7 @@ function ui(){
  
 
  $('duration').textContent=new Date(state.elapsed*1000).toISOString().slice(14,19);
+ renderQuests();
  $('zone').textContent=currentMap().name;
  $('mapProgress').textContent=state.mapKills+'/10 quái';
 }
@@ -868,7 +875,7 @@ window.addEventListener('keydown',e=>{
 
 window.addEventListener('keyup',e=>keys[e.code]=false);
 
-$('mpPotionBtn').onclick=drinkMp;$('itemModalClose').onclick=closeItem;$('itemEquipBtn').onclick=()=>{if(selectedItemIndex!==null)equip(selectedItemIndex)};$('itemSellBtn').onclick=sellItem;$('itemDropBtn').onclick=discardItem;$('itemLockBtn').onclick=toggleItemLock;document.addEventListener('click',e=>{const p=e.target.closest('[data-potential]');if(p)spendPoint(p.dataset.potential);const q=e.target.closest('[data-item-index]');if(q)openItem(+q.dataset.itemIndex);const z=e.target.closest('[data-unequip]');if(z)unequip(z.dataset.unequip);});
+$('mpPotionBtn').onclick=drinkMp;$('itemModalClose').onclick=closeItem;$('itemEquipBtn').onclick=()=>{if(selectedItemIndex!==null)equip(selectedItemIndex)};$('itemSellBtn').onclick=sellItem;$('itemDropBtn').onclick=discardItem;$('itemLockBtn').onclick=toggleItemLock;document.addEventListener('click',e=>{const p=e.target.closest('[data-potential]');if(p)spendPoint(p.dataset.potential);const q=e.target.closest('[data-item-index]');if(q)openItem(+q.dataset.itemIndex);const z=e.target.closest('[data-unequip]');if(z)unequip(z.dataset.unequip);const quest=e.target.closest('[data-quest-claim]');if(quest)claimQuest(quest.dataset.questClaim);});
 $('respawnBtn').onclick=()=>{
  state.dead=false;state.paused=false;state.hp=Math.max(1,Math.round(state.maxHp*.65));
  state.player.x=240;state.player.y=360;state.pendingAction=null;state.target=null;
@@ -942,7 +949,7 @@ canvas.addEventListener('pointerdown',e=>{
 });
 document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('click',()=>{
  const side=document.querySelector('.side'),index=Number(btn.dataset.menu),sections=[...side.querySelectorAll('section')];
- sections.forEach((el,i)=>el.classList.toggle('menu-active',i===index));side.classList.add('open');if(index===5)loadSettingsUI();
+ sections.forEach((el,i)=>el.classList.toggle('menu-active',i===index));side.classList.add('open');if(index===6)loadSettingsUI();
  if(!side.querySelector('.menu-close')){const close=document.createElement('button');close.className='menu-close';close.textContent='✕ ĐÓNG';close.onclick=()=>side.classList.remove('open');side.prepend(close);}
 }));
 window.addEventListener('beforeunload',save);
