@@ -1066,7 +1066,7 @@ function attack(skill=false,arrived=false){
  const m=(state.target&&!state.target.dead&&state.mobs.includes(state.target))?state.target:nearest();
  if(!m||m.dead){log('Hãy chạm chọn một mục tiêu trước.');return;}
  state.target=m;
- const range=skill?Math.max(68,state.attackRange+24):state.attackRange,dist=Math.hypot(m.x-p.x,m.y-p.y);
+ const range=state.attackRange,dist=Math.hypot(m.x-p.x,m.y-p.y);
  if(dist>range){state.pendingAction=null;return;}
  if(skill){state.mp-=state.characterClass==='Pháp sư'?8:10;state.lastSkill=now;state.skillFlash=.55;}else state.lastAttack=now;
  state.pendingAction=null;p.face=m.x<p.x?-1:1;state.attackAnim=skill?.62:.42;state.lastHitSkill=skill;
@@ -1097,7 +1097,7 @@ function update(dt){
  if(state.pendingAction){
   const a=state.pendingAction,m=a.target;
   if(!m||m.dead||!state.mobs.includes(m))state.pendingAction=null;
-  else{const d=Math.hypot(m.x-p.x,m.y-p.y),r=a.skill?Math.max(68,state.attackRange+24):state.attackRange;
+  else{const d=Math.hypot(m.x-p.x,m.y-p.y),r=a.state.attackRange;
    if(d>r-2){const step=Math.min(d-r+2,(state.moveSpeed||150)*1.4*dt);p.x+=(m.x-p.x)/d*step;p.y+=(m.y-p.y)/d*step;p.face=m.x<p.x?-1:1;moving=true;}
    else attack(a.skill,true);
   }
