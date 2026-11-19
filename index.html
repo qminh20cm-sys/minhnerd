@@ -206,21 +206,6 @@ button,.menu-bar button,.controls button{touch-action:manipulation}
 
     <canvas id="game" width="480" height="720" aria-label="Game Pixel RPG"></canvas>
 
-    <div class="overlay" id="startScreen">
-
-     <div class="modal">
-
-      <h1>THẾ GIỚI HẮC ÁM</h1>
-
-      <p>Một thế giới pixel nhỏ đang chờ được khám phá. Hạ Slime, tích lũy EXP, nâng cấp nhân vật và thử sức với Guardian.</p>
-
-      <button id="startBtn" type="button" onclick="window.startAdventure && window.startAdventure()">▶ BẮT ĐẦU PHIÊU LƯU</button>
-
-      <p style="font-size:10px">Dùng joystick hoặc WASD để di chuyển • Space để đánh • Chọn ải để khám phá</p>
-
-     </div>
-
-    </div>
     <div class="death-screen" id="deathScreen"><div class="death-card"><h2>☠ BẠN ĐÃ BỊ HẠ</h2><p>Hành trình tạm dừng. Hãy hồi sinh để tiếp tục cuộc phiêu lưu.</p><button id="respawnBtn">↻ HỒI SINH</button></div></div>
    </div>
 
@@ -536,7 +521,7 @@ function load(){
 
   state.floating=[];
 
-  state.started=false;
+  state.started=true;
 
   state.paused=false;
 
@@ -895,7 +880,7 @@ window.addEventListener('keydown',e=>{
 
 window.addEventListener('keyup',e=>keys[e.code]=false);
 
-$('startBtn').onclick=start;$('mpPotionBtn').onclick=drinkMp;$('itemModalClose').onclick=closeItem;$('itemEquipBtn').onclick=()=>{if(selectedItemIndex!==null)equip(selectedItemIndex)};$('itemSellBtn').onclick=sellItem;$('itemDropBtn').onclick=discardItem;$('itemLockBtn').onclick=toggleItemLock;document.addEventListener('click',e=>{const p=e.target.closest('[data-potential]');if(p)spendPoint(p.dataset.potential);const q=e.target.closest('[data-item-index]');if(q)openItem(+q.dataset.itemIndex);const z=e.target.closest('[data-unequip]');if(z)unequip(z.dataset.unequip);});
+$('mpPotionBtn').onclick=drinkMp;$('itemModalClose').onclick=closeItem;$('itemEquipBtn').onclick=()=>{if(selectedItemIndex!==null)equip(selectedItemIndex)};$('itemSellBtn').onclick=sellItem;$('itemDropBtn').onclick=discardItem;$('itemLockBtn').onclick=toggleItemLock;document.addEventListener('click',e=>{const p=e.target.closest('[data-potential]');if(p)spendPoint(p.dataset.potential);const q=e.target.closest('[data-item-index]');if(q)openItem(+q.dataset.itemIndex);const z=e.target.closest('[data-unequip]');if(z)unequip(z.dataset.unequip);});
 $('respawnBtn').onclick=()=>{
  state.dead=false;state.paused=false;state.hp=Math.max(1,Math.round(state.maxHp*.65));
  state.player.x=240;state.player.y=360;state.pendingAction=null;state.target=null;
@@ -909,19 +894,6 @@ function applySettings(){document.documentElement.style.setProperty('--game-font
 function saveSettings(){localStorage.setItem('afkSettings',JSON.stringify(settings));applySettings();}
 function loadSettingsUI(){const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(el){if(el.type==='checkbox')el.checked=!!settings[k];else el.value=settings[k];}}}
 function initSettings(){try{Object.assign(settings,JSON.parse(localStorage.getItem('afkSettings')||'{}'));}catch{}applySettings();const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(!el)continue;el.addEventListener('input',()=>{settings[k]=el.type==='checkbox'?el.checked:(el.type==='range'?Number(el.value):el.value);saveSettings();});} $('settingsReset').onclick=()=>{Object.assign(settings,{damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,sound:false,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'});saveSettings();loadSettingsUI();};}
-function start(){
- if(state.started)return;
- state.started=true;
- const screen=$('startScreen');
- if(screen){screen.classList.add('hidden');screen.style.display='none';screen.style.pointerEvents='none';}
- if(!state.mobs.length)for(let i=0;i<7;i++)spawnMob();
- updateMapUI();
- log('Bắt đầu hành trình tại '+currentMap().name+'!');
- save();
- ui();
-}
-window.startAdventure=start;
-
 $('autoBtn').onclick=()=>{
  state.auto=!state.auto;
  log('Auto Attack '+(state.auto?'đã bật.':'đã tắt.'));
@@ -989,6 +961,10 @@ window.addEventListener('beforeunload',save);
 document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
 initSettings();
 load();
+state.started=true;
+state.paused=false;
+state.dead=false;
+if(!state.mobs.length)for(let i=0;i<7;i++)spawnMob();
 state.mapIndex=Math.min(state.mapIndex||0,maps.length-1);
 state.unlockedMaps=Math.max(1,Math.min(state.unlockedMaps||1,maps.length));
 updateMapUI();
