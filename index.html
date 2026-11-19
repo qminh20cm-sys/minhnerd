@@ -275,13 +275,14 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
 
    <section class="panel">
 
-    <div class="heading">🗺️ CHỌN ẢI / BẢN ĐỒ</div>
+    <div class="heading">🗺️ CHỌN BẢN ĐỒ</div>
+     <div class="muted" style="font-size:10px;margin:-4px 0 8px">bấm để chọn bản đồ cần dịch chuyển đến</div>
 
     <select class="map-select" id="mapSelect" aria-label="Chọn bản đồ"></select>
 
     <div class="map-info" id="mapInfo">Đồng cỏ xanh • Dễ • Thưởng cơ bản</div>
 
-    <div class="row"><span>Tiến độ ải</span><b class="value" id="mapProgress">0/10 quái</b></div>
+    <div class="row"><span>Tiến độ bản đồ</span><b class="value" id="mapProgress">0/10 quái</b></div>
     
 
    </section>
@@ -385,6 +386,9 @@ function currentMap(){
 const TOWN={name:"THỊ TRẤN ABORNE",difficulty:"An toàn",mob:"Không có",hp:0,atk:0,xp:0,gold:0,color:"#344c3e",path:"#b49a6b",water:"#397c83",boss:""};
 function showMapBanner(name){const el=$("mapBanner");if(!el)return;el.textContent=name;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");}
 function inTown(){return !!state.inTown;}
+// Thị trấn và Đồng cỏ xanh luôn mở; các bản đồ sau tăng 20 cấp mỗi bản đồ.
+function requiredMapLevel(i){return i<=0?1:i*20;}
+function canEnterMap(i){return Number.isInteger(i)&&i>=0&&i<maps.length&&(i===0||state.level>=requiredMapLevel(i));}
 const CLASS_DATA=[{name:'Chiến binh',icon:'⚔️',desc:'Công kích và phòng thủ cân bằng, bền bỉ khi cận chiến.'},{name:'Pháp sư',icon:'🔮',desc:'Sức mạnh phép thuật và kỹ năng phép được tăng cường.'},{name:'Sát thủ',icon:'🗡️',desc:'Tốc đánh và tỉ lệ chí mạng cao.'},{name:'Cung thủ',icon:'🏹',desc:'Tầm đánh xa và tốc độ di chuyển linh hoạt.'}];
 function openClassModal(){renderClassOptions();$('classModal').classList.add('show');}
 function renderClassOptions(){$('classOptions').innerHTML=CLASS_DATA.map(c=>'<button class="class-option" data-class="'+c.name+'"><span>'+c.icon+' '+c.name+'<small>'+c.desc+'</small></span><b>'+(state.characterClass===c.name?'ĐANG CHỌN':'Chọn')+'</b></button>').join('');}
@@ -393,7 +397,7 @@ function openNpcDialog(id){const data={alden:{name:'Trưởng trấn Alden',icon
 function closeNpcDialog(){$('npcDialog').classList.remove('show');}
 function interactTownNpc(id){if(!inTown())return;state.townNpcVisited=state.townNpcVisited||[];if(!state.townNpcVisited.includes(id)){state.townNpcVisited.push(id);save();}openNpcDialog(id);}
 function enterTown(){state.inTown=true;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=540;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
-function leaveTown(i){if(i<0||i>=state.unlockedMaps)return;state.inTown=false;state.mapIndex=i;state.mapKills=0;state.bossSpawned=false;state.bossDefeated=false;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=360;state.auto=true;for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+".");}
+function leaveTown(i){if(!canEnterMap(i)){log("Bản đồ này yêu cầu cấp "+requiredMapLevel(i)+".");return;}state.inTown=false;state.mapIndex=i;state.mapKills=0;state.bossSpawned=false;state.bossDefeated=false;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=360;state.auto=true;for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+".");}
 const MAIN_QUESTS=[
 {id:'q1',title:'Khởi đầu từ tro tàn',map:0,goal:10,objective:'Đánh bại 10 Slime tại Đồng cỏ xanh và trò chuyện với các NPC trong thị trấn.',rewardXp:120,rewardGold:80,kind:'starter'},
 {id:'q2',title:'Tiếng Vọng Của Thép Rỉ',map:1,goal:10,objective:'Đánh bại 10 Thạch quái tại Hang động đá và thu thập 5 Quặng Sắt để thợ rèn chế tạo trang bị mới.',rewardXp:260,rewardGold:160,kind:'ore'},
@@ -445,7 +449,7 @@ function compareItemPower(it){
  return '<div class="power-compare"><b>⚖️ SO SÁNH CHIẾN LỰC</b><div>Hiện tại: <b>'+before.toLocaleString('vi-VN')+'</b></div><div>Nếu trang bị món này: <b>'+after.toLocaleString('vi-VN')+'</b></div><div class="'+cls+'">Chênh lệch: '+(delta>0?'+':'')+delta.toLocaleString('vi-VN')+' điểm</div><div class="'+cls+'">'+verdict+'</div><small style="color:#9fb7ba">Mô phỏng thay thế món đang mặc ở cùng vị trí, tính cả class và toàn bộ trang bị còn lại.</small></div>';
 }
 
-function levelUp(){if(state.level>=200)return false;state.level++;state.baseAtk+=3;state.baseMagic+=3;state.baseMaxHp+=25;state.baseDef+=2;state.baseMagicArmor+=2;state.baseMoveSpeed+=1;state.nextXp=state.level>=200?0:Math.ceil(state.nextXp*1.25);state.potential=(state.potential||0)+5;derive();state.hp=state.maxHp;state.mp=state.maxMp;state.levelUpFx=1.5;renderCharacter();ui();log('✨ LÊN CẤP! Bạn đạt Lv.'+state.level+' · +3 sức mạnh công kích, +3 sức mạnh phép thuật, +25 HP, +2 giáp, +2 giáp phép, +1 tốc độ di chuyển · +5 điểm tiềm năng');return true;}
+function levelUp(){if(state.level>=200)return false;state.level++;state.baseAtk+=3;state.baseMagic+=3;state.baseMaxHp+=25;state.baseDef+=2;state.baseMagicArmor+=2;state.baseMoveSpeed+=1;state.nextXp=state.level>=200?0:Math.ceil(state.nextXp*1.25);state.potential=(state.potential||0)+5;derive();state.hp=state.maxHp;state.mp=state.maxMp;state.levelUpFx=1.5;renderCharacter();ui();updateMapUI();log('✨ LÊN CẤP! Bạn đạt Lv.'+state.level+' · +3 sức mạnh công kích, +3 sức mạnh phép thuật, +25 HP, +2 giáp, +2 giáp phép, +1 tốc độ di chuyển · +5 điểm tiềm năng');return true;}
 function addExperience(amount){if(state.level>=200)return;state.xp+=amount;while(state.level<200&&state.xp>=state.nextXp){state.xp-=state.nextXp;levelUp();}if(state.level>=200){state.xp=0;state.nextXp=0;}}
 function itemDesc(it){const n={atk:'Sức mạnh công kích',atkPct:'Sức mạnh công kích',magic:'Sức mạnh phép thuật',magicPct:'Sức mạnh phép thuật',hp:'Máu',hpPct:'Máu',mp:'Mana',armor:'Giáp',armorPct:'Giáp',magicArmor:'Giáp phép',magicArmorPct:'Giáp phép',attackSpeed:'Tốc độ đánh',crit:'Tỉ lệ chí mạng',critDamage:'Sát thương chí mạng',moveSpeed:'Tốc độ di chuyển',lifesteal:'Hút máu',omnivamp:'Hút máu toàn phần',range:'Tầm đánh',goldBonusPct:'Vàng rơi từ quái',mpPct:'Mana',moveSpeedPct:'Tốc độ di chuyển',cooldownReduction:'Giảm hồi chiêu'};return Object.entries(it.stats||{}).filter(([,v])=>Number(v)!==0).map(([k,v])=>(n[k]||k)+' +'+(k==='attackSpeed'||k==='cooldownReduction'?(v*100).toFixed(1):v)+(k.endsWith('Pct')||['crit','critDamage','attackSpeed','lifesteal','omnivamp','atkPct','magicPct','hpPct','armorPct','magicArmorPct','cooldownReduction'].includes(k)?'%':'')).join(' | ');}function itemDescHtml(it){return itemDesc(it).split(' | ').join('<br>');}
 let selectedItemIndex=null;
@@ -494,16 +498,17 @@ function updateMapUI(){
 
  sel.innerHTML='';
 
- const townOpt=document.createElement("option");townOpt.value="-1";townOpt.textContent="🏘 Ải 1: THỊ TRẤN ABORNE (Khu an toàn)";sel.appendChild(townOpt);
+ const townOpt=document.createElement("option");townOpt.value="-1";townOpt.textContent="🏘 THỊ TRẤN ABORNE (Khu an toàn)";sel.appendChild(townOpt);
  maps.forEach((m,i)=>{
 
   const o=document.createElement('option');
 
   o.value=i;
 
-  o.textContent=(i<state.unlockedMaps?'':'🔒 ')+`Ải ${i+2}: ${m.name}`;
-
-  o.disabled=i>=state.unlockedMaps;
+  const required=requiredMapLevel(i);
+   const available=canEnterMap(i);
+   o.textContent=(available?"":"🔒 ")+m.name+(available?"":` (Cần cấp ${required})`);
+   o.disabled=!available;
 
   sel.appendChild(o);
 
@@ -518,7 +523,7 @@ function updateMapUI(){
 
 function selectMap(i){
  if(i===-1){enterTown();return;}
- if(i<0||i>=state.unlockedMaps)return;
+ if(!canEnterMap(i)){log("Chưa thể dịch chuyển! "+maps[i]?.name+" yêu cầu nhân vật đạt cấp "+requiredMapLevel(i)+".");updateMapUI();return;}
 
  state.inTown=false;state.mapIndex=i;
 
@@ -832,7 +837,7 @@ function attack(skill=false,arrived=false){
   const map=currentMap(),xp=m.boss?map.bossXp:map.xp;
   addExperience(xp);state.earned+=xp;state.gold+=m.boss?map.bossGold:Math.floor(rand(map.gold*.7,map.gold*1.4));state.loot++;lootDrop(m.x,m.y);
   floatText(m.x,m.y-32,'+'+xp+' EXP','#ffe27a');log((m.boss?'Guardian bị đánh bại! ':'Hạ '+map.mob+'! ')+'+'+xp+' EXP');
-  if(m.boss){state.bossDefeated=true;state.bossesDefeated=(state.bossesDefeated||0)+1;state.mapBossesDefeated=state.mapBossesDefeated||Array(10).fill(false);state.mapBossesDefeated[state.mapIndex]=true;if(state.mainQuestAccepted&&state.mainQuestIndex===2&&state.mapIndex===2)state.mainQuestBossDefeated=true;state.unlockedMaps=Math.max(state.unlockedMaps,Math.min(maps.length,state.mapIndex+2));log('CHIẾN THẮNG! Đã mở khóa ải mới nếu còn.');updateMapUI();}
+  if(m.boss){state.bossDefeated=true;state.bossesDefeated=(state.bossesDefeated||0)+1;state.mapBossesDefeated=state.mapBossesDefeated||Array(10).fill(false);state.mapBossesDefeated[state.mapIndex]=true;if(state.mainQuestAccepted&&state.mainQuestIndex===2&&state.mapIndex===2)state.mainQuestBossDefeated=true;log('CHIẾN THẮNG! Thủ lĩnh bản đồ đã bị đánh bại.');updateMapUI();}
   else if(state.mapKills>=10&&!state.bossSpawned){state.bossSpawned=true;spawnMob(true);log('Thủ lĩnh '+map.boss+' đã xuất hiện!');}
   
  }
