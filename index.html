@@ -366,11 +366,36 @@ html,body{overscroll-behavior-x:none!important}
 .inventory-power-arrow.power-down{color:#ff626d}
 .canvas-wrap>.combat-ui #joystick,.canvas-wrap>.combat-ui button{touch-action:none!important}
 .skill-learning-list{display:grid;gap:8px}.skill-learning-card{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:9px;padding:9px;background:linear-gradient(110deg,#142a35,#1b303a);border:1px solid #405c67;border-radius:8px}.skill-learning-icon{width:36px;height:36px;display:grid;place-items:center;background:#0b1b24;border:1px solid #5a7781;border-radius:8px;font-size:21px}.skill-learning-card b{display:block;color:#eaf4f0;font-size:12px}.skill-learning-card small{display:block;color:#9db3b7;font-size:9px;margin-top:3px}.skill-learning-status{font-size:8px;font-weight:bold;color:#62d9e8;border:1px solid #267c8b;border-radius:5px;padding:4px 5px;white-space:nowrap}
+
+/* ELDORIA landscape 16:9 presentation */
+#orientationNotice{display:none}
+@media (orientation:portrait) and (max-width:900px){
+ #orientationNotice{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at top,#203746,#080e14 75%);text-align:center}
+ #orientationNotice .orientation-card{max-width:340px;padding:28px 22px;border:1px solid #718a91;border-radius:16px;background:linear-gradient(180deg,#1c303c,#101b24);box-shadow:0 15px 55px #000b}
+ #orientationNotice .orientation-icon{font-size:48px;margin-bottom:14px}
+ #orientationNotice h2{color:#ffd36a;font-size:19px;line-height:1.4;margin:0 0 10px}
+ #orientationNotice p{color:#c3d4d2;font-size:13px;line-height:1.7;margin:0}
+ .wrap{visibility:hidden!important;pointer-events:none!important}
+}
+@media (orientation:landscape){
+ html,body{width:100%;height:100%;overflow:hidden}
+ .wrap{width:100vw;height:100dvh;max-width:none;padding:0;display:flex;overflow:hidden}
+ .layout{display:flex!important;flex:1;min-height:0;width:100%;margin:0}
+ .gamebox{width:100%;height:100%;padding:0!important;margin:0;border:0;border-radius:0;display:flex!important;flex-direction:column;min-height:0;overflow:hidden}
+ .menu-bar{position:absolute!important;left:50%!important;top:1%!important;transform:translateX(-50%)!important;z-index:28!important;width:min(32vw,300px)!important;margin:0!important}
+ .menu-bar button{font-size:clamp(14px,2.2vw,20px)!important;padding:3px 2px!important}
+ .canvas-wrap{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-height:none!important;min-height:0!important;border:0!important;border-radius:0!important}
+ canvas#game{width:100%!important;height:100%!important;object-fit:fill!important}
+ .side.open{top:4%!important;left:5%!important;right:5%!important;max-height:92dvh!important}
+ .canvas-wrap::after{height:0!important}
+ .canvas-wrap>.combat-ui .stat{font-size:clamp(8px,1.2vw,11px)!important}
+}
 </style>
 
 </head>
 <body>
 
+<div id="orientationNotice" role="status" aria-live="polite"><div class="orientation-card"><div class="orientation-icon">📱 ↻</div><h2>ELDORIA CHƠI Ở CHẾ ĐỘ NGANG</h2><p>Hãy xoay điện thoại sang ngang để tiếp tục cuộc phiêu lưu.</p></div></div>
 <div class="wrap">
 
  <div class="top">
@@ -395,7 +420,7 @@ html,body{overscroll-behavior-x:none!important}
 
    <div class="canvas-wrap">
 
-    <canvas id="game" width="480" height="720" aria-label="Game Pixel RPG"></canvas>
+    <canvas id="game" width="854" height="480" aria-label="Game Pixel RPG"></canvas>
     <button id="chatToggle" class="chat-toggle" aria-label="Mở chat" title="Chat">💬</button>
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
@@ -527,24 +552,24 @@ const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
 
 ctx.imageSmoothingEnabled=false;
 
-const W=480,H=720,keys={};
+const W=854,H=480,keys={};
 
 const $=id=>document.getElementById(id);
 
 const HUD_LAYOUT_KEY='afkHudLayoutV1';
 // HUD chính thức: cấu hình cố định từ afk-adventure-hud.json phiên bản 4.
 const HUD_DEFAULTS={
- hpStat:{x:20.543352589071848,y:14.681672723502034,width:92,height:32,scale:134,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- mpStat:{x:51.93057063168395,y:14.541552171187067,width:92,height:32,scale:138,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- xpStat:{x:82.94753086419753,y:14.76311336717428,width:90,height:32,scale:132,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- joystick:{x:22.37654320987654,y:85.74450084602368,width:72,height:72,scale:152,opacity:100,visible:true,shape:'circle',color:'#17303b'},
- mobileAttack:{x:82.71604938271605,y:89.63620981387479,width:64,height:64,scale:132,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- autoBtn:{x:90.97222222222221,y:67.34348561759728,width:50,height:50,scale:88,opacity:100,visible:true,shape:'circle',color:'#245b42'},
- skillBtn:{x:84.56329359127047,y:77.17401326321337,width:50,height:50,scale:131,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- potionBtn:{x:63.73456790123456,y:82.95262267343485,width:46,height:46,scale:133,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- mpPotionBtn:{x:59.40371416465125,y:92.30668013976243,width:46,height:46,scale:122,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- chatToggle:{x:89.04716830793876,y:22.528241921353967,width:52,height:52,scale:70,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- menuBar:{x:51.08024691358024,y:6.556683587140438,width:240,height:34,scale:150,opacity:100,visible:true,shape:'rounded',color:'#203541'}
+ hpStat:{x:9,y:8,width:92,height:32,scale:134,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ mpStat:{x:20,y:8,width:92,height:32,scale:138,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ xpStat:{x:31,y:8,width:90,height:32,scale:132,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ joystick:{x:8,y:82,width:72,height:72,scale:152,opacity:100,visible:true,shape:'circle',color:'#17303b'},
+ mobileAttack:{x:23,y:82,width:64,height:64,scale:132,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ autoBtn:{x:91,y:69,width:50,height:50,scale:88,opacity:100,visible:true,shape:'circle',color:'#245b42'},
+ skillBtn:{x:91,y:85,width:50,height:50,scale:131,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ potionBtn:{x:82,y:69,width:46,height:46,scale:133,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ mpPotionBtn:{x:82,y:85,width:46,height:46,scale:122,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ chatToggle:{x:96,y:9,width:52,height:52,scale:70,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ menuBar:{x:50,y:7,width:240,height:34,scale:150,opacity:100,visible:true,shape:'rounded',color:'#203541'}
 };
 const hudTargets={
  hpStat:()=>$('hpStat'),mpStat:()=>$('mpStat'),xpStat:()=>$('xpStat'),
@@ -598,7 +623,7 @@ const maps=[
 
 const joystick={x:0,y:0,active:false,pointerId:null};
 const MAX_GEAR_SLOTS=62;
-const TOWN_NPCS=[{id:'alden',x:240,y:220},{id:'healer',x:110,y:365},{id:'merchant',x:370,y:365},{id:'blacksmith',x:370,y:520},{id:'syrupp',x:110,y:520}];
+const TOWN_NPCS=[{id:'alden',x:427,y:150},{id:'healer',x:230,y:255},{id:'merchant',x:624,y:255},{id:'blacksmith',x:624,y:385},{id:'syrupp',x:230,y:385}];
 let npcWalkTarget=null;
 let pickupWalkTarget=null;
 let lastDropTap={id:null,time:0};
@@ -615,7 +640,7 @@ gold:0,gems:0,potions:3,mpPotions:2,kills:0,earned:0,loot:0,potential:0,baseAtk:
 
 elapsed:0,lastSave:Date.now(),lastAttack:0,lastPotion:0,lastSkill:0,
 
-player:{x:240,y:360,face:1},mobs:[],groundItems:[],particles:[],floating:[],target:null,attackAnim:0,skillFlash:0,
+player:{x:427,y:240,face:1},mobs:[],groundItems:[],particles:[],floating:[],target:null,attackAnim:0,skillFlash:0,
 
 bossSpawned:false,bossDefeated:false,bossesDefeated:0,bossSpawnTimer:180,normalMobKillsForSpecial:0,questClaims:[],pendingAction:null,lastHitSkill:false,walkTime:0,moveBlend:0,hitFlash:0,dead:false
 
@@ -639,8 +664,8 @@ function chooseClass(name){if(!CLASS_DATA.some(c=>c.name===name))return;state.ch
 function openNpcDialog(id){const data={alden:{name:'Trưởng trấn Alden',icon:'👑',line:'Chào cậu, ta là Alden, thị trưởng của Aborne. Cậu muốn làm gì?',choices:[['Tôi muốn nhận nhiệm vụ',()=>{closeNpcDialog();storyAction();}],['Không có gì, cảm ơn',closeNpcDialog]]},healer:{name:'Mục sư Rafael',icon:'🧑‍⚕️',line:'Chào cậu. Ta có thể giúp cậu hồi phục trước khi lên đường.',choices:[['Hồi phục HP và MP',()=>{closeNpcDialog();townHeal();}],['Không cần, cảm ơn',closeNpcDialog]]},merchant:{name:'Chủ cửa hàng Pelio',icon:'🧔',line:'Chào mừng! Ta là Pelio. Cậu muốn mua vật phẩm nào?',choices:[['Xem cửa hàng',()=>{closeNpcDialog();$('townShopModal').classList.add('show');}],['Để lần khác',closeNpcDialog]]},blacksmith:{name:'Thợ Rèn Homes',icon:'⚒️',line:'Trang bị của cậu cần được chăm sóc chứ? Ta có thể rèn lại các dòng phụ.',choices:[['Mở lò rèn',()=>{closeNpcDialog();openBlacksmith();}],['Không cần, cảm ơn',closeNpcDialog]]},syrupp:{name:'Người hướng dẫn Syrupp',icon:'🧙',line:'Ta là Syrupp. Ta có thể giúp cậu thay đổi con đường chiến đấu. Cậu muốn chọn class nào?',choices:[['Thay đổi class',()=>{closeNpcDialog();openClassModal();}],['Không có gì, cảm ơn',closeNpcDialog]]}}[id];if(!data)return;$('npcTitle').textContent=data.name;$('npcPortrait').textContent=data.icon;$('npcLine').textContent=data.line;$('npcChoices').innerHTML='';data.choices.forEach(([label,action])=>{const b=document.createElement('button');b.textContent=label;b.onclick=action;$('npcChoices').appendChild(b);});$('npcDialog').classList.add('show');}
 function closeNpcDialog(){$('npcDialog').classList.remove('show');}
 function interactTownNpc(id){if(!inTown())return;npcWalkTarget=null;pickupWalkTarget=null;joystick.x=joystick.y=0;joystick.active=false;joystick.pointerId=null;stick.style.transform='translate(0,0)';state.pendingAction=null;state.paused=false;state.townNpcVisited=state.townNpcVisited||[];if(!state.townNpcVisited.includes(id)){state.townNpcVisited.push(id);save();}openNpcDialog(id);$('npcDialog').classList.add('show');}
-function enterTown(){npcWalkTarget=null;state.inTown=true;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=540;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
-function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu "+requiredMapExp(i).toLocaleString('vi-VN')+" EXP tích lũy.");return;}state.inTown=false;state.mapIndex=i;state.mapKills=0;state.normalMobKillsForSpecial=0;state.bossSpawned=true;state.bossDefeated=false;state.bossSpawnTimer=180;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=360;state.auto=true;spawnMob(true);for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+". Boss đã xuất hiện!");}
+function enterTown(){npcWalkTarget=null;state.inTown=true;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=427;state.player.y=360;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
+function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu "+requiredMapExp(i).toLocaleString('vi-VN')+" EXP tích lũy.");return;}state.inTown=false;state.mapIndex=i;state.mapKills=0;state.normalMobKillsForSpecial=0;state.bossSpawned=true;state.bossDefeated=false;state.bossSpawnTimer=180;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=427;state.player.y=240;state.auto=true;spawnMob(true);for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+". Boss đã xuất hiện!");}
 const MAIN_QUESTS=[
 {id:'q1',title:'Khởi đầu từ tro tàn',map:0,goal:10,objective:'Đánh bại 10 Slime tại Đồng cỏ xanh và trò chuyện với các NPC trong thị trấn.',rewardXp:120,rewardGold:80,kind:'starter'},
 {id:'q2',title:'Tiếng Vọng Của Thép Rỉ',map:1,goal:10,objective:'Đánh bại 10 Thạch quái tại Hang động đá và thu thập 5 Quặng Sắt để thợ rèn chế tạo trang bị mới.',rewardXp:260,rewardGold:160,kind:'ore'},
@@ -997,24 +1022,21 @@ function pixelPerson(x,y,main='#5a9be8',isPlayer=false){
 }
 
 function drawTownWorld(){
- ctx.fillStyle="#344c3e";ctx.fillRect(0,0,W,H);
- for(let y=0;y<H;y+=36){for(let x=0;x<W;x+=36){ctx.fillStyle=((x+y)/36)%2?"#3b5945":"#385340";ctx.fillRect(x,y,34,34);}}
- ctx.fillStyle="#b49a6b";ctx.beginPath();ctx.moveTo(0,390);ctx.bezierCurveTo(110,350,160,420,250,385);ctx.bezierCurveTo(340,350,390,410,480,370);ctx.lineTo(480,470);ctx.bezierCurveTo(370,500,330,445,240,480);ctx.bezierCurveTo(140,515,80,455,0,500);ctx.closePath();ctx.fill();
- // Nhà dân
- const houses=[[35,115,"#9b6650"],[335,105,"#8b7655"],[40,535,"#9a7852"],[350,530,"#725d4d"]];
- for(const [x,y,c] of houses){ctx.fillStyle="#4a3329";ctx.fillRect(x-5,y+32,112,70);ctx.fillStyle=c;ctx.fillRect(x,y+25,102,70);ctx.fillStyle="#5b382d";ctx.beginPath();ctx.moveTo(x-10,y+28);ctx.lineTo(x+50,y-15);ctx.lineTo(x+112,y+28);ctx.closePath();ctx.fill();ctx.fillStyle="#f3d18a";ctx.fillRect(x+15,y+45,18,20);ctx.fillRect(x+68,y+45,18,20);ctx.fillStyle="#453329";ctx.fillRect(x+42,y+62,20,33);}
- // Giếng và quảng trường
- ctx.fillStyle="#5a5144";ctx.fillRect(190,300,100,48);ctx.fillStyle="#8c9c99";ctx.fillRect(198,305,84,34);ctx.fillStyle="#3e777a";ctx.fillRect(204,311,72,22);ctx.fillStyle="#5a5144";ctx.fillRect(187,294,106,9);
- // Cây
- for(const [x,y] of [[25,275],[440,270],[135,190],[320,235],[130,610],[420,620]]){ctx.fillStyle="#60432f";ctx.fillRect(x-4,y,8,30);ctx.fillStyle="#4c8956";ctx.beginPath();ctx.arc(x,y-3,22,0,Math.PI*2);ctx.fill();ctx.fillStyle="#70a963";ctx.beginPath();ctx.arc(x-7,y-10,10,0,Math.PI*2);ctx.fill();}
- // Bảng tên và NPC
- ctx.fillStyle="#2a211c";ctx.fillRect(145,55,190,48);ctx.fillStyle="#d9bd7a";ctx.fillRect(149,59,182,40);ctx.fillStyle="#382a20";ctx.font="bold 18px monospace";ctx.textAlign="center";ctx.fillText("ABORNE",240,84);ctx.textAlign="left";
- if(npcWalkTarget){ctx.save();const pulse=1+Math.sin(performance.now()/110)*.08;ctx.strokeStyle='#ffe36b';ctx.lineWidth=3;ctx.shadowColor='#ffe36b';ctx.shadowBlur=9;ctx.beginPath();ctx.ellipse(npcWalkTarget.x,npcWalkTarget.y+10,18*pulse,7*pulse,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
- pixelPerson(240,220,"#b58a4c",false);ctx.fillStyle="#fff0b0";ctx.font="bold 12px monospace";ctx.textAlign="center";ctx.fillText("TRƯỞNG TRẤN ALDEN",240,190);ctx.textAlign="left";
- pixelPerson(110,365,"#8fb7c7",false);ctx.fillStyle="#e5f4ff";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("MỤC SƯ RAFAEL",110,337);ctx.textAlign="left";
- pixelPerson(370,365,"#c68c65",false);ctx.fillStyle="#ffe0b0";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("CHỦ CỬA HÀNG PELIO",370,337);ctx.textAlign="left";
- pixelPerson(370,520,"#b7b7c4",false);ctx.fillStyle="#f0e8ff";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("THỢ RÈN HOMES",370,492);ctx.textAlign="left";pixelPerson(110,520,"#9c8bd4",false);ctx.fillStyle="#e8ddff";ctx.font="bold 11px monospace";ctx.textAlign="center";ctx.fillText("NGƯỜI HƯỚNG DẪN SYRUPP",110,492);ctx.textAlign="left";
- const safeElapsed=(performance.now()-townSafeLabelStartedAt)/1000;ctx.globalAlpha=Math.max(0,Math.min(1,safeElapsed/.7,(3.2-safeElapsed)/.8));ctx.fillStyle="#42eaff";ctx.font="bold 15px monospace";ctx.textAlign="center";ctx.shadowColor="#00dfff";ctx.shadowBlur=8;ctx.fillText("KHU VỰC AN TOÀN",240,680);ctx.shadowBlur=0;ctx.globalAlpha=1;ctx.textAlign="left";
+  ctx.fillStyle="#344c3e";ctx.fillRect(0,0,W,H);
+  for(let y=0;y<H;y+=36){for(let x=0;x<W;x+=36){ctx.fillStyle=((x+y)/36)%2?"#3b5945":"#385340";ctx.fillRect(x,y,34,34);}}
+  ctx.fillStyle="#b49a6b";ctx.beginPath();ctx.moveTo(0,220);ctx.bezierCurveTo(170,170,270,250,427,210);ctx.bezierCurveTo(590,170,700,240,854,200);ctx.lineTo(854,300);ctx.bezierCurveTo(700,330,590,275,427,310);ctx.bezierCurveTo(260,345,150,285,0,330);ctx.closePath();ctx.fill();
+  const houses=[[70,55,"#9b6650"],[680,55,"#8b7655"],[70,340,"#9a7852"],[680,340,"#725d4d"]];
+  for(const [x,y,c] of houses){ctx.fillStyle="#4a3329";ctx.fillRect(x-5,y+32,112,70);ctx.fillStyle=c;ctx.fillRect(x,y+25,102,70);ctx.fillStyle="#5b382d";ctx.beginPath();ctx.moveTo(x-10,y+28);ctx.lineTo(x+50,y-15);ctx.lineTo(x+112,y+28);ctx.closePath();ctx.fill();ctx.fillStyle="#f3d18a";ctx.fillRect(x+15,y+45,18,20);ctx.fillRect(x+68,y+45,18,20);ctx.fillStyle="#453329";ctx.fillRect(x+42,y+62,20,33);}
+  ctx.fillStyle="#5a5144";ctx.fillRect(377,210,100,48);ctx.fillStyle="#8c9c99";ctx.fillRect(385,215,84,34);ctx.fillStyle="#3e777a";ctx.fillRect(391,221,72,22);ctx.fillStyle="#5a5144";ctx.fillRect(374,204,106,9);
+  for(const [x,y] of [[35,185],[820,185],[260,90],[590,90],[260,420],[590,420]]){ctx.fillStyle="#60432f";ctx.fillRect(x-4,y,8,30);ctx.fillStyle="#4c8956";ctx.beginPath();ctx.arc(x,y-3,22,0,Math.PI*2);ctx.fill();ctx.fillStyle="#70a963";ctx.beginPath();ctx.arc(x-7,y-10,10,0,Math.PI*2);ctx.fill();}
+  ctx.fillStyle="#2a211c";ctx.fillRect(332,20,190,48);ctx.fillStyle="#d9bd7a";ctx.fillRect(336,24,182,40);ctx.fillStyle="#382a20";ctx.font="bold 18px monospace";ctx.textAlign="center";ctx.fillText("ABORNE",427,49);ctx.textAlign="left";
+  if(npcWalkTarget){ctx.save();const pulse=1+Math.sin(performance.now()/110)*.08;ctx.strokeStyle='#ffe36b';ctx.lineWidth=3;ctx.shadowColor='#ffe36b';ctx.shadowBlur=9;ctx.beginPath();ctx.ellipse(npcWalkTarget.x,npcWalkTarget.y+10,18*pulse,7*pulse,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
+  pixelPerson(427,150,"#b58a4c",false);ctx.fillStyle="#fff0b0";ctx.font="bold 12px monospace";ctx.textAlign="center";ctx.fillText("TRƯỞNG TRẤN ALDEN",427,120);
+  pixelPerson(230,255,"#8fb7c7",false);ctx.fillStyle="#e5f4ff";ctx.font="bold 11px monospace";ctx.fillText("MỤC SƯ RAFAEL",230,227);
+  pixelPerson(624,255,"#c68c65",false);ctx.fillStyle="#ffe0b0";ctx.fillText("CHỦ CỬA HÀNG PELIO",624,227);
+  pixelPerson(624,385,"#b7b7c4",false);ctx.fillStyle="#f0e8ff";ctx.fillText("THỢ RÈN HOMES",624,357);
+  pixelPerson(230,385,"#9c8bd4",false);ctx.fillStyle="#e8ddff";ctx.fillText("NGƯỜI HƯỚNG DẪN SYRUPP",230,357);ctx.textAlign="left";
+  const safeElapsed=(performance.now()-townSafeLabelStartedAt)/1000;ctx.globalAlpha=Math.max(0,Math.min(1,safeElapsed/.7,(3.2-safeElapsed)/.8));ctx.fillStyle="#42eaff";ctx.font="bold 15px monospace";ctx.textAlign="center";ctx.shadowColor="#00dfff";ctx.shadowBlur=8;ctx.fillText("KHU VỰC AN TOÀN",427,455);ctx.shadowBlur=0;ctx.globalAlpha=1;ctx.textAlign="left";
 }
 
 function drawMob(m){
@@ -1277,7 +1299,7 @@ function runHiddenChatCommand(raw){
   state.hp=100;state.mp=40;state.dead=false;state.paused=false;state.pendingAction=null;
   state.mobs=[];state.groundItems=[];state.particles=[];state.floating=[];state.target=null;
   state.bossSpawned=false;state.bossDefeated=false;state.bossSpawnTimer=180;state.normalMobKillsForSpecial=0;
-  state.player={x:240,y:360,face:1};
+  state.player={x:427,y:240,face:1};
   derive();state.hp=state.maxHp;state.mp=state.maxMp;
   renderCharacter();ui();updateMapUI();save();
   log('⚙ Đã reset EXP, chỉ số và tiềm năng về trạng thái ban đầu. Trang bị đã được cất vào túi.');
