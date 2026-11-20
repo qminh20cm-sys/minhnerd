@@ -1214,7 +1214,7 @@ function ui(){
  $('mpText').textContent=Math.floor(state.mp)+'/'+state.maxMp;
  $('mpBar').style.width=state.mp/state.maxMp*100+'%';
 
- $('xpText').textContent=state.level>=200?'MAX CẤP':state.xp+'/'+state.nextXp;
+ $('xpText').textContent=(Number(state.totalExp)||0).toLocaleString('vi-VN');
  $('xpBar').style.width=(state.level>=200?100:state.xp/state.nextXp*100)+'%';
 
  // Ba ô level/attack/defense thuộc giao diện cũ đã bị loại khỏi HTML.
