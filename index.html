@@ -419,7 +419,7 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
 
     <div class="stat" id="mpStat">💧 MP <b id="mpText">40/40</b><div class="bar"><div class="fill mp" id="mpBar"></div></div></div>
 
-    <div class="stat" id="xpStat">⭐ EXP <b id="xpText">0/50</b><div class="bar"><div class="fill xp" id="xpBar"></div></div></div>
+    <div class="stat" id="xpStat">⭐ EXP TÍCH LŨY <b id="xpText">0</b><div class="bar"><div class="fill xp" id="xpBar"></div></div></div>
 
    </div>
     <div class="combat-bottom">
@@ -466,7 +466,7 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
 
    <section class="panel">
 
-    <div class="heading">✦ THÔNG TIN NHÂN VẬT</div><div class="row"><span>Tên nhân vật</span></div><input class="character-info-input" id="characterNameInput" maxlength="18" placeholder="Nhập tên nhân vật"><div class="row"><span>Vai trò (Class)</span><b class="value" id="characterClassText">Chiến binh</b></div><div class="row"><span>Kinh nghiệm</span><b class="value" id="characterExp">Lv. 1 / 0 EXP</b></div><div class="row"><span>Vàng</span><b class="value" id="gold">0 G</b></div><div class="row"><span>Đá quý</span><b class="value" id="gems">0</b></div><div class="row"><span>Khu vực hiện tại</span><b class="value" id="zone">Thị trấn Aborne</b></div><div class="heading">⚡ ĐIỂM SỨC MẠNH</div><div class="power-score"><span>CHIẾN LỰC HIỆN TẠI</span><strong id="combatPower">0</strong><small>Được tính từ sát thương, tốc đánh, chí mạng, khả năng sống sót và hiệu quả chiến đấu</small></div><div class="heading">🛡 TRANG BỊ ĐANG MẶC</div><div id="equipmentSlots" class="equipment-star"></div><div class="heading">📊 CHỈ SỐ CHIẾN ĐẤU</div><div id="combatStats" class="stats-grid"></div><div class="heading">✨ ĐIỂM TIỀM NĂNG: <b id="potentialPoints">0</b></div><div id="potentialControls" class="potential-grid"></div><div class="muted" style="font-size:10px">Mỗi cấp +5 điểm. Tấn công: +2 song công; Phòng thủ: +20 HP, +1 song giáp; Nhanh nhạy: +0,3% tốc đánh, +0,1% chí mạng; Thông minh: +2 MP, +0,1% hồi chiêu.</div>
+    <div class="heading">✦ THÔNG TIN NHÂN VẬT</div><div class="row"><span>Tên nhân vật</span></div><input class="character-info-input" id="characterNameInput" maxlength="18" placeholder="Nhập tên nhân vật"><div class="row"><span>Vai trò (Class)</span><b class="value" id="characterClassText">Chiến binh</b></div><div class="row"><span>Tổng kinh nghiệm</span><b class="value" id="characterExp">0 EXP</b></div><div class="row"><span>Vàng</span><b class="value" id="gold">0 G</b></div><div class="row"><span>Đá quý</span><b class="value" id="gems">0</b></div><div class="row"><span>Khu vực hiện tại</span><b class="value" id="zone">Thị trấn Aborne</b></div><div class="heading">⚡ ĐIỂM SỨC MẠNH</div><div class="power-score"><span>CHIẾN LỰC HIỆN TẠI</span><strong id="combatPower">0</strong><small>Được tính từ sát thương, tốc đánh, chí mạng, khả năng sống sót và hiệu quả chiến đấu</small></div><div class="heading">🛡 TRANG BỊ ĐANG MẶC</div><div id="equipmentSlots" class="equipment-star"></div><div class="heading">📊 CHỈ SỐ CHIẾN ĐẤU</div><div id="combatStats" class="stats-grid"></div><div class="heading">✨ ĐIỂM TIỀM NĂNG: <b id="potentialPoints">0</b></div><div id="potentialControls" class="potential-grid"></div><div class="muted" style="font-size:10px">Mỗi EXP nhận được cộng 1 điểm tiềm năng. Chi phí nâng cấp từng chỉ số: 150 điểm lần đầu, mỗi lần sau tăng thêm 20. Tấn công: +2 song công; Phòng thủ: +20 HP, +1 song giáp; Nhanh nhạy: +0,3% tốc đánh, +0,1% chí mạng; Thông minh: +2 MP, +0,1% hồi chiêu.</div>
 
    </section>
 
@@ -584,16 +584,16 @@ document.body.appendChild($('blacksmithModal'));
 document.body.appendChild($('townShopModal'));
 
 const maps=[
-{name:'ĐỒNG CỎ XANH',difficulty:'Dễ',minLevel:1,maxLevel:20,mob:'Slime',hp:32,atk:5,xp:12,gold:4,color:'#477d52',path:'#9b875c',water:'#397c83',boss:'VUA SLIME',bossHp:260,bossAtk:14,bossXp:120,bossGold:80},
-{name:'HANG ĐỘNG',difficulty:'Trung bình',minLevel:21,maxLevel:40,mob:'Thạch quái',hp:62,atk:10,xp:25,gold:9,color:'#4d5966',path:'#8b8175',water:'#344f67',boss:'Cave Golem',bossHp:520,bossAtk:23,bossXp:260,bossGold:180},
-{name:'THUNG LŨNG TÀN TRO',difficulty:'Khó',minLevel:41,maxLevel:60,mob:'Hỏa linh',hp:105,atk:18,xp:45,gold:17,color:'#704b42',path:'#b17b52',water:'#69434b',boss:'Ash Warden',bossHp:900,bossAtk:36,bossXp:520,bossGold:360},
-{name:'MIỆNG NÚI LỬA',difficulty:'Khó',minLevel:61,maxLevel:80,mob:'Quái vật map 4',hp:160,atk:27,xp:70,gold:28,color:'#53634b',path:'#9b875c',water:'#397c83',boss:'Boss map 4',bossHp:1300,bossAtk:48,bossXp:800,bossGold:520},
-{name:'THÀNH LORAND',difficulty:'Rất khó',minLevel:81,maxLevel:100,mob:'Quái vật map 5',hp:230,atk:38,xp:100,gold:40,color:'#5d5368',path:'#887c9c',water:'#465a78',boss:'Boss map 5',bossHp:1900,bossAtk:65,bossXp:1100,bossGold:720},
-{name:'MỎM ĐÁ CỔ NGỮ',difficulty:'Rất khó',minLevel:101,maxLevel:120,mob:'Quái vật map 6',hp:320,atk:52,xp:140,gold:55,color:'#6c5147',path:'#a27c5c',water:'#5b4b62',boss:'Boss map 6',bossHp:2700,bossAtk:85,bossXp:1500,bossGold:950},
-{name:'CỔ MỘ HÀN BĂNG',difficulty:'Ác mộng',minLevel:121,maxLevel:140,mob:'Quái vật map 7',hp:440,atk:70,xp:190,gold:75,color:'#4d526d',path:'#8b829e',water:'#3d5776',boss:'Boss map 7',bossHp:3700,bossAtk:110,bossXp:2000,bossGold:1250},
-{name:'RẠN NỨT TỬ VONG',difficulty:'Ác mộng',minLevel:141,maxLevel:160,mob:'Quái vật map 8',hp:600,atk:92,xp:250,gold:100,color:'#694b58',path:'#a17b7e',water:'#57465e',boss:'Boss map 8',bossHp:5000,bossAtk:145,bossXp:2600,bossGold:1600},
-{name:'NÚI THÁNH',difficulty:'Huyền thoại',minLevel:161,maxLevel:180,mob:'Quái vật map 9',hp:820,atk:120,xp:330,gold:130,color:'#55475c',path:'#9881a5',water:'#4b4c76',boss:'Boss map 9',bossHp:6800,bossAtk:185,bossXp:3400,bossGold:2100},
-{name:'LỤC ĐỊA VĨNH HẰNG',difficulty:'Huyền thoại',minLevel:181,maxLevel:200,mob:'Quái vật map 10',hp:1100,atk:155,xp:430,gold:170,color:'#4a3f54',path:'#987c98',water:'#4a4c70',boss:'Boss map 10',bossHp:9000,bossAtk:235,bossXp:4500,bossGold:2800}
+{name:'ĐỒNG CỎ XANH',difficulty:'Dễ',mob:'Slime',hp:32,atk:5,xp:12,gold:4,color:'#477d52',path:'#9b875c',water:'#397c83',boss:'VUA SLIME',bossHp:260,bossAtk:14,bossXp:120,bossGold:80},
+{name:'HANG ĐỘNG',difficulty:'Trung bình',mob:'Thạch quái',hp:62,atk:10,xp:25,gold:9,color:'#4d5966',path:'#8b8175',water:'#344f67',boss:'Cave Golem',bossHp:520,bossAtk:23,bossXp:260,bossGold:180},
+{name:'THUNG LŨNG TÀN TRO',difficulty:'Khó',mob:'Hỏa linh',hp:105,atk:18,xp:45,gold:17,color:'#704b42',path:'#b17b52',water:'#69434b',boss:'Ash Warden',bossHp:900,bossAtk:36,bossXp:520,bossGold:360},
+{name:'MIỆNG NÚI LỬA',difficulty:'Khó',mob:'Quái vật map 4',hp:160,atk:27,xp:70,gold:28,color:'#53634b',path:'#9b875c',water:'#397c83',boss:'Boss map 4',bossHp:1300,bossAtk:48,bossXp:800,bossGold:520},
+{name:'THÀNH LORAND',difficulty:'Rất khó',mob:'Quái vật map 5',hp:230,atk:38,xp:100,gold:40,color:'#5d5368',path:'#887c9c',water:'#465a78',boss:'Boss map 5',bossHp:1900,bossAtk:65,bossXp:1100,bossGold:720},
+{name:'MỎM ĐÁ CỔ NGỮ',difficulty:'Rất khó',mob:'Quái vật map 6',hp:320,atk:52,xp:140,gold:55,color:'#6c5147',path:'#a27c5c',water:'#5b4b62',boss:'Boss map 6',bossHp:2700,bossAtk:85,bossXp:1500,bossGold:950},
+{name:'CỔ MỘ HÀN BĂNG',difficulty:'Ác mộng',mob:'Quái vật map 7',hp:440,atk:70,xp:190,gold:75,color:'#4d526d',path:'#8b829e',water:'#3d5776',boss:'Boss map 7',bossHp:3700,bossAtk:110,bossXp:2000,bossGold:1250},
+{name:'RẠN NỨT TỬ VONG',difficulty:'Ác mộng',mob:'Quái vật map 8',hp:600,atk:92,xp:250,gold:100,color:'#694b58',path:'#a17b7e',water:'#57465e',boss:'Boss map 8',bossHp:5000,bossAtk:145,bossXp:2600,bossGold:1600},
+{name:'NÚI THÁNH',difficulty:'Huyền thoại',mob:'Quái vật map 9',hp:820,atk:120,xp:330,gold:130,color:'#55475c',path:'#9881a5',water:'#4b4c76',boss:'Boss map 9',bossHp:6800,bossAtk:185,bossXp:3400,bossGold:2100},
+{name:'LỤC ĐỊA VĨNH HẰNG',difficulty:'Huyền thoại',mob:'Quái vật map 10',hp:1100,atk:155,xp:430,gold:170,color:'#4a3f54',path:'#987c98',water:'#4a4c70',boss:'Boss map 10',bossHp:9000,bossAtk:235,bossXp:4500,bossGold:2800}
 ];
 
 const joystick={x:0,y:0,active:false,pointerId:null};
@@ -607,7 +607,7 @@ const state={
 
 started:false,paused:false,auto:true,inTown:true,characterClass:'Chiến binh',characterCreated:false,gems:0,mapIndex:0,unlockedMaps:1,progressionVersion:2,silver:0,mapKillCounts:Array(10).fill(0),mapBossesDefeated:Array(10).fill(false),mainQuestIndex:0,mainQuestAccepted:false,mainQuestKills:0,mainQuestOre:0,mainQuestBossDefeated:false,townNpcVisited:[],
 
-mapKills:0,respawnTimer:0,level:1,xp:0,nextXp:20,maxLevel:200,
+mapKills:0,respawnTimer:0,totalExp:0,
 
 hp:100,maxHp:100,mp:40,maxMp:40,atk:12,def:2,
 
@@ -617,7 +617,7 @@ elapsed:0,lastSave:Date.now(),lastAttack:0,lastPotion:0,lastSkill:0,
 
 player:{x:240,y:360,face:1},mobs:[],groundItems:[],particles:[],floating:[],target:null,attackAnim:0,skillFlash:0,
 
-bossSpawned:false,bossDefeated:false,bossesDefeated:0,bossSpawnTimer:180,normalMobKillsForSpecial:0,questClaims:[],pendingAction:null,lastHitSkill:false,walkTime:0,moveBlend:0,hitFlash:0,levelUpFx:0,dead:false
+bossSpawned:false,bossDefeated:false,bossesDefeated:0,bossSpawnTimer:180,normalMobKillsForSpecial:0,questClaims:[],pendingAction:null,lastHitSkill:false,walkTime:0,moveBlend:0,hitFlash:0,dead:false
 
 };
 
@@ -629,9 +629,9 @@ const TOWN={name:"THỊ TRẤN ABORNE",difficulty:"An toàn",mob:"Không có",hp
 let townSafeLabelStartedAt=performance.now();
 function showMapBanner(name){if(name===TOWN.name)townSafeLabelStartedAt=performance.now();const el=$("mapBanner");if(!el)return;el.textContent=name;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");}
 function inTown(){return !!state.inTown;}
-// Thị trấn và Đồng cỏ xanh luôn mở; các bản đồ sau tăng 20 cấp mỗi bản đồ.
-function requiredMapLevel(i){return i<=0?1:i*20;}
-function canEnterMap(i){return Number.isInteger(i)&&i>=0&&i<maps.length&&(i===0||state.level>=requiredMapLevel(i));}
+const MAP_EXP_REQUIREMENTS=[0,50000,350000,1000000,7500000,20000000,60000000,150000000,750000000,1500000000];
+function requiredMapExp(i){return MAP_EXP_REQUIREMENTS[i]??Infinity;}
+function canEnterMap(i){return Number.isInteger(i)&&i>=0&&i<maps.length&&Number(state.totalExp||0)>=requiredMapExp(i);}
 const CLASS_DATA=[{name:'Chiến binh',icon:'⚔️',desc:'Công kích và phòng thủ cân bằng, bền bỉ khi cận chiến.'},{name:'Pháp sư',icon:'🔮',desc:'Sức mạnh phép thuật và kỹ năng phép được tăng cường.'},{name:'Sát thủ',icon:'🗡️',desc:'Tốc đánh và tỉ lệ chí mạng cao.'},{name:'Cung thủ',icon:'🏹',desc:'Tầm đánh xa và tốc độ di chuyển linh hoạt.'}];
 function openClassModal(){renderClassOptions();$('classModal').classList.add('show');}
 function renderClassOptions(){$('classOptions').innerHTML=CLASS_DATA.map(c=>'<button class="class-option" data-class="'+c.name+'"><span>'+c.icon+' '+c.name+'<small>'+c.desc+'</small></span><b>'+(state.characterClass===c.name?'ĐANG CHỌN':'Chọn')+'</b></button>').join('');}
@@ -640,7 +640,7 @@ function openNpcDialog(id){const data={alden:{name:'Trưởng trấn Alden',icon
 function closeNpcDialog(){$('npcDialog').classList.remove('show');}
 function interactTownNpc(id){if(!inTown())return;npcWalkTarget=null;pickupWalkTarget=null;joystick.x=joystick.y=0;joystick.active=false;joystick.pointerId=null;stick.style.transform='translate(0,0)';state.pendingAction=null;state.paused=false;state.townNpcVisited=state.townNpcVisited||[];if(!state.townNpcVisited.includes(id)){state.townNpcVisited.push(id);save();}openNpcDialog(id);$('npcDialog').classList.add('show');}
 function enterTown(){npcWalkTarget=null;state.inTown=true;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=540;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
-function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu cấp "+requiredMapLevel(i)+".");return;}state.inTown=false;state.mapIndex=i;state.mapKills=0;state.normalMobKillsForSpecial=0;state.bossSpawned=true;state.bossDefeated=false;state.bossSpawnTimer=180;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=360;state.auto=true;spawnMob(true);for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+". Boss đã xuất hiện!");}
+function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu "+requiredMapExp(i).toLocaleString('vi-VN')+" EXP tích lũy.");return;}state.inTown=false;state.mapIndex=i;state.mapKills=0;state.normalMobKillsForSpecial=0;state.bossSpawned=true;state.bossDefeated=false;state.bossSpawnTimer=180;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=240;state.player.y=360;state.auto=true;spawnMob(true);for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+". Boss đã xuất hiện!");}
 const MAIN_QUESTS=[
 {id:'q1',title:'Khởi đầu từ tro tàn',map:0,goal:10,objective:'Đánh bại 10 Slime tại Đồng cỏ xanh và trò chuyện với các NPC trong thị trấn.',rewardXp:120,rewardGold:80,kind:'starter'},
 {id:'q2',title:'Tiếng Vọng Của Thép Rỉ',map:1,goal:10,objective:'Đánh bại 10 Thạch quái tại Hang động đá và thu thập 5 Quặng Sắt để thợ rèn chế tạo trang bị mới.',rewardXp:260,rewardGold:160,kind:'ore'},
@@ -692,8 +692,7 @@ function compareItemPower(it){
  return '<div class="power-compare"><b>⚖️ SO SÁNH CHIẾN LỰC</b><div>Hiện tại: <b>'+before.toLocaleString('vi-VN')+'</b></div><div>Nếu trang bị món này: <b>'+after.toLocaleString('vi-VN')+'</b></div><div class="'+cls+'">Chênh lệch: '+(delta>0?'+':'')+delta.toLocaleString('vi-VN')+' điểm</div><div class="'+cls+'">'+verdict+'</div><small style="color:#9fb7ba">Mô phỏng thay thế món đang mặc ở cùng vị trí, tính cả class và toàn bộ trang bị còn lại.</small></div>';
 }
 
-function levelUp(){if(state.level>=200)return false;state.level++;state.baseAtk+=3;state.baseMagic+=3;state.baseMaxHp+=25;state.baseDef+=2;state.baseMagicArmor+=2;state.baseMoveSpeed+=1;state.nextXp=state.level>=200?0:Math.ceil(state.nextXp*1.25);derive();state.hp=state.maxHp;state.mp=state.maxMp;state.levelUpFx=1.5;renderCharacter();ui();updateMapUI();log('✨ LÊN CẤP! Bạn đạt Lv.'+state.level+' · +3 sức mạnh công kích, +3 sức mạnh phép thuật, +25 HP, +2 giáp, +2 giáp phép, +1 tốc độ di chuyển · +5 điểm tiềm năng');return true;}
-function addExperience(amount){amount=Math.max(0,Math.floor(Number(amount)||0));if(!amount)return;state.potential=(state.potential||0)+amount;if(state.level>=200)return;state.xp+=amount;while(state.level<200&&state.xp>=state.nextXp){state.xp-=state.nextXp;levelUp();}if(state.level>=200){state.xp=0;state.nextXp=0;}}
+function addExperience(amount){amount=Math.max(0,Math.floor(Number(amount)||0));if(!amount)return;state.totalExp=(Number(state.totalExp)||0)+amount;state.potential=(Number(state.potential)||0)+amount;updateMapUI();}
 function itemDesc(it){const n={atk:'Sức mạnh công kích',atkPct:'Sức mạnh công kích',magic:'Sức mạnh phép thuật',magicPct:'Sức mạnh phép thuật',hp:'Máu',hpPct:'Máu',mp:'Mana',armor:'Giáp',armorPct:'Giáp',magicArmor:'Giáp phép',magicArmorPct:'Giáp phép',attackSpeed:'Tốc độ đánh',crit:'Tỉ lệ chí mạng',critDamage:'Sát thương chí mạng',moveSpeed:'Tốc độ di chuyển',lifesteal:'Hút máu',omnivamp:'Hút máu toàn phần',range:'Tầm đánh',goldBonusPct:'Vàng rơi từ quái',mpPct:'Mana',moveSpeedPct:'Tốc độ di chuyển',cooldownReduction:'Giảm hồi chiêu'};return Object.entries(it.stats||{}).filter(([,v])=>Number(v)!==0).map(([k,v])=>(n[k]||k)+' +'+(k==='attackSpeed'||k==='cooldownReduction'?(v*100).toFixed(1):v)+(k.endsWith('Pct')||['crit','critDamage','attackSpeed','lifesteal','omnivamp','atkPct','magicPct','hpPct','armorPct','magicArmorPct','cooldownReduction'].includes(k)?'%':'')).join(' | ');}function itemDescHtml(it){return itemDesc(it).split(' | ').join('<br>');}
 let selectedItemIndex=null;let inventorySelectMode=false;let selectedInventoryItems=new Set();let selectedInventoryPotions=new Set();
 const EQUIPMENT_CATALOG={
@@ -702,7 +701,7 @@ const EQUIPMENT_CATALOG={
 'Hiếm':{main:['Kiếm Titan','Kiếm Lửa','Gậy Phép Rừng Sâu','Gậy Phù Thủy Lỗi Lạc','Dao Găm Tẩm Độc','Dao Găm Sắc Lẻm','Cung Tên Thợ Săn','Cung Tên Diệt Quỷ'],off:['Khiên Titan','Khiên Băng','Quả Cầu Trường Sinh','Quả Cầu Chiêm Tinh','Dao Găm Phụ Tẩm Độc','Dao Găm Phụ Sắc Lẻm','Ống Tên Săn Lùng','Ống Tên Bạc'],helm:['Mũ Chiến Binh','Mũ Phù Thủy Lừng Danh','Khăn Trùm Bí Ẩn'],armor:['Giáp Chiến Binh','Áo Choàng Phù Thủy Thiên Nhiên','Áo Khoác Kẻ Đi Săn'],pants:['Quần Chiến Binh','Quần Rừng Già','Quần Sợ Hãi'],gloves:['Găng Chiến Binh','Găng Pháp Thuật','Găng Thợ Săn'],boots:['Giày Chiến Binh','Giày Ma Pháp','Giày Thầm Lặng','Giày Thần Tốc'],relic:['Đồng Xu Cổ','Nhẫn Sức Mạnh','Nhẫn Xé Gió','Vòng Xương']}
 };
 function equipmentArchetype(n){if(/Gậy|Phù Thủy|Quả Cầu|Ma Pháp|Pháp Thuật|Vòng Xương/.test(n))return'magic';if(/Dao Găm|Cung|Ống Tên|Thợ Săn|Đi Săn|Thầm Lặng|Thần Tốc|Đồng Xu|Nhẫn Xé Gió/.test(n))return'agile';return'warrior';}
-function makeGearStats(slot,name,rarity,lv,mapScale){const scale=([.45,.8,1.25][['Thô','Thường','Hiếm'].indexOf(rarity)])*mapScale,a=equipmentArchetype(name),st={},add=(k,v)=>{if(Number(v))st[k]=Math.round(v*scale*100)/100;};
+function makeGearStats(slot,name,rarity,gearPower,mapScale){const lv=gearPower;const scale=([.45,.8,1.25][['Thô','Thường','Hiếm'].indexOf(rarity)])*mapScale,a=equipmentArchetype(name),st={},add=(k,v)=>{if(Number(v))st[k]=Math.round(v*scale*100)/100;};
 if(slot==='main')add(a==='magic'?'magic':'atk',lv*2+10);
 if(slot==='off'){if(a==='magic')add('magic',lv+5);else if(a==='agile')add('atk',lv+5);else add('hp',18+lv*3);}
 if(slot==='helm')add('hp',14+lv*3);
@@ -730,7 +729,8 @@ function discardItem(){const it=state.inventory[selectedItemIndex];if(!it||it.lo
 function toggleItemLock(){const it=state.inventory[selectedItemIndex];if(!it)return;it.locked=!it.locked;openItem(selectedItemIndex);renderCharacter();save();}
 function renderPotentialUI(){$('potentialPoints').textContent=state.potential;$('potentialControls').querySelectorAll('[data-potential],[data-potential-custom],[data-potential-input]').forEach(el=>{el.disabled=state.potential<=0;if(el.dataset.potentialInput)el.max=state.potential;});}
 function renderCombatStats(){$('combatPower').textContent=calculateCombatPower(state.equipped).toLocaleString('vi-VN');const rows=[['Sức mạnh công kích',state.atk],['Sức mạnh phép thuật',state.magicDamage],['Máu',state.maxHp],['Giáp',state.def],['Giáp phép',state.magicArmor],['Tốc đánh',state.attackSpeed.toFixed(2)+'x'],['Tỉ lệ chí mạng',state.critChance.toFixed(1)+'%'],['Sát thương chí mạng',state.critDamage+'%'],['Tốc độ di chuyển',state.moveSpeed],['Hút máu',state.lifesteal+'%'],['Hút máu toàn phần',state.omnivamp+'%'],['Tầm đánh',state.attackRange],['Mana',state.maxMp],['Hồi chiêu',state.cooldownReduction*100+'%']];$('combatStats').innerHTML=rows.map(x=>'<div>'+x[0]+'<br><b>'+x[1]+'</b></div>').join('');}
-function spendPoint(k,amount=1){if(!POTS.some(p=>p[0]===k))return;amount=Math.floor(Number(amount)||1);amount=Math.max(1,Math.min(amount,state.potential));if(state.potential<amount)return;state.potential-=amount;state.potentialStats[k]=(state.potentialStats[k]||0)+amount;derive();renderCharacter();ui();save();}
+function potentialUpgradeCost(k,levels=1){const current=Math.max(0,Math.floor(Number(state.potentialStats?.[k])||0));levels=Math.max(0,Math.floor(Number(levels)||0));return levels*(300+20*current+20*(levels-1))/2;}
+function spendPoint(k,levels=1){if(!POTS.some(p=>p[0]===k))return;levels=Math.max(1,Math.floor(Number(levels)||1));const cost=potentialUpgradeCost(k,levels);if(state.potential<cost){log('Không đủ tiềm năng! Cần '+cost.toLocaleString('vi-VN')+' điểm cho '+levels+' lần nâng cấp.');return;}state.potential-=cost;state.potentialStats[k]=(state.potentialStats[k]||0)+levels;derive();renderCharacter();ui();save();}
 function rollGear(){const mi=Math.max(0,Math.min(9,state.mapIndex||0)),r=Math.random();let rarity;if(mi<=2)rarity=r<.55?'Thô':r<.85?'Thường':'Hiếm';else if(mi<=6)rarity=r<(.60/.90)?'Thường':'Hiếm';else rarity='Hiếm';const slots=['helm','armor','pants','gloves','boots','main','off',...(rarity==='Hiếm'?['relic']:[])],slot=slots[Math.floor(Math.random()*slots.length)],list=EQUIPMENT_CATALOG[rarity][slot],name=list[Math.floor(Math.random()*list.length)],lv=state.level||1,mapScale=1+mi*.22,stats=makeGearStats(slot,name,rarity,lv,mapScale),keys=Object.keys(stats),primaryKeys=slot==='relic'?keys:keys.slice(0,1),secondaryKeys=slot==='relic'?[]:keys.slice(1);return{slot,type:slot==='main'?'Vũ khí chính':slot==='off'?'Vũ khí phụ':slot==='relic'?'Tạo vật':({helm:'Mũ',armor:'Áo',pants:'Quần',gloves:'Găng',boots:'Giày'})[slot],name,rarity,rarityLines:keys.length,primaryKeys,secondaryKeys,sellValueGold:Math.max(5,Math.floor(({Thô:8,Thường:25,Hiếm:70}[rarity])*mapScale+lv*2)),image:name==='Kiếm Sắt'?'assets/equipment/weapons/iron_sword.png':null,subtitle:'',locked:false,stats};}
 function lootDrop(x,y){const r=Math.random();if(r<.22){spawnGroundItem('hp',x,y);log('🎁 Quái vật làm rơi Dược phẩm HP!')}else if(r<.38){spawnGroundItem('mp',x,y);log('🎁 Quái vật làm rơi Dược phẩm MP!')}else if(r<.62){const n=Math.floor(rand(3,9+state.mapIndex*5)*(1+(state.goldBonusPct||0)/100));spawnGroundItem('gold',x,y,{amount:n});log('🪙 Quái vật làm rơi '+n+' vàng!')}else if(r<.82){const it=rollGear();spawnGroundItem('gear',x,y,{data:it});log('⚔ Quái vật làm rơi '+it.name+'!')}else{const n=Math.floor(rand(2,6)*(1+(state.goldBonusPct||0)/100));spawnGroundItem('gold',x,y,{amount:n});log('🪙 Quái vật làm rơi '+n+' vàng!')}}
 function drinkMp(){if(state.mpPotions&&state.mp<state.maxMp){state.mpPotions--;state.mp=Math.min(state.maxMp,state.mp+state.maxMp*.05);save();ui();log('Đã dùng dược phẩm MP.')}else log('Không thể dùng lúc này.')}
@@ -760,9 +760,9 @@ function updateMapUI(){
 
   o.value=i;
 
-  const required=requiredMapLevel(i);
+  const required=requiredMapExp(i);
    const available=canEnterMap(i);
-   o.textContent=(available?"":"🔒 ")+m.name+(available?"":` (Cần cấp ${required})`);
+   o.textContent=(available?"":"🔒 ")+m.name+(available?"":` (Cần ${required.toLocaleString('vi-VN')} EXP)`);
    o.disabled=!available;
 
   sel.appendChild(o);
@@ -779,7 +779,7 @@ function updateMapUI(){
 function selectMap(i){
  npcWalkTarget=null;
  if(i===-1){enterTown();document.querySelector('.side')?.classList.remove('open');return;}
- if(!canEnterMap(i)){log("Chưa thể dịch chuyển! "+maps[i]?.name+" yêu cầu nhân vật đạt cấp "+requiredMapLevel(i)+".");updateMapUI();return;}
+ if(!canEnterMap(i)){log("Chưa thể dịch chuyển! "+maps[i]?.name+" yêu cầu "+requiredMapExp(i).toLocaleString('vi-VN')+" EXP tích lũy.");updateMapUI();return;}
 
  state.inTown=false;state.mapIndex=i;
 
@@ -878,7 +878,7 @@ function load(){
 
    const rate=Math.min(.65,offline/3600*.12);
 
-   const gain=Math.floor(offline/12*rate*(5+state.level));
+   const gain=Math.floor(offline/12*rate*(5+state.mapIndex*5));
 
    state.earned+=gain;
 
@@ -912,15 +912,15 @@ function spawnMob(boss=false,forcedKind=null){
 
  }while(Math.hypot(x-state.player.x,y-state.player.y)<110&&tries<30);
 
- const mobLevel=Math.floor(rand(map.minLevel||1,(map.maxLevel||20)+1));
+ const mobLevel=state.mapIndex+1;
  const elite=!boss&&forcedKind==='elite';
  const leader=!boss&&forcedKind==='leader';
  const kind=boss?'boss':leader?'leader':elite?'elite':'normal';
- const scale=mobLevel/Math.max(1,((map.minLevel||1)+(map.maxLevel||20))/2);
+ const scale=1;
  const power=boss?1:leader?5:elite?2:1;
  const hp=boss?Math.max(1,Math.round(map.hp*scale*15)):Math.max(1,Math.round(map.hp*scale*rand(.9,1.1)*power));
  const mobName=boss?map.boss:map.mob;
- state.mobs.push({x,y,hp,max:hp,boss,elite,leader,kind,name:mobName,level:mobLevel,spd:boss?24+state.mapIndex*7:rand(18,27)+state.mapIndex*5,atk:boss?Math.max(1,Math.round(map.atk*scale*15)):Math.max(1,Math.round(map.atk*scale*power)),rewardScale:scale,rewardMultiplier:boss?35:leader?20:elite?10:1,hit:0,attackAt:0,dead:false,dir:rand(0,Math.PI*2),wanderTimer:rand(.4,2.2),phase:rand(0,6.28)});
+ state.mobs.push({x,y,hp,max:hp,boss,elite,leader,kind,name:mobName,spd:boss?24+state.mapIndex*7:rand(18,27)+state.mapIndex*5,atk:boss?Math.max(1,Math.round(map.atk*scale*15)):Math.max(1,Math.round(map.atk*scale*power)),rewardScale:scale,rewardMultiplier:boss?35:leader?20:elite?10:1,hit:0,attackAt:0,dead:false,dir:rand(0,Math.PI*2),wanderTimer:rand(.4,2.2),phase:rand(0,6.28)});
 
 }
 
@@ -1044,7 +1044,7 @@ function drawMob(m){
 
  ctx.fillStyle='#e45e67';ctx.fillRect(m.x-19,barY+1,38*Math.max(0,m.hp/m.max),3);
  ctx.restore();
- const mobName=m.name||(m.boss?currentMap().boss:currentMap().mob),label=m.boss?mobName.toUpperCase():mobName+' Lvl.'+(m.level||1);ctx.save();ctx.font=m.boss?'bold 13px monospace':'bold 10px monospace';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#08131b';ctx.shadowBlur=m.boss?13:m.leader?12:m.elite?10:0;ctx.shadowColor=m.boss?'#ff3030':m.leader?'#ffd52e':m.elite?'#b34cff':'transparent';ctx.strokeText(label,m.x,barY-5);ctx.fillStyle=m.boss?'#ff4141':m.leader?'#ffe45c':m.elite?'#d58aff':'#f2f6ef';ctx.fillText(label,m.x,barY-5);ctx.restore();
+ const mobName=m.name||(m.boss?currentMap().boss:currentMap().mob),label=m.boss?mobName.toUpperCase():mobName;ctx.save();ctx.font=m.boss?'bold 13px monospace':'bold 10px monospace';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#08131b';ctx.shadowBlur=m.boss?13:m.leader?12:m.elite?10:0;ctx.shadowColor=m.boss?'#ff3030':m.leader?'#ffd52e':m.elite?'#b34cff':'transparent';ctx.strokeText(label,m.x,barY-5);ctx.fillStyle=m.boss?'#ff4141':m.leader?'#ffe45c':m.elite?'#d58aff':'#f2f6ef';ctx.fillText(label,m.x,barY-5);ctx.restore();
 }
 
 function particle(x,y,color){
@@ -1112,7 +1112,7 @@ function update(dt){
  if(!state.started||state.paused||state.dead)return;
  if(inTown()){state.hp=Math.min(state.maxHp,state.hp+state.maxHp*.035*dt);state.mp=Math.min(state.maxMp,state.mp+state.maxMp*.05*dt);}
  state.elapsed+=dt;state.attackAnim=Math.max(0,state.attackAnim-dt);state.skillFlash=Math.max(0,state.skillFlash-dt);
- state.hitFlash=Math.max(0,state.hitFlash-dt);state.levelUpFx=Math.max(0,state.levelUpFx-dt);
+ state.hitFlash=Math.max(0,state.hitFlash-dt);
  const p=state.player;let dx=joystick.x,dy=joystick.y;
  if(keys.KeyA||keys.ArrowLeft)dx--;if(keys.KeyD||keys.ArrowRight)dx++;if(keys.KeyW||keys.ArrowUp)dy--;if(keys.KeyS||keys.ArrowDown)dy++;
  dx=Math.max(-1,Math.min(1,dx));dy=Math.max(-1,Math.min(1,dy));let moving=false;
@@ -1183,7 +1183,7 @@ function draw(){
  if(state.lastHitSkill){ctx.strokeStyle='#9ef4ff';ctx.lineWidth=8;ctx.shadowColor='#59dfff';ctx.shadowBlur=18;ctx.beginPath();ctx.arc(8,0,35+(1-k)*42,-1.5,1.45);ctx.stroke();ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(8,0,22+(1-k)*28,-1.4,1.35);ctx.stroke();}
  else{ctx.strokeStyle='#fff0a8';ctx.lineWidth=8;ctx.shadowColor='#ffc95e';ctx.shadowBlur=12;ctx.beginPath();ctx.arc(12,0,34,-1.25+(1-k)*.25,.95+(1-k)*.4);ctx.stroke();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(12,0,26,-1.2,.8);ctx.stroke();}
  ctx.restore();}
- const pname=(settings.playerName||'Wanderer').trim()||'Wanderer';ctx.save();ctx.font='bold 12px monospace';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#08131b';ctx.strokeText(pname+' Lvl.'+state.level,state.player.x,state.player.y-34);ctx.fillStyle='#fff1a8';ctx.fillText(pname+' Lvl.'+state.level,state.player.x,state.player.y-34);ctx.restore();
+ const pname=(settings.playerName||'Wanderer').trim()||'Wanderer';ctx.save();ctx.font='bold 12px monospace';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#08131b';ctx.strokeText(pname,state.player.x,state.player.y-34);ctx.fillStyle='#fff1a8';ctx.fillText(pname,state.player.x,state.player.y-34);ctx.restore();
  if(state.chatBubble&&Date.now()<state.chatBubbleUntil){ctx.save();const msg=state.chatBubble.slice(0,42),bw=Math.min(220,Math.max(76,ctx.measureText(msg).width+18)),bx=Math.max(4,Math.min(W-bw-4,state.player.x-bw/2)),by=state.player.y-76;ctx.font='11px monospace';ctx.textAlign='center';ctx.fillStyle='#f4f6f3';ctx.strokeStyle='#314650';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(bx,by,bw,26,7);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(state.player.x-5,by+25);ctx.lineTo(state.player.x,by+32);ctx.lineTo(state.player.x+5,by+25);ctx.fill();ctx.fillStyle='#17242a';ctx.fillText(msg,bx+bw/2,by+17);ctx.restore();}
 
  for(const a of state.particles){
@@ -1208,7 +1208,7 @@ function questDefinitions(){return MAIN_QUESTS;}
 function renderQuests(){const el=$('questList');if(!el)return;const i=state.mainQuestIndex||0;el.innerHTML=MAIN_QUESTS.map((q,index)=>{if(q.future)return '<div class="item quest-locked"><strong>🔒 '+(index+1)+'. '+q.title+'</strong><div class="muted">'+(q.description||'Nội dung sẽ được mở trong bản cập nhật sau.')+'</div><div class="quest-progress">SẮP RA MẮT</div></div>';const active=index===i,done=index<i,p=mainQuestProgress(q),reward=q.rewardXp+' EXP · '+q.rewardGold+' vàng'+(q.kind==='starter'?' · Bộ trang bị tân thủ':q.kind==='ore'?' · Kiếm Thép Rèn':'');return '<div class="item '+(active?'quest-current':'')+'"><strong>'+(done?'✅':active?'📜':'🔒')+' '+(index+1)+'. '+q.title+'</strong><div>'+q.objective+'</div><div class="muted" style="margin-top:5px">🎁 Phần thưởng: '+reward+'</div>'+(active?'<div class="quest-progress">'+(state.mainQuestAccepted?'ĐANG THỰC HIỆN':'CHƯA NHẬN — ĐẾN GẶP ALDEN')+'</div><div class="muted">Tiến độ quái: '+p.kills+' / '+q.goal+'</div>'+(q.kind==='starter'?'<div class="muted">NPC đã trò chuyện: '+p.extra+' / 4</div>':q.kind==='ore'?'<div class="muted">Quặng Sắt: '+p.extra+' / 5</div>':'<div class="muted">Ash Warden: '+(p.extra?'Đã đánh bại':'Chưa đánh bại')+'</div>'):'<div class="quest-progress">'+(done?'ĐÃ HOÀN THÀNH':'CHƯA MỞ KHÓA')+'</div>')+'</div>';}).join('');}
 
 function ui(){
- $('hpText').textContent=Math.ceil(state.hp)+'/'+state.maxHp;$('characterClassText').textContent=state.characterClass||'Chiến binh';$('characterExp').textContent='Lv. '+state.level+' / '+(state.level>=200?'MAX':state.xp+'/'+state.nextXp+' EXP');$('gems').textContent=state.gems||0;$('zone').textContent=inTown()?TOWN.name:currentMap().name;if(document.activeElement!==$('characterNameInput'))$('characterNameInput').value=settings.playerName||'Wanderer';
+ $('hpText').textContent=Math.ceil(state.hp)+'/'+state.maxHp;$('characterClassText').textContent=state.characterClass||'Chiến binh';$('characterExp').textContent=(Number(state.totalExp)||0).toLocaleString('vi-VN')+' EXP';$('gems').textContent=state.gems||0;$('zone').textContent=inTown()?TOWN.name:currentMap().name;if(document.activeElement!==$('characterNameInput'))$('characterNameInput').value=settings.playerName||'Wanderer';
  $('hpBar').style.width=state.hp/state.maxHp*100+'%';
 
  $('mpText').textContent=Math.floor(state.mp)+'/'+state.maxMp;
@@ -1266,7 +1266,7 @@ function runHiddenChatCommand(raw){
  const now=Date.now();
  if(now-lastAdminGrantAt<1500){showRewardToast('⏳ Lệnh vừa được thực hiện!');return true;}
  lastAdminGrantAt=now;
- const lv=Math.max(1,state.level||1),stats={atk:lv*2+8,atkPct:2+Math.floor(lv/12),crit:1+lv*.015,critDamage:5,attackSpeed:.04};
+ const gearPower=8+(state.mapIndex||0)*8,stats={atk:gearPower*2+8,atkPct:2+Math.floor(gearPower/12),crit:1+gearPower*.015,critDamage:5,attackSpeed:.04};
  const item={slot:'main',type:'Kiếm',name:'Kiếm Huyền thoại',rarity:'Huyền thoại',rarityLines:5,primaryKeys:['atk','atkPct'],secondaryKeys:['crit','critDamage','attackSpeed'],sellValueGold:Math.max(5,600+lv*2),subtitle:'Thanh kiếm được ban tặng bởi quyền năng bí ẩn.',locked:false,stats};
  state.inventory.push(item);renderCharacter();save();ui();
  log('⚙ Lệnh admin thành công: đã nhận 1 '+item.name+'.');
@@ -1277,7 +1277,7 @@ function runHiddenChatCommand(raw){
 function sendChat(){const input=$('chatInput'),msg=(input.value||'').trim();if(!msg)return;if(!runHiddenChatCommand(msg)){state.chatBubble=msg;state.chatBubbleUntil=Date.now()+5000;log((settings.playerName||'Wanderer')+': '+msg);}input.value='';$('chatPanel').classList.remove('show');}
 $('chatToggle').onclick=()=>{$('chatPanel').classList.toggle('show');if($('chatPanel').classList.contains('show'))$('chatInput').focus();};$('chatClose').onclick=()=> $('chatPanel').classList.remove('show');$('chatSend').onclick=sendChat;$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendChat();}});
 function openBlacksmith(){const list=$('blacksmithList');const eligible=state.inventory.map((it,i)=>({it,i})).filter(x=>(x.it.secondaryKeys||[]).length>0&&!x.it.locked);if(!eligible.length){log('Thợ rèn: Chưa có trang bị nào có dòng phụ để tôi rèn lại.');showMapBanner('THỢ RÈN: CHƯA CÓ TRANG BỊ HỢP LỆ');return;}list.innerHTML=eligible.map(({it,i})=>{const r=rarityInfo(it),cost=Math.max(20,r.price);return '<div class="blacksmith-option"><b class="rarity-'+r.css+'">'+it.name+'</b><div style="color:#cbd8d8;margin:5px 0">'+itemDesc(it)+'</div><div style="color:#e9c77e">Làm mới '+it.secondaryKeys.length+' dòng phụ · '+cost+' vàng</div><button data-reroll-item="'+i+'" '+(state.gold<cost?'disabled':'')+'>⚒️ Tôi rèn lại</button></div>';}).join('');$('blacksmithModal').classList.add('show');}
-function rerollGearAffixes(index){const it=state.inventory[index];if(!it||it.locked||!(it.secondaryKeys||[]).length)return;const cost=Math.max(20,rarityInfo(it).price);if(state.gold<cost){log('Thợ rèn: Không đủ vàng. Cần '+cost+' vàng.');return;}state.gold-=cost;const pool=[['atk',Math.max(2,Math.round(state.level*.7+3))],['atkPct',1+Math.floor(state.level/25)],['magic',Math.max(2,Math.round(state.level*.7+3))],['magicPct',1+Math.floor(state.level/25)],['hp',10+state.level*2],['hpPct',1+Math.floor(state.level/30)],['armor',1+Math.floor(state.level/8)],['magicArmor',1+Math.floor(state.level/8)],['attackSpeed',.02],['crit',.6],['critDamage',5],['moveSpeed',2],['lifesteal',.4],['omnivamp',.25],['mp',5+state.level]];const prim=new Set(it.primaryKeys||[]);for(const oldKey of [...it.secondaryKeys]){delete it.stats[oldKey];const options=pool.filter(([key])=>!prim.has(key)&&!Object.prototype.hasOwnProperty.call(it.stats,key));if(options.length){const [key,val]=options[Math.floor(Math.random()*options.length)];it.stats[key]=val;it.secondaryKeys[it.secondaryKeys.indexOf(oldKey)]=key;}}$('blacksmithModal').classList.remove('show');renderCharacter();save();log('Thợ rèn đã làm mới '+it.secondaryKeys.length+' dòng phụ của '+it.name+'.');}
+function rerollGearAffixes(index){const it=state.inventory[index];if(!it||it.locked||!(it.secondaryKeys||[]).length)return;const cost=Math.max(20,rarityInfo(it).price);if(state.gold<cost){log('Thợ rèn: Không đủ vàng. Cần '+cost+' vàng.');return;}state.gold-=cost;const gearPower=8+(state.mapIndex||0)*8,pool=[['atk',Math.max(2,Math.round(gearPower*.7+3))],['atkPct',1+Math.floor(gearPower/25)],['magic',Math.max(2,Math.round(gearPower*.7+3))],['magicPct',1+Math.floor(gearPower/25)],['hp',10+gearPower*2],['hpPct',1+Math.floor(gearPower/30)],['armor',1+Math.floor(gearPower/8)],['magicArmor',1+Math.floor(gearPower/8)],['attackSpeed',.02],['crit',.6],['critDamage',5],['moveSpeed',2],['lifesteal',.4],['omnivamp',.25],['mp',5+gearPower]];const prim=new Set(it.primaryKeys||[]);for(const oldKey of [...it.secondaryKeys]){delete it.stats[oldKey];const options=pool.filter(([key])=>!prim.has(key)&&!Object.prototype.hasOwnProperty.call(it.stats,key));if(options.length){const [key,val]=options[Math.floor(Math.random()*options.length)];it.stats[key]=val;it.secondaryKeys[it.secondaryKeys.indexOf(oldKey)]=key;}}$('blacksmithModal').classList.remove('show');renderCharacter();save();log('Thợ rèn đã làm mới '+it.secondaryKeys.length+' dòng phụ của '+it.name+'.');}
 $('itemEquipBtn').onclick=()=>{if(selectedItemIndex!==null)equip(selectedItemIndex)};$('itemDropBtn').onclick=discardItem;$('itemLockBtn').onclick=toggleItemLock;$('itemPotionUseBtn').onclick=()=>{const k=$('itemModal').dataset.potionKind;if(k){useBagPotion(k);closeItem();}};$('townShopClose').onclick=()=> $('townShopModal').classList.remove('show');$('townShopHp').onclick=()=>townBuy('hp');$('townShopMp').onclick=()=>townBuy('mp');$('townShopIronSword').onclick=()=>townBuy('ironSword');document.querySelectorAll('[data-shop-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-shop-tab]').forEach(x=>x.classList.toggle('active',x===b));['potions','gear'].forEach(k=>{$('shop'+k.charAt(0).toUpperCase()+k.slice(1)).hidden=k!==b.dataset.shopTab;});});document.addEventListener('click',e=>{const classChoice=e.target.closest('[data-class]');if(classChoice){chooseClass(classChoice.dataset.class);return;}const custom=e.target.closest('[data-potential-custom]');if(custom){const k=custom.dataset.potentialCustom,input=document.querySelector('[data-potential-input="'+k+'"]'),amount=Math.floor(Number(input?.value)||0);if(amount>0)spendPoint(k,Math.min(state.potential,amount));if(input)input.value='';}const detail=e.target.closest('[data-equipped-item]');if(detail)openEquippedItem(detail.dataset.equippedItem);const rr=e.target.closest('[data-reroll-item]');if(rr)rerollGearAffixes(Number(rr.dataset.rerollItem));const p=e.target.closest('[data-potential]');if(p)spendPoint(p.dataset.potential,Number(p.dataset.amount)||1);const potion=e.target.closest('[data-potion-use]');if(potion){const k=potion.dataset.potionUse;if(inventorySelectMode){if(selectedInventoryPotions.has(k))selectedInventoryPotions.delete(k);else selectedInventoryPotions.add(k);renderInventoryGrid();}else openPotionDetail(k);return;}const q=e.target.closest('[data-item-index]');if(q){const i=Number(q.dataset.itemIndex);if(inventorySelectMode){if(selectedInventoryItems.has(i))selectedInventoryItems.delete(i);else selectedInventoryItems.add(i);q.classList.toggle('inventory-selected',selectedInventoryItems.has(i));$('inventoryActionHint').textContent='Đã chọn '+(selectedInventoryItems.size+selectedInventoryPotions.size)+' loại vật phẩm. Chạm vào ô để chọn hoặc bỏ chọn.';}else openItem(i);return;}const z=e.target.closest('[data-unequip]');if(z)unequip(z.dataset.unequip);const quest=e.target.closest('[data-quest-claim]');if(quest)claimQuest(quest.dataset.questClaim);});
 $('respawnBtn').onclick=()=>{$('deathScreen').classList.remove('show');enterTown();};
 
