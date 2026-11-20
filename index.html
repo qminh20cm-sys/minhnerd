@@ -1215,7 +1215,7 @@ function ui(){
  $('mpBar').style.width=state.mp/state.maxMp*100+'%';
 
  $('xpText').textContent=(Number(state.totalExp)||0).toLocaleString('vi-VN');
- $('xpBar').style.width=(state.level>=200?100:state.xp/state.nextXp*100)+'%';
+ const nextRequirement=MAP_EXP_REQUIREMENTS.find((v,i)=>i>state.mapIndex&&v>(Number(state.totalExp)||0));const currentRequirement=requiredMapExp(state.mapIndex);$('xpBar').style.width=(nextRequirement?Math.max(0,Math.min(100,((state.totalExp-currentRequirement)/(nextRequirement-currentRequirement))*100)):100)+'%';
 
  // Ba ô level/attack/defense thuộc giao diện cũ đã bị loại khỏi HTML.
  // Không truy cập chúng trong ui() vì sẽ gây TypeError mỗi khi nhân vật lên cấp.
