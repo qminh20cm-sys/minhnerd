@@ -533,7 +533,7 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
 
    
 
-   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label><label><input type="checkbox" id="settingSound"> Âm thanh (sắp hỗ trợ)</label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>🎒 LỊCH SỬ NHẶT ĐỒ</b><div id="pickupHistory" class="pickup-history"><div class="muted">Chưa nhặt được vật phẩm nào.</div></div><div id="log" class="log" style="display:none" aria-hidden="true"></div></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
+   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label><label><input type="checkbox" id="settingSound"> 🎵 Nhạc nền</label><label>Âm lượng nhạc <input type="range" id="settingMusicVolume" min="0" max="100" value="35"></label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>🎒 LỊCH SỬ NHẶT ĐỒ</b><div id="pickupHistory" class="pickup-history"><div class="muted">Chưa nhặt được vật phẩm nào.</div></div><div id="log" class="log" style="display:none" aria-hidden="true"></div></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
 
   </aside>
 
@@ -667,8 +667,8 @@ function chooseClass(name){if(!CLASS_DATA.some(c=>c.name===name))return;state.ch
 function openNpcDialog(id){const data={alden:{name:'Trưởng trấn Alden',icon:'👑',line:'Chào cậu, ta là Alden, thị trưởng của Aborne. Cậu muốn làm gì?',choices:[['Tôi muốn nhận nhiệm vụ',()=>{closeNpcDialog();storyAction();}],['Không có gì, cảm ơn',closeNpcDialog]]},healer:{name:'Mục sư Rafael',icon:'🧑‍⚕️',line:'Chào cậu. Ta có thể giúp cậu hồi phục trước khi lên đường.',choices:[['Hồi phục HP và MP',()=>{closeNpcDialog();townHeal();}],['Không cần, cảm ơn',closeNpcDialog]]},merchant:{name:'Chủ cửa hàng Pelio',icon:'🧔',line:'Chào mừng! Ta là Pelio. Cậu muốn mua vật phẩm nào?',choices:[['Xem cửa hàng',()=>{closeNpcDialog();$('townShopModal').classList.add('show');}],['Để lần khác',closeNpcDialog]]},blacksmith:{name:'Thợ Rèn Homes',icon:'⚒️',line:'Trang bị của cậu cần được chăm sóc chứ? Ta có thể rèn lại các dòng phụ.',choices:[['Mở lò rèn',()=>{closeNpcDialog();openBlacksmith();}],['Không cần, cảm ơn',closeNpcDialog]]},syrupp:{name:'Người hướng dẫn Syrupp',icon:'🧙',line:'Ta là Syrupp. Ta có thể giúp cậu thay đổi con đường chiến đấu. Cậu muốn chọn class nào?',choices:[['Thay đổi class',()=>{closeNpcDialog();openClassModal();}],['Không có gì, cảm ơn',closeNpcDialog]]}}[id];if(!data)return;$('npcTitle').textContent=data.name;$('npcPortrait').textContent=data.icon;$('npcLine').textContent=data.line;$('npcChoices').innerHTML='';data.choices.forEach(([label,action])=>{const b=document.createElement('button');b.textContent=label;b.onclick=action;$('npcChoices').appendChild(b);});$('npcDialog').classList.add('show');}
 function closeNpcDialog(){$('npcDialog').classList.remove('show');}
 function interactTownNpc(id){if(!inTown())return;npcWalkTarget=null;pickupWalkTarget=null;joystick.x=joystick.y=0;joystick.active=false;joystick.pointerId=null;stick.style.transform='translate(0,0)';state.pendingAction=null;state.paused=false;state.townNpcVisited=state.townNpcVisited||[];if(!state.townNpcVisited.includes(id)){state.townNpcVisited.push(id);save();}openNpcDialog(id);$('npcDialog').classList.add('show');}
-function enterTown(){npcWalkTarget=null;state.inTown=true;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=427;state.player.y=360;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
-function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu "+requiredMapExp(i).toLocaleString('vi-VN')+" EXP tích lũy.");return;}state.inTown=false;state.mapIndex=i;state.mapKills=0;state.normalMobKillsForSpecial=0;state.bossSpawned=true;state.bossDefeated=false;state.bossSpawnTimer=180;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=427;state.player.y=240;state.auto=true;spawnMob(true);for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+". Boss đã xuất hiện!");}
+function enterTown(){npcWalkTarget=null;state.inTown=true;syncBackgroundMusic();state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=427;state.player.y=360;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
+function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu "+requiredMapExp(i).toLocaleString('vi-VN')+" EXP tích lũy.");return;}state.inTown=false;state.mapIndex=i;syncBackgroundMusic();state.mapKills=0;state.normalMobKillsForSpecial=0;state.bossSpawned=true;state.bossDefeated=false;state.bossSpawnTimer=180;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=427;state.player.y=240;state.auto=true;spawnMob(true);for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+". Boss đã xuất hiện!");}
 const MAIN_QUESTS=[
 {id:'q1',title:'Khởi đầu từ tro tàn',map:0,goal:10,objective:'Đánh bại 10 Slime tại Đồng cỏ xanh và trò chuyện với các NPC trong thị trấn.',rewardXp:120,rewardGold:80,kind:'starter'},
 {id:'q2',title:'Tiếng Vọng Của Thép Rỉ',map:1,goal:10,objective:'Đánh bại 10 Thạch quái tại Hang động đá và thu thập 5 Quặng Sắt để thợ rèn chế tạo trang bị mới.',rewardXp:260,rewardGold:160,kind:'ore'},
@@ -810,7 +810,7 @@ function selectMap(i){
  if(i===-1){enterTown();document.querySelector('.side')?.classList.remove('open');return;}
  if(!canEnterMap(i)){log("Chưa thể dịch chuyển! "+maps[i]?.name+" yêu cầu "+requiredMapExp(i).toLocaleString('vi-VN')+" EXP tích lũy.");updateMapUI();return;}
 
- state.inTown=false;state.mapIndex=i;
+ state.inTown=false;state.mapIndex=i;syncBackgroundMusic();
 
  state.mapKills=0;
 
@@ -1327,11 +1327,72 @@ function rerollGearAffixes(index){const it=state.inventory[index];if(!it||it.loc
 $('itemEquipBtn').onclick=()=>{if(selectedItemIndex!==null)equip(selectedItemIndex)};$('itemDropBtn').onclick=discardItem;$('itemLockBtn').onclick=toggleItemLock;$('itemPotionUseBtn').onclick=()=>{const k=$('itemModal').dataset.potionKind;if(k){useBagPotion(k);closeItem();}};$('townShopClose').onclick=()=> $('townShopModal').classList.remove('show');$('townShopHp').onclick=()=>townBuy('hp');$('townShopMp').onclick=()=>townBuy('mp');$('townShopIronSword').onclick=()=>townBuy('ironSword');document.querySelectorAll('[data-shop-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-shop-tab]').forEach(x=>x.classList.toggle('active',x===b));['potions','gear'].forEach(k=>{$('shop'+k.charAt(0).toUpperCase()+k.slice(1)).hidden=k!==b.dataset.shopTab;});});document.addEventListener('click',e=>{const classChoice=e.target.closest('[data-class]');if(classChoice){chooseClass(classChoice.dataset.class);return;}const custom=e.target.closest('[data-potential-custom]');if(custom){const k=custom.dataset.potentialCustom,input=document.querySelector('[data-potential-input="'+k+'"]'),amount=Math.floor(Number(input?.value)||0);if(amount>0)spendPoint(k,amount);if(input)input.value='';}const detail=e.target.closest('[data-equipped-item]');if(detail)openEquippedItem(detail.dataset.equippedItem);const rr=e.target.closest('[data-reroll-item]');if(rr)rerollGearAffixes(Number(rr.dataset.rerollItem));const p=e.target.closest('[data-potential]');if(p)spendPoint(p.dataset.potential,Number(p.dataset.amount)||1);const potion=e.target.closest('[data-potion-use]');if(potion){const k=potion.dataset.potionUse;if(inventorySelectMode){if(selectedInventoryPotions.has(k))selectedInventoryPotions.delete(k);else selectedInventoryPotions.add(k);renderInventoryGrid();}else openPotionDetail(k);return;}const q=e.target.closest('[data-item-index]');if(q){const i=Number(q.dataset.itemIndex);if(inventorySelectMode){if(selectedInventoryItems.has(i))selectedInventoryItems.delete(i);else selectedInventoryItems.add(i);q.classList.toggle('inventory-selected',selectedInventoryItems.has(i));$('inventoryActionHint').textContent='Đã chọn '+(selectedInventoryItems.size+selectedInventoryPotions.size)+' loại vật phẩm. Chạm vào ô để chọn hoặc bỏ chọn.';}else openItem(i);return;}const z=e.target.closest('[data-unequip]');if(z)unequip(z.dataset.unequip);const quest=e.target.closest('[data-quest-claim]');if(quest)claimQuest(quest.dataset.questClaim);});
 $('respawnBtn').onclick=()=>{$('deathScreen').classList.remove('show');enterTown();};
 
-const settings={damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,sound:false,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'};
+// Nhạc nền nguyên bản được tổng hợp bằng Web Audio API, không cần tải file ngoài.
+const MUSIC_TRACKS={
+ town:{tempo:72,chords:[[50,57,62,66],[45,52,57,61],[47,54,59,62],[43,50,55,59]],melody:[
+ [[0,74],[1,78],[2,81],[3,78]],[[0,73],[1,76],[2,81],[3,76]],[[0,74],[1,78],[2,83],[3,81]],[[0,71],[1,74],[2,79],[3,74]]
+ ]},
+ meadow:{tempo:96,chords:[[55,62,67,71],[50,57,62,66],[53,60,65,69],[48,55,60,64]],melody:[
+ [[0,79],[0.5,81],[1,83],[2,86],[3,83]],[[0,78],[1,81],[1.5,83],[2.5,86],[3,83]],[[0,77],[0.5,81],[1,84],[2,86],[3,84]],[[0,76],[1,79],[2,84],[2.5,83],[3,79]]
+ ]}
+};
+let musicContext=null,musicMaster=null,musicTimer=null,musicZone=null,musicUnlocked=false,musicBar=0;
+function getMusicContext(){
+ if(musicContext)return musicContext;
+ const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;
+ musicContext=new AC();musicMaster=musicContext.createGain();musicMaster.gain.value=0;
+ const filter=musicContext.createBiquadFilter();filter.type='lowpass';filter.frequency.value=5200;
+ musicMaster.connect(filter);filter.connect(musicContext.destination);return musicContext;
+}
+function musicNote(midi,at,duration,volume,type='triangle'){
+ const ac=getMusicContext();if(!ac||!musicMaster)return;
+ const osc=ac.createOscillator(),gain=ac.createGain();osc.type=type;osc.frequency.value=440*Math.pow(2,(midi-69)/12);
+ gain.gain.setValueAtTime(0.0001,at);gain.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),at+.035);
+ gain.gain.exponentialRampToValueAtTime(.0001,at+duration);
+ osc.connect(gain);gain.connect(musicMaster);osc.start(at);osc.stop(at+duration+.03);
+}
+function musicPad(notes,at,duration){
+ const ac=getMusicContext();if(!ac||!musicMaster)return;
+ notes.forEach((m,i)=>{const osc=ac.createOscillator(),gain=ac.createGain(),filter=ac.createBiquadFilter();osc.type='sawtooth';osc.frequency.value=440*Math.pow(2,(m-69)/12);osc.detune.value=i%2?4:-4;filter.type='lowpass';filter.frequency.value=720;
+ gain.gain.setValueAtTime(.0001,at);gain.gain.linearRampToValueAtTime(.012,at+.65);gain.gain.setValueAtTime(.012,Math.max(at+.66,at+duration-.55));gain.gain.linearRampToValueAtTime(.0001,at+duration);
+ osc.connect(filter);filter.connect(gain);gain.connect(musicMaster);osc.start(at);osc.stop(at+duration+.04);});
+}
+function scheduleMusicBar(zone){
+ const ac=getMusicContext(),track=MUSIC_TRACKS[zone];if(!ac||!track||!settings.sound)return;
+ const beat=60/track.tempo,barStart=ac.currentTime+.08,barDuration=beat*4,chord=track.chords[musicBar%track.chords.length];
+ musicPad(chord,barStart,barDuration);
+ musicNote(chord[0]-12,barStart,barDuration*.92,.025,'sine');
+ const phrase=track.melody[musicBar%track.melody.length];
+ phrase.forEach(([b,n],i)=>musicNote(n,barStart+b*beat,Math.min(beat*(i===phrase.length-1?.82:.72),barDuration-b*beat),zone==='town'?.045:.052,'triangle'));
+ musicBar++;
+ musicTimer=setTimeout(()=>scheduleMusicBar(zone),barDuration*1000-35);
+}
+function setMusicVolume(){
+ if(!musicMaster)return;
+ const level=settings.sound?Math.max(0,Math.min(100,Number(settings.musicVolume??35)))/100:0;
+ musicMaster.gain.setTargetAtTime(level*.42,musicContext.currentTime,.18);
+}
+function syncBackgroundMusic(){
+ if(!settings.sound)return;
+ const zone=state.inTown?'town':(state.mapIndex===0?'meadow':null);
+ if(!zone){if(musicTimer)clearTimeout(musicTimer);musicTimer=null;musicZone=null;setMusicVolume();return;}
+ if(musicZone===zone&&musicTimer)return;
+ if(musicTimer)clearTimeout(musicTimer);
+ musicZone=zone;musicBar=0;
+ if(musicUnlocked&&getMusicContext()){musicContext.resume().then(()=>{setMusicVolume();scheduleMusicBar(zone);}).catch(()=>{});}
+}
+function activateBackgroundMusic(){
+ if(!settings.sound)return;
+ const ac=getMusicContext();if(!ac)return;
+ musicUnlocked=true;ac.resume().then(()=>{setMusicVolume();syncBackgroundMusic();}).catch(()=>{});
+}
+document.addEventListener('pointerdown',activateBackgroundMusic,{passive:true});
+document.addEventListener('keydown',activateBackgroundMusic);
+const settings={damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,sound:true,musicVolume:35,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'};
 function applySettings(){document.documentElement.style.setProperty('--game-font',settings.fontSize+'px');document.documentElement.style.setProperty('--button-font',settings.buttonSize+'px');const j=$('joystick'),st=$('stick');j.style.width=settings.joySize+'px';j.style.height=settings.joySize+'px';j.style.flexBasis=settings.joySize+'px';const z=settings.joySize*.46;st.style.width=z+'px';st.style.height=z+'px';st.style.left=(settings.joySize-z)/2+'px';st.style.top=(settings.joySize-z)/2+'px';}
-function saveSettings(){localStorage.setItem('afkSettings',JSON.stringify(settings));applySettings();}
-function loadSettingsUI(){const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(el){if(el.type==='checkbox')el.checked=!!settings[k];else el.value=settings[k];}}}
-function initSettings(){try{Object.assign(settings,JSON.parse(localStorage.getItem('afkSettings')||'{}'));delete settings.hitRun;}catch{}applySettings();const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(!el)continue;el.addEventListener('input',()=>{settings[k]=el.type==='checkbox'?el.checked:(el.type==='range'?Number(el.value):el.value);saveSettings();});} $('settingsReset').onclick=()=>{Object.assign(settings,{damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,sound:false,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'});saveSettings();loadSettingsUI();};}
+function saveSettings(){localStorage.setItem('afkSettings',JSON.stringify(settings));applySettings();setMusicVolume();if(settings.sound)activateBackgroundMusic();else{if(musicTimer)clearTimeout(musicTimer);musicTimer=null;musicZone=null;setMusicVolume();}}
+function loadSettingsUI(){const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingMusicVolume:'musicVolume',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(el){if(el.type==='checkbox')el.checked=!!settings[k];else el.value=settings[k];}}}
+function initSettings(){try{Object.assign(settings,JSON.parse(localStorage.getItem('afkSettings')||'{}'));delete settings.hitRun;}catch{}applySettings();const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingMusicVolume:'musicVolume',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(!el)continue;el.addEventListener('input',()=>{settings[k]=el.type==='checkbox'?el.checked:(el.type==='range'?Number(el.value):el.value);saveSettings();});} $('settingsReset').onclick=()=>{Object.assign(settings,{damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,sound:true,musicVolume:35,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'});saveSettings();loadSettingsUI();};}
 const bindGameControl=(id,action)=>{const el=$(id);el.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();action();});el.addEventListener('click',e=>{if(e.detail===0)action();});};
 bindGameControl('autoBtn',()=>{state.auto=!state.auto;log('Auto Attack '+(state.auto?'đã bật.':'đã tắt.'));ui();});bindGameControl('skillBtn',()=>attack(true));bindGameControl('mobileAttack',()=>attack(false));
 bindGameControl('potionBtn',()=>{if(state.potions>0&&state.hp<state.maxHp){state.potions--;restorePlayerHp(state.maxHp*.05,'heal');save();ui();log('Đã dùng dược phẩm HP.')}else log('Không thể dùng lúc này.')});
@@ -1410,7 +1471,7 @@ state.dead=false;
 if(!state.inTown&&!state.mobs.length)for(let i=0;i<7;i++)spawnMob();
 state.mapIndex=Math.min(state.mapIndex||0,maps.length-1);
 state.unlockedMaps=Math.max(1,Math.min(state.unlockedMaps||1,maps.length));
-try{updateMapUI();showMapBanner(inTown()?TOWN.name:currentMap().name);}catch(e){console.error('Map UI init error:',e);}
+try{updateMapUI();showMapBanner(inTown()?TOWN.name:currentMap().name);syncBackgroundMusic();}catch(e){console.error('Map UI init error:',e);}
 try{ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.clearRect(0,0,canvas.width,canvas.height);draw();}catch(e){console.error('Initial render error:',e);const box=$('runtimeError');if(box){box.style.display='block';box.textContent='LỖI KHỞI TẠO HIỂN THỊ: '+(e&&e.stack?e.stack:e&&e.message?e.message:String(e));}}
 requestAnimationFrame(loop);
 try{ui();}catch(e){console.error('Initial UI error:',e);}
