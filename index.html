@@ -1261,6 +1261,27 @@ $('mpPotionBtn').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPro
 let lastAdminGrantAt=0;
 function runHiddenChatCommand(raw){
  const command=raw.trim().toLowerCase().replace(/\s+/g,' ');
+ if(command==='reset tnsm'){
+  const now=Date.now();
+  if(now-lastAdminGrantAt<1500){showRewardToast('⏳ Lệnh vừa được thực hiện!');return true;}
+  lastAdminGrantAt=now;
+  // Cất toàn bộ trang bị đang mặc vào túi để chỉ số thực sự trở về mặc định, không làm mất vật phẩm.
+  Object.entries(state.equipped||{}).forEach(([slot,it])=>{if(it){state.inventory.push(it);state.equipped[slot]=null;}});
+  state.totalExp=0;state.potential=0;state.earned=0;
+  state.potentialStats={attack:0,defense:0,agility:0,intelligence:0};
+  state.baseAtk=12;state.baseDef=2;state.baseMaxHp=100;state.baseMaxMp=40;state.baseMagic=6;state.baseMagicArmor=2;state.baseMoveSpeed=150;
+  state.mapIndex=0;state.unlockedMaps=1;state.inTown=true;state.mapKills=0;state.respawnTimer=0;
+  state.hp=100;state.mp=40;state.dead=false;state.paused=false;state.pendingAction=null;
+  state.mobs=[];state.groundItems=[];state.particles=[];state.floating=[];state.target=null;
+  state.bossSpawned=false;state.bossDefeated=false;state.bossSpawnTimer=180;state.normalMobKillsForSpecial=0;
+  state.player={x:240,y:360,face:1};
+  derive();state.hp=state.maxHp;state.mp=state.maxMp;
+  renderCharacter();ui();updateMapUI();save();
+  log('⚙ Đã reset EXP, chỉ số và tiềm năng về trạng thái ban đầu. Trang bị đã được cất vào túi.');
+  showRewardToast('🔄 ĐÃ RESET TIẾN TRÌNH NHÂN VẬT!');
+  state.chatBubble='Đã reset nhân vật về trạng thái ban đầu!';state.chatBubbleUntil=Date.now()+5000;
+  return true;
+ }
  if(command!=='give admini itms 1 test true')return false;
  const now=Date.now();
  if(now-lastAdminGrantAt<1500){showRewardToast('⏳ Lệnh vừa được thực hiện!');return true;}
