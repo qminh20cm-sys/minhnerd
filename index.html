@@ -557,23 +557,23 @@ const $=id=>document.getElementById(id);
 const HUD_LAYOUT_KEY='afkHudLayoutV1';
 // HUD chính thức: cấu hình cố định từ afk-adventure-hud.json phiên bản 4.
 const HUD_DEFAULTS={
- hpStat:{x:9,y:8,width:92,height:32,scale:134,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- mpStat:{x:20,y:8,width:92,height:32,scale:138,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- xpStat:{x:31,y:8,width:90,height:32,scale:132,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- joystick:{x:8,y:82,width:72,height:72,scale:152,opacity:100,visible:true,shape:'circle',color:'#17303b'},
- mobileAttack:{x:23,y:82,width:64,height:64,scale:132,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- autoBtn:{x:91,y:69,width:50,height:50,scale:88,opacity:100,visible:true,shape:'circle',color:'#245b42'},
- skillBtn:{x:91,y:85,width:50,height:50,scale:131,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- potionBtn:{x:82,y:69,width:46,height:46,scale:133,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- mpPotionBtn:{x:82,y:85,width:46,height:46,scale:122,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- chatToggle:{x:96,y:9,width:52,height:52,scale:70,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- menuBar:{x:50,y:7,width:240,height:34,scale:150,opacity:100,visible:true,shape:'rounded',color:'#203541'}
+ hpStat:{x:13,y:8,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ mpStat:{x:29,y:8,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
+ joystick:{x:9,y:81,width:72,height:72,scale:100,opacity:100,visible:true,shape:'circle',color:'#17303b'},
+ mobileAttack:{x:91,y:81,width:64,height:64,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ autoBtn:{x:76,y:58,width:50,height:50,scale:100,opacity:100,visible:true,shape:'circle',color:'#245b42'},
+ skillBtn:{x:91,y:58,width:50,height:50,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ potionBtn:{x:76,y:91,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ mpPotionBtn:{x:91,y:91,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ chatToggle:{x:96,y:10,width:52,height:52,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ mapBanner:{x:50,y:15,width:190,height:48,scale:100,opacity:100,visible:true,shape:'rounded',color:'#dfc080'},
+ menuBar:{x:50,y:7,width:380,height:48,scale:100,opacity:100,visible:true,shape:'rounded',color:'#203541'}
 };
 const hudTargets={
  hpStat:()=>$('hpStat'),mpStat:()=>$('mpStat'),
  joystick:()=>$('joystick'),mobileAttack:()=>$('mobileAttack'),autoBtn:()=>$('autoBtn'),
  skillBtn:()=>$('skillBtn'),potionBtn:()=>$('potionBtn'),mpPotionBtn:()=>$('mpPotionBtn'),
- chatToggle:()=>$('chatToggle'),menuBar:()=>document.querySelector('.menu-bar')
+ chatToggle:()=>$('chatToggle'),mapBanner:()=>$('mapBanner'),menuBar:()=>document.querySelector('.menu-bar')
 };
 const hudLayout=JSON.parse(JSON.stringify(HUD_DEFAULTS));
 function applyHudLayout(){
@@ -596,9 +596,14 @@ function applyHudLayout(){
  }
 }
 function setupHudLayout(){
+ // Đọc cấu hình do HUD Studio lưu trên cùng trình duyệt; chỉ dùng mặc định nếu chưa có.
+ try{
+  const saved=JSON.parse(localStorage.getItem(HUD_LAYOUT_KEY)||'null');
+  if(saved&&saved.items&&[4,7].includes(saved.version)){
+   for(const k of Object.keys(HUD_DEFAULTS))if(saved.items[k])Object.assign(hudLayout[k],saved.items[k]);
+  }
+ }catch(e){console.warn('HUD layout load:',e);}
  applyHudLayout();
- // Ghi đè bố cục cũ trên từng thiết bị bằng HUD chuẩn mới.
- try{localStorage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:7,items:hudLayout}));}catch(e){console.warn('HUD layout save:',e);}
 }
 
 // Đưa modal ra khỏi gamebox để không bị bảng menu che do stacking context.
