@@ -912,7 +912,6 @@ function spawnMob(boss=false,forcedKind=null){
 
  }while(Math.hypot(x-state.player.x,y-state.player.y)<110&&tries<30);
 
- const mobLevel=state.mapIndex+1;
  const elite=!boss&&forcedKind==='elite';
  const leader=!boss&&forcedKind==='leader';
  const kind=boss?'boss':leader?'leader':elite?'elite':'normal';
@@ -1215,7 +1214,7 @@ function ui(){
  $('mpBar').style.width=state.mp/state.maxMp*100+'%';
 
  $('xpText').textContent=(Number(state.totalExp)||0).toLocaleString('vi-VN');
- const nextRequirement=MAP_EXP_REQUIREMENTS.find((v,i)=>i>state.mapIndex&&v>(Number(state.totalExp)||0));const currentRequirement=requiredMapExp(state.mapIndex);$('xpBar').style.width=(nextRequirement?Math.max(0,Math.min(100,((state.totalExp-currentRequirement)/(nextRequirement-currentRequirement))*100)):100)+'%';
+ const total=Number(state.totalExp)||0,nextRequirement=MAP_EXP_REQUIREMENTS.find(v=>v>total),previousRequirement=[...MAP_EXP_REQUIREMENTS].reverse().find(v=>v<=total)||0;$('xpBar').style.width=(nextRequirement?Math.max(0,Math.min(100,((total-previousRequirement)/(nextRequirement-previousRequirement))*100)):100)+'%';
 
  // Ba ô level/attack/defense thuộc giao diện cũ đã bị loại khỏi HTML.
  // Không truy cập chúng trong ui() vì sẽ gây TypeError mỗi khi nhân vật lên cấp.
