@@ -444,8 +444,6 @@ Trước sức mạnh tuyệt đối đó, loài người nhỏ bé đã dốc c
 
     <div class="stat" id="mpStat">💧 MP <b id="mpText">40/40</b><div class="bar"><div class="fill mp" id="mpBar"></div></div></div>
 
-    <div class="stat" id="xpStat">⭐ EXP TÍCH LŨY <b id="xpText">0</b><div class="bar"><div class="fill xp" id="xpBar"></div></div></div>
-
    </div>
     <div class="combat-bottom">
      <div class="mobile-controls">
@@ -572,7 +570,7 @@ const HUD_DEFAULTS={
  menuBar:{x:50,y:7,width:240,height:34,scale:150,opacity:100,visible:true,shape:'rounded',color:'#203541'}
 };
 const hudTargets={
- hpStat:()=>$('hpStat'),mpStat:()=>$('mpStat'),xpStat:()=>$('xpStat'),
+ hpStat:()=>$('hpStat'),mpStat:()=>$('mpStat'),
  joystick:()=>$('joystick'),mobileAttack:()=>$('mobileAttack'),autoBtn:()=>$('autoBtn'),
  skillBtn:()=>$('skillBtn'),potionBtn:()=>$('potionBtn'),mpPotionBtn:()=>$('mpPotionBtn'),
  chatToggle:()=>$('chatToggle'),menuBar:()=>document.querySelector('.menu-bar')
@@ -1238,8 +1236,6 @@ function ui(){
  $('mpText').textContent=Math.floor(state.mp)+'/'+state.maxMp;
  $('mpBar').style.width=state.mp/state.maxMp*100+'%';
 
- $('xpText').textContent=(Number(state.totalExp)||0).toLocaleString('vi-VN');
- const total=Number(state.totalExp)||0,nextRequirement=MAP_EXP_REQUIREMENTS.find(v=>v>total),previousRequirement=[...MAP_EXP_REQUIREMENTS].reverse().find(v=>v<=total)||0;$('xpBar').style.width=(nextRequirement?Math.max(0,Math.min(100,((total-previousRequirement)/(nextRequirement-previousRequirement))*100)):100)+'%';
 
  // Ba ô level/attack/defense thuộc giao diện cũ đã bị loại khỏi HTML.
  // Không truy cập chúng trong ui() vì sẽ gây TypeError mỗi khi nhân vật lên cấp.
