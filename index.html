@@ -557,17 +557,17 @@ const $=id=>document.getElementById(id);
 const HUD_LAYOUT_KEY='afkHudLayoutV1';
 // HUD chính thức: cấu hình cố định từ afk-adventure-hud.json phiên bản 4.
 const HUD_DEFAULTS={
- hpStat:{x:13,y:8,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- mpStat:{x:29,y:8,width:92,height:32,scale:100,opacity:100,visible:true,shape:'rounded',color:'#17303b'},
- joystick:{x:9,y:81,width:72,height:72,scale:100,opacity:100,visible:true,shape:'circle',color:'#17303b'},
- mobileAttack:{x:91,y:81,width:64,height:64,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- autoBtn:{x:76,y:58,width:50,height:50,scale:100,opacity:100,visible:true,shape:'circle',color:'#245b42'},
- skillBtn:{x:91,y:58,width:50,height:50,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- potionBtn:{x:76,y:91,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- mpPotionBtn:{x:91,y:91,width:46,height:46,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- chatToggle:{x:96,y:10,width:52,height:52,scale:100,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
- mapBanner:{x:50,y:15,width:190,height:48,scale:100,opacity:100,visible:true,shape:'rounded',color:'#dfc080'},
- menuBar:{x:50,y:7,width:380,height:48,scale:100,opacity:100,visible:true,shape:'rounded',color:'#203541'}
+ hpStat:{x:34.47820385177246,y:90.18787683363027,width:240,height:32,scale:100,opacity:100,visible:true,shape:'pill',color:'#17303b'},
+ mpStat:{x:50.85865120908599,y:90.0313157918155,width:240,height:32,scale:100,opacity:100,visible:true,shape:'pill',color:'#17303b'},
+ joystick:{x:14.487010410243048,y:72.49620437719923,width:72,height:72,scale:180,opacity:100,visible:true,shape:'circle',color:'#17303b'},
+ mobileAttack:{x:87.93482676403623,y:82.67282737810304,width:64,height:64,scale:180,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ autoBtn:{x:92.07396971597421,y:63.102398530211104,width:50,height:50,scale:150,opacity:100,visible:true,shape:'circle',color:'#245b42'},
+ skillBtn:{x:85.3808912126981,y:66.23366714587381,width:50,height:50,scale:150,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ potionBtn:{x:77.71906440176343,y:87.68286433006847,width:46,height:46,scale:150,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ mpPotionBtn:{x:79.48040297177506,y:75.15778986741763,width:46,height:46,scale:150,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ chatToggle:{x:94.36371523216808,y:10.497088176045946,width:52,height:52,scale:130,opacity:100,visible:true,shape:'circle',color:'#263f4c'},
+ mapBanner:{x:49.889916339374274,y:23.178729652932468,width:190,height:48,scale:100,opacity:100,visible:false,shape:'rounded',color:'#dfc080'},
+ menuBar:{x:49.537647281577264,y:5.956755252998021,width:380,height:48,scale:115,opacity:100,visible:true,shape:'pill',color:'#203541'}
 };
 const hudTargets={
  hpStat:()=>$('hpStat'),mpStat:()=>$('mpStat'),
