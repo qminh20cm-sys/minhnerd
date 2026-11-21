@@ -1060,16 +1060,13 @@ function pixelPerson(x,y,main='#5a9be8',isPlayer=false){
 }
 
 function drawChibiGaren(x,y){
- const frames=[
-  ["........HHHH........",".......HHHHHH.......","......HHHHHHHH......",".....HHHFFFFHHH.....",".....HHFFFFFFHH.....","....HHFFFFFFFFHH....","....HFFEEEEEEFFH....","....HFFFFFFFFFFH....",".....FFFFFFFFFF.....","...AAAKKGGGGKKAAA...","..AAAAKKGGGGKKAAAA..","..AABBBBBBBBBBBBAA..","...BBBGGGGGGBBBB....","...BBBKKGGKKBBB.....","...CCBBBBBBBBCC.....","...CCBBBBBBBBCC.....","....CC......CC......","...DDD......DDD.....","...DDD......DDD.....","...DDD......DDD.....","....DDD....DDD......","....DDD....DDD......"],
-  ["........HHHH........",".......HHHHHH.......","......HHHHHHHH......",".....HHHFFFFHHH.....",".....HHFFFFFFHH.....","....HHFFFFFFFFHH....","....HFFEEEEEEFFH....","....HFFFFFFFFFFH....",".....FFFFFFFFFF.....","...AAAKKGGGGKKAAA...","..AAAAKKGGGGKKAAAA..","..AABBBBBBBBBBBBAA..","...BBBGGGGGGBBBB....","...BBBKKGGKKBBB.....","....CCBBBBBBBBCC....","...CCBBBBBBBBCC.....","...CC......CC.......","...DDD......DDD.....","...DDD......DDD.....","...DDD......DDD.....","....DDD....DDD......","....DDD....DDD......"]
- ];
+ const frames=[["......HHHH......",".....HHHHHH.....","....HHHHHHHH....","...HHHFFFFHHH...","...HHFFFFFFHH...","..HHFFFFFFFFHH..","..HFFEEEEEEFFH..","..HFFFFFFFFFFH..","...FFFFFFFFFF...","..AAAKKGGGGKAA..",".AAAAKKGGGGKAAA.",".AABBBBBBBBBBAA.","..BBBGGGGGGBBB..","..BBBKKGGKBBB...","..CCBBBBBBBBCC..","..CCBBBBBBBBCC..","...CC....CC.....","..DDD....DDD....","..DDD....DDD....","..DDD....DDD....","...DDD..DDD.....","...DDD..DDD....."],["......HHHH......",".....HHHHHH.....","....HHHHHHHH....","...HHHFFFFHHH...","...HHFFFFFFHH...","..HHFFFFFFFFHH..","..HFFEEEEEEFFH..","..HFFFFFFFFFFH..","...FFFFFFFFFF...","..AAAKKGGGGKAA..",".AAAAKKGGGGKAAA.",".AABBBBBBBBBBAA.","..BBBGGGGGGBBB..","..BBBKKGGKBBB...","...CCBBBBBBBBCC.","..CCBBBBBBBBCC..","...CC....CC.....","..DDD....DDD....","..DDD....DDD....","..DDD....DDD....","...DDD..DDD.....","...DDD..DDD....."]];
  const frame=Math.floor(performance.now()/520)%2,rows=frames[frame],scale=3;
  const colors={H:"#493025",F:"#edbd98",E:"#202d42",A:"#c7d0d5",K:"#d7ad59",G:"#b68b42",B:"#17385f",C:"#102b50",D:"#34333a"};
  ctx.save();ctx.imageSmoothingEnabled=false;
- ctx.fillStyle="#17232966";ctx.beginPath();ctx.ellipse(x,y+35,20,6,0,0,Math.PI*2);ctx.fill();
- const bob=frame===0?0:-2,left=Math.round(x-30),top=Math.round(y-34+bob);
- for(let ry=0;ry<rows.length;ry++)for(let rx=0;rx<20;rx++){const ch=rows[ry][rx];if(ch===".")continue;ctx.fillStyle=colors[ch];ctx.fillRect(left+rx*scale,top+ry*scale,scale,scale);}
+ ctx.fillStyle="#17232966";ctx.beginPath();ctx.ellipse(x,y+35,17,5,0,0,Math.PI*2);ctx.fill();
+ const bob=frame===0?0:-2,left=Math.round(x-24),top=Math.round(y-34+bob);
+ for(let ry=0;ry<rows.length;ry++)for(let rx=0;rx<16;rx++){const ch=rows[ry][rx];if(ch===".")continue;ctx.fillStyle=colors[ch];ctx.fillRect(left+rx*scale,top+ry*scale,scale,scale);}
  ctx.restore();
 }
 function drawTownWorld(){
