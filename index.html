@@ -422,7 +422,7 @@ html,body{overscroll-behavior-x:none!important}
 
    <div class="logo">✦ Runeterra: Tái Sinh</div>
 
-   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.2.33</div>
+   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.2.34</div>
 
   </div>
 
@@ -447,7 +447,7 @@ html,body{overscroll-behavior-x:none!important}
     <div id="inventoryFullToast" class="inventory-full-toast" role="status" aria-live="polite">Túi đồ của bạn đã đầy</div>
     <div id="bossDefeatNotice" class="boss-defeat-notice" role="status" aria-live="assertive"></div>
     <div id="rewardFeed" class="reward-feed" aria-live="polite"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.33</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.34</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px 'Spiegel',Arial,sans-serif;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ KHỞI NGUYÊN HUYỀN THOẠI</h2><div class="intro-story">Không một lời báo trước.
@@ -1059,6 +1059,18 @@ function pixelPerson(x,y,main='#5a9be8',isPlayer=false){
  }
 }
 
+function drawChibiGaren(x,y){
+ const frames=[
+  ["......HHHH......",".....HHHHHH.....","....HHHHHHHH....","....HFFFFFHH....","....HFFEEFFH....","...AAFFFFFFAA...","..AAAAAAAGAAAA..","..ABAAAGGAAAAB..","..ABAAAAGAAAAB..","...ABAAAAAAAB...","...CCBBAABBCC...","...CCBBAABBCC...","....DD....DD....","....DD....DD....","...DDD....DDD...","...DD......DD..."],
+  ["......HHHH......",".....HHHHHH.....","....HHHHHHHH....","....HFFFFFHH....","....HFFEEFFH....","...AAFFFFFFAA...","..AAAAAAAGAAAA..","..ABAAAGGAAAAB..","..ABAAAAGAAAAB..","..ABAAAAAAAAB...","..CCBBAABBCCC...","...CCBBAABBCC...","....DD....DD....","....DD....DD....","...DDD....DDD...","...DD......DD..."]
+ ];
+ const frame=Math.floor(performance.now()/420)%2,rows=frames[frame],scale=3;
+ const colors={H:"#513324",F:"#f2c39b",E:"#244f9c",A:"#aebbc5",G:"#d9ad52",B:"#244f9c",C:frame?"#173d83":"#1d4d9d",D:"#302b35"};
+ ctx.save();ctx.fillStyle="#17232966";ctx.beginPath();ctx.ellipse(x,y+24,19,5,0,0,Math.PI*2);ctx.fill();
+ const bob=frame?0:-1;
+ for(let ry=0;ry<16;ry++)for(let rx=0;rx<16;rx++){const ch=rows[ry][rx];if(ch===".")continue;ctx.fillStyle=colors[ch];ctx.fillRect(Math.round(x-24+rx*scale),Math.round(y-25+ry*scale+bob),scale,scale);}
+ ctx.restore();
+}
 function drawTownWorld(){
   ctx.fillStyle="#344c3e";ctx.fillRect(0,0,W,H);
   for(let y=0;y<H;y+=36){for(let x=0;x<W;x+=36){ctx.fillStyle=((x+y)/36)%2?"#3b5945":"#385340";ctx.fillRect(x,y,34,34);}}
@@ -1068,7 +1080,7 @@ function drawTownWorld(){
   ctx.fillStyle="#5a5144";ctx.fillRect(377,210,100,48);ctx.fillStyle="#8c9c99";ctx.fillRect(385,215,84,34);ctx.fillStyle="#3e777a";ctx.fillRect(391,221,72,22);ctx.fillStyle="#5a5144";ctx.fillRect(374,204,106,9);
   for(const [x,y] of [[35,185],[820,185],[260,90],[590,90],[260,420],[590,420]]){ctx.fillStyle="#60432f";ctx.fillRect(x-4,y,8,30);ctx.fillStyle="#4c8956";ctx.beginPath();ctx.arc(x,y-3,22,0,Math.PI*2);ctx.fill();ctx.fillStyle="#70a963";ctx.beginPath();ctx.arc(x-7,y-10,10,0,Math.PI*2);ctx.fill();}
   ctx.fillStyle="#2a211c";ctx.fillRect(332,20,190,48);ctx.fillStyle="#d9bd7a";ctx.fillRect(336,24,182,40);ctx.fillStyle="#382a20";ctx.font="bold 18px 'Spiegel',Arial,sans-serif";ctx.textAlign="center";ctx.font="bold 14px 'Spiegel',Arial,sans-serif";ctx.fillText("ĐẠI THÀNH DEMACIA",427,49);ctx.textAlign="left";
-  if(npcWalkTarget){ctx.save();const pulse=1+Math.sin(performance.now()/110)*.08;ctx.strokeStyle='#ffe36b';ctx.lineWidth=3;ctx.shadowColor='#ffe36b';ctx.shadowBlur=9;ctx.beginPath();ctx.ellipse(npcWalkTarget.x,npcWalkTarget.y+10,18*pulse,7*pulse,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
+  drawChibiGaren(427,150);\n  if(npcWalkTarget){ctx.save();const pulse=1+Math.sin(performance.now()/110)*.08;ctx.strokeStyle='#ffe36b';ctx.lineWidth=3;ctx.shadowColor='#ffe36b';ctx.shadowBlur=9;ctx.beginPath();ctx.ellipse(npcWalkTarget.x,npcWalkTarget.y+10,18*pulse,7*pulse,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
   const safeElapsed=(performance.now()-townSafeLabelStartedAt)/1000;ctx.globalAlpha=Math.max(0,Math.min(1,safeElapsed/.7,(3.2-safeElapsed)/.8));ctx.fillStyle="#42eaff";ctx.font="bold 15px 'Spiegel',Arial,sans-serif";ctx.textAlign="center";ctx.shadowColor="#00dfff";ctx.shadowBlur=8;ctx.fillText("KHU VỰC AN TOÀN",427,395);ctx.shadowBlur=0;ctx.globalAlpha=1;ctx.textAlign="left";
 }
 
