@@ -416,7 +416,7 @@ html,body{overscroll-behavior-x:none!important}
 
   <main class="panel gamebox">
 
-   <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Nhiệm vụ" title="Nhiệm vụ">🎯</button><button data-menu="3" aria-label="Kỹ năng" title="Kỹ năng">✨</button><button data-menu="4" aria-label="Túi đồ" title="Túi đồ">🎒</button><button type="button" class="archive-menu" aria-label="Archive" title="Archive">🗄️</button><button data-menu="5" aria-label="Cài đặt" title="Cài đặt">⚙</button><button data-menu="6" aria-label="Sưu tập và thành tựu" title="Sưu tập & Thành tựu">🏆</button></nav>
+   <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Nhiệm vụ" title="Nhiệm vụ">🎯</button><button data-menu="3" aria-label="Kỹ năng" title="Kỹ năng">✨</button><button data-menu="4" aria-label="Túi đồ" title="Túi đồ">🎒</button><button type="button" class="collection-menu" aria-label="Collection" title="Collection">🗃️</button><button data-menu="5" aria-label="Cài đặt" title="Cài đặt">⚙</button><button data-menu="6" aria-label="Achievements" title="Achievements">🏆</button></nav>
 
    <div class="canvas-wrap">
 
@@ -1537,7 +1537,7 @@ function metaItemIcon(item){
  return '📦';
 }
 function metaRender(){
- const panel=document.getElementById('metaPanel');if(!panel)return;
+ const panel=document.getElementById('collectionPanel');if(!panel)return;
  trackCollectionAndAchievements();
  const rows=metaCatalog(),groups=['Vũ khí','Giáp','Phụ kiện'];
  const discovered=collectionMeta.discovered;
@@ -1556,21 +1556,24 @@ function metaRender(){
  }).join('');
  const unlocked=META_ACHIEVEMENTS.filter(a=>collectionMeta.unlocked.includes(a.id));
  const titleOptions='<option value="">Không hiển thị danh hiệu</option>'+unlocked.map(a=>'<option value="'+a.title.replace(/"/g,'&quot;')+'" '+(collectionMeta.equippedTitle===a.title?'selected':'')+'>'+a.title+'</option>').join('');
- panel.innerHTML='<div class="heading">📚 BÁCH KHOA TRANG BỊ</div><div class="meta-summary">Đã khám phá <b>'+discovered.length+'</b> món đồ · '+rows.length+' món trong danh mục</div>'+collectionHtml+'<div class="heading" style="margin-top:14px">🏆 THÀNH TỰU & DANH HIỆU</div><div class="meta-summary">Hoàn thành '+unlocked.length+'/'+META_ACHIEVEMENTS.length+' thành tựu. Thành tựu chỉ mở khóa danh hiệu, không trao vật phẩm hay chỉ số.</div>'+achHtml+'<div class="heading" style="margin-top:14px">👑 DANH HIỆU ĐANG HIỂN THỊ</div><div class="meta-title-preview"><b>'+(settings.playerName||'Wanderer')+'</b><span>'+(collectionMeta.equippedTitle||'Chưa trang bị danh hiệu')+'</span></div><select id="metaTitleSelect" class="map-select">'+titleOptions+'</select><button id="metaTitleApply" style="width:100%;margin-top:7px">Lưu danh hiệu</button>';
- const select=document.getElementById('metaTitleSelect'),apply=document.getElementById('metaTitleApply');
- if(apply)apply.onclick=()=>{const value=select.value;if(value&&!unlocked.some(a=>a.title===value)){showRewardToast('Danh hiệu này chưa được mở khóa.');return;}collectionMeta.equippedTitle=value;persistMeta();metaRender();renderCharacter();showRewardToast(value?'Đã trang bị danh hiệu!':'Đã gỡ danh hiệu.');};
+ panel.innerHTML='<div class="heading">📚 BỘ SƯU TẬP TRANG BỊ</div><div class="meta-summary">Đã khám phá <b>'+discovered.length+'</b> món đồ · '+rows.length+' món trong danh mục</div>'+collectionHtml;
+ // Phần trang bị danh hiệu được tạm ẩn cùng giao diện Achievements.
 }
 function initCollectionAchievements(){
  const nav=document.querySelector('.menu-bar'),side=document.querySelector('.side');if(!nav||!side)return;
- if(!document.getElementById('metaPanel')){
-  const section=document.createElement('section');section.className='panel';section.innerHTML='<div id="metaPanel"></div>';side.appendChild(section);
+ if(!document.getElementById('collectionPanel')){
+  const section=document.createElement('section');section.className='panel';section.innerHTML='<div id="collectionPanel"></div>';side.appendChild(section);
+ }
+ if(!document.getElementById('achievementPanel')){
+  const section=document.createElement('section');section.className='panel';section.id='achievementPanel';section.innerHTML='';side.appendChild(section);
  }
  if(!document.getElementById('metaStyles')){const css=document.createElement('style');css.id='metaStyles';css.textContent='.meta-summary{font-size:11px;color:#b9ccca;padding:8px;background:#102029;border:1px solid #405a63;border-radius:6px;margin:7px 0}.meta-group{margin:10px 0}.meta-group> b{display:block;color:#e8ce91;font-size:12px;margin-bottom:6px}.meta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.meta-item{min-width:0;padding:7px 5px;border:1px solid #405a63;border-radius:6px;background:#102029;text-align:center;font-size:10px}.meta-item span{display:block;font-size:20px;margin-bottom:3px}.meta-item b{display:block;overflow-wrap:anywhere}.meta-item small{display:block;color:#9fb5b5;margin-top:3px}.meta-item.unknown{opacity:.55}.meta-card{padding:8px;margin:6px 0;background:#102029;border:1px solid #405a63;border-radius:6px}.meta-card-top{display:flex;justify-content:space-between;gap:6px;font-size:11px}.meta-card-top span{color:#e8ce91;font-size:9px;white-space:nowrap}.meta-card>small{display:block;color:#a9bfbd;font-size:10px;margin-top:5px}.meta-progress{height:5px;margin-top:7px;background:#263b43;border-radius:5px;overflow:hidden}.meta-progress i{display:block;height:100%;background:#72e0ad}.meta-title-text{color:#e9ce8d!important}.meta-title-preview{padding:10px;text-align:center;background:#102029;border:1px solid #8a744d;border-radius:7px}.meta-title-preview b,.meta-title-preview span{display:block}.meta-title-preview span{color:#f3d27b;font-size:11px;margin-top:5px}';
   document.head.appendChild(css);
  }
- if(!nav.querySelector('[data-menu="6"]')){const b=document.createElement('button');b.dataset.menu='6';b.title='Sưu tập & Thành tựu';b.setAttribute('aria-label',b.title);b.textContent='🏆';nav.appendChild(b);}
+ const collectionButton=nav.querySelector('.collection-menu');
+ if(collectionButton&&!collectionButton.dataset.collectionBound){collectionButton.dataset.collectionBound='1';collectionButton.addEventListener('click',()=>{side.querySelectorAll('section').forEach((el,i)=>el.classList.toggle('menu-active',i===6));side.classList.add('open');metaRender();if(!side.querySelector('.menu-close')){const close=document.createElement('button');close.className='menu-close';close.textContent='✕ ĐÓNG';close.onclick=()=>side.classList.remove('open');side.prepend(close);}});}
  const button=nav.querySelector('[data-menu="6"]');
- if(button&&!button.dataset.metaBound){button.dataset.metaBound='1';button.addEventListener('click',()=>{side.querySelectorAll('section').forEach((el,i)=>el.classList.toggle('menu-active',i===6));side.classList.add('open');metaRender();if(!side.querySelector('.menu-close')){const close=document.createElement('button');close.className='menu-close';close.textContent='✕ ĐÓNG';close.onclick=()=>side.classList.remove('open');side.prepend(close);}});}
+ if(button){button.title='Achievements';button.setAttribute('aria-label','Achievements');if(!button.dataset.achievementBound){button.dataset.achievementBound='1';button.addEventListener('click',()=>{side.querySelectorAll('section').forEach((el,i)=>el.classList.toggle('menu-active',i===7));side.classList.add('open');if(!side.querySelector('.menu-close')){const close=document.createElement('button');close.className='menu-close';close.textContent='✕ ĐÓNG';close.onclick=()=>side.classList.remove('open');side.prepend(close);}});}}
  const nameInput=document.getElementById('characterNameInput');
  if(nameInput&&!document.getElementById('characterTitleLine')){const line=document.createElement('div');line.id='characterTitleLine';line.style.cssText='font-size:10px;color:#f3d27b;text-align:center;margin:4px 0 8px;min-height:12px';nameInput.insertAdjacentElement('afterend',line);}
  updateCharacterTitleLine();
