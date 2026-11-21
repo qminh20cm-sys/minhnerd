@@ -632,16 +632,16 @@ document.body.appendChild($('blacksmithModal'));
 document.body.appendChild($('townShopModal'));
 
 const maps=[
-{name:'DEMACIA',difficulty:'Dễ',mob:'Slime',hp:100,atk:4,xp:12,gold:4,color:'#477d52',path:'#9b875c',water:'#397c83',boss:'VUA SLIME',bossHp:260,bossAtk:14,bossXp:120,bossGold:80},
-{name:'PILTOVER & ZAUN',difficulty:'Trung bình',mob:'Thạch quái',hp:62,atk:10,xp:25,gold:9,color:'#4d5966',path:'#8b8175',water:'#344f67',boss:'Cave Golem',bossHp:520,bossAtk:23,bossXp:260,bossGold:180},
-{name:'IONIA',difficulty:'Khó',mob:'Hỏa linh',hp:105,atk:18,xp:45,gold:17,color:'#704b42',path:'#b17b52',water:'#69434b',boss:'Ash Warden',bossHp:900,bossAtk:36,bossXp:520,bossGold:360},
-{name:'NOXUS',difficulty:'Khó',mob:'Quái vật map 4',hp:160,atk:27,xp:70,gold:28,color:'#53634b',path:'#9b875c',water:'#397c83',boss:'Boss map 4',bossHp:1300,bossAtk:48,bossXp:800,bossGold:520},
-{name:'BILGEWATER',difficulty:'Rất khó',mob:'Quái vật map 5',hp:230,atk:38,xp:100,gold:40,color:'#5d5368',path:'#887c9c',water:'#465a78',boss:'Boss map 5',bossHp:1900,bossAtk:65,bossXp:1100,bossGold:720},
-{name:'FRELJORD',difficulty:'Rất khó',mob:'Quái vật map 6',hp:320,atk:52,xp:140,gold:55,color:'#6c5147',path:'#a27c5c',water:'#5b4b62',boss:'Boss map 6',bossHp:2700,bossAtk:85,bossXp:1500,bossGold:950},
-{name:'SHURIMA',difficulty:'Ác mộng',mob:'Quái vật map 7',hp:440,atk:70,xp:190,gold:75,color:'#4d526d',path:'#8b829e',water:'#3d5776',boss:'Boss map 7',bossHp:3700,bossAtk:110,bossXp:2000,bossGold:1250},
-{name:'TARGON',difficulty:'Ác mộng',mob:'Quái vật map 8',hp:600,atk:92,xp:250,gold:100,color:'#694b58',path:'#a17b7e',water:'#57465e',boss:'Boss map 8',bossHp:5000,bossAtk:145,bossXp:2600,bossGold:1600},
-{name:'QUẦN ĐẢO BÓNG ĐÊM',difficulty:'Huyền thoại',mob:'Quái vật map 9',hp:820,atk:120,xp:330,gold:130,color:'#55475c',path:'#9881a5',water:'#4b4c76',boss:'Boss map 9',bossHp:6800,bossAtk:185,bossXp:3400,bossGold:2100},
-{name:'ICATHIA',difficulty:'Huyền thoại',mob:'Quái vật map 10',hp:1100,atk:155,xp:430,gold:170,color:'#4a3f54',path:'#987c98',water:'#4a4c70',boss:'Boss map 10',bossHp:9000,bossAtk:235,bossXp:4500,bossGold:2800}
+{name:'Đồng Cỏ Uwendale - Demacia',difficulty:'Dễ',mob:'Slime',hp:100,atk:4,xp:12,gold:4,color:'#477d52',path:'#9b875c',water:'#397c83',boss:'VUA SLIME',bossHp:260,bossAtk:14,bossXp:120,bossGold:80},
+{name:'Khu Công Nghiệp Zaun - Piltover & Zaun',difficulty:'Trung bình',mob:'Thạch quái',hp:62,atk:10,xp:25,gold:9,color:'#4d5966',path:'#8b8175',water:'#344f67',boss:'Cave Golem',bossHp:520,bossAtk:23,bossXp:260,bossGold:180},
+{name:'Rừng Placidium - Ionia',difficulty:'Khó',mob:'Hỏa linh',hp:105,atk:18,xp:45,gold:17,color:'#704b42',path:'#b17b52',water:'#69434b',boss:'Ash Warden',bossHp:900,bossAtk:36,bossXp:520,bossGold:360},
+{name:'Pháo Đài Bất Diệt - Noxus',difficulty:'Khó',mob:'Quái vật map 4',hp:160,atk:27,xp:70,gold:28,color:'#53634b',path:'#9b875c',water:'#397c83',boss:'Boss map 4',bossHp:1300,bossAtk:48,bossXp:800,bossGold:520},
+{name:'Quần Đảo Lam Hỏa - Bilgewater',difficulty:'Rất khó',mob:'Quái vật map 5',hp:230,atk:38,xp:100,gold:40,color:'#5d5368',path:'#887c9c',water:'#465a78',boss:'Boss map 5',bossHp:1900,bossAtk:65,bossXp:1100,bossGold:720},
+{name:'Vùng Hoang Dã Băng Giá - Freljord',difficulty:'Rất khó',mob:'Quái vật map 6',hp:320,atk:52,xp:140,gold:55,color:'#6c5147',path:'#a27c5c',water:'#5b4b62',boss:'Boss map 6',bossHp:2700,bossAtk:85,bossXp:1500,bossGold:950},
+{name:'Sa Mạc Shurima - Shurima',difficulty:'Ác mộng',mob:'Quái vật map 7',hp:440,atk:70,xp:190,gold:75,color:'#4d526d',path:'#8b829e',water:'#3d5776',boss:'Boss map 7',bossHp:3700,bossAtk:110,bossXp:2000,bossGold:1250},
+{name:'Con Đường Tầm Đỉnh - Targon',difficulty:'Ác mộng',mob:'Quái vật map 8',hp:600,atk:92,xp:250,gold:100,color:'#694b58',path:'#a17b7e',water:'#57465e',boss:'Boss map 8',bossHp:5000,bossAtk:145,bossXp:2600,bossGold:1600},
+{name:'Thành Phố Helia - Quần Đảo Bóng Đêm',difficulty:'Huyền thoại',mob:'Quái vật map 9',hp:820,atk:120,xp:330,gold:130,color:'#55475c',path:'#9881a5',water:'#4b4c76',boss:'Boss map 9',bossHp:6800,bossAtk:185,bossXp:3400,bossGold:2100},
+{name:'Vùng Đất Cổ Icathia - Icathia',difficulty:'Huyền thoại',mob:'Quái vật map 10',hp:1100,atk:155,xp:430,gold:170,color:'#4a3f54',path:'#987c98',water:'#4a4c70',boss:'Boss map 10',bossHp:9000,bossAtk:235,bossXp:4500,bossGold:2800}
 ];
 
 const joystick={x:0,y:0,active:false,pointerId:null};
@@ -673,7 +673,7 @@ function currentMap(){
  return maps[Math.max(0,Math.min(state.mapIndex,maps.length-1))];
 }
 
-const TOWN={name:"THỊ TRẤN ABORNE",difficulty:"An toàn",mob:"Không có",hp:0,atk:0,xp:0,gold:0,color:"#344c3e",path:"#b49a6b",water:"#397c83",boss:""};
+const TOWN={name:"Đại Thành Demacia",difficulty:"An toàn",mob:"Không có",hp:0,atk:0,xp:0,gold:0,color:"#344c3e",path:"#b49a6b",water:"#397c83",boss:""};
 let townSafeLabelStartedAt=performance.now();
 function showMapBanner(name){if(name===TOWN.name)townSafeLabelStartedAt=performance.now();const el=$("mapBanner");if(!el)return;el.textContent=name;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");}
 function inTown(){return !!state.inTown;}
@@ -687,8 +687,8 @@ function chooseClass(name){if(!CLASS_DATA.some(c=>c.name===name))return;state.ch
 function openNpcDialog(id){const data={alden:{name:'Trưởng trấn Alden',icon:'👑',line:'Chào cậu, ta là Alden, thị trưởng của Aborne. Cậu muốn làm gì?',choices:[['Tôi muốn nhận nhiệm vụ',()=>{closeNpcDialog();storyAction();}],['Không có gì, cảm ơn',closeNpcDialog]]},healer:{name:'Mục sư Rafael',icon:'🧑‍⚕️',line:'Chào cậu. Ta có thể giúp cậu hồi phục trước khi lên đường.',choices:[['Hồi phục HP và MP',()=>{closeNpcDialog();townHeal();}],['Không cần, cảm ơn',closeNpcDialog]]},merchant:{name:'Chủ cửa hàng Pelio',icon:'🧔',line:'Chào mừng! Ta là Pelio. Cậu muốn mua vật phẩm nào?',choices:[['Xem cửa hàng',()=>{closeNpcDialog();$('townShopModal').classList.add('show');}],['Để lần khác',closeNpcDialog]]},blacksmith:{name:'Thợ Rèn Homes',icon:'⚒️',line:'Trang bị của cậu cần được chăm sóc chứ? Ta có thể rèn lại các dòng phụ.',choices:[['Mở lò rèn',()=>{closeNpcDialog();openBlacksmith();}],['Không cần, cảm ơn',closeNpcDialog]]},syrupp:{name:'Người hướng dẫn Syrupp',icon:'🧙',line:'Ta là Syrupp. Ta có thể giúp cậu thay đổi con đường chiến đấu. Cậu muốn chọn class nào?',choices:[['Thay đổi class',()=>{closeNpcDialog();openClassModal();}],['Không có gì, cảm ơn',closeNpcDialog]]}}[id];if(!data)return;$('npcTitle').textContent=data.name;$('npcPortrait').textContent=data.icon;$('npcLine').textContent=data.line;$('npcChoices').innerHTML='';data.choices.forEach(([label,action])=>{const b=document.createElement('button');b.textContent=label;b.onclick=action;$('npcChoices').appendChild(b);});$('npcDialog').classList.add('show');}
 function closeNpcDialog(){$('npcDialog').classList.remove('show');}
 function interactTownNpc(id){if(!inTown())return;npcWalkTarget=null;pickupWalkTarget=null;joystick.x=joystick.y=0;joystick.active=false;joystick.pointerId=null;stick.style.transform='translate(0,0)';state.pendingAction=null;state.paused=false;state.townNpcVisited=state.townNpcVisited||[];if(!state.townNpcVisited.includes(id)){state.townNpcVisited.push(id);save();}openNpcDialog(id);$('npcDialog').classList.add('show');}
-function enterTown(){npcWalkTarget=null;state.inTown=true;syncBackgroundMusic();state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=427;state.player.y=360;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Thị trấn Aborne. HP và MP đã được hồi phục.");}
-function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu "+requiredMapExp(i).toLocaleString('vi-VN')+" EXP tích lũy.");return;}state.inTown=false;state.mapIndex=i;syncBackgroundMusic();state.mapKills=0;state.normalMobKillsForSpecial=0;state.bossSpawned=true;state.bossDefeated=false;state.bossSpawnTimer=180;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=427;state.player.y=240;state.auto=true;spawnMob(true);for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Aborne, tiến đến "+currentMap().name+". Boss đã xuất hiện!");}
+function enterTown(){npcWalkTarget=null;state.inTown=true;syncBackgroundMusic();state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=427;state.player.y=360;state.hp=state.maxHp;state.mp=state.maxMp;state.dead=false;state.paused=false;state.auto=false;updateMapUI();showMapBanner(TOWN.name);save();log("Bạn đã trở về Đại Thành Demacia. HP và MP đã được hồi phục.");}
+function leaveTown(i){npcWalkTarget=null;if(!canEnterMap(i)){log("Bản đồ này yêu cầu "+requiredMapExp(i).toLocaleString('vi-VN')+" EXP tích lũy.");return;}state.inTown=false;state.mapIndex=i;syncBackgroundMusic();state.mapKills=0;state.normalMobKillsForSpecial=0;state.bossSpawned=true;state.bossDefeated=false;state.bossSpawnTimer=180;state.mobs=[];state.target=null;state.pendingAction=null;state.respawnTimer=0;state.player.x=427;state.player.y=240;state.auto=true;spawnMob(true);for(let n=0;n<7;n++)spawnMob();updateMapUI();showMapBanner(currentMap().name);save();log("Bạn rời Đại Thành Demacia, tiến đến "+currentMap().name+". Boss đã xuất hiện!");}
 const MAIN_QUESTS=[
 {id:'q1',title:'Khởi đầu từ tro tàn',map:0,goal:10,objective:'Đánh bại 10 Slime tại Đồng cỏ xanh và trò chuyện với các NPC trong thị trấn.',rewardXp:120,rewardGold:80,kind:'starter'},
 {id:'q2',title:'Tiếng Vọng Của Thép Rỉ',map:1,goal:10,objective:'Đánh bại 10 Thạch quái tại Hang động đá và thu thập 5 Quặng Sắt để thợ rèn chế tạo trang bị mới.',rewardXp:260,rewardGold:160,kind:'ore'},
@@ -807,7 +807,7 @@ function updateMapUI(){
 
  sel.innerHTML='';
 
- const townOpt=document.createElement("option");townOpt.value="-1";townOpt.textContent="🏘 THỊ TRẤN ABORNE (Khu an toàn)";sel.appendChild(townOpt);
+ const townOpt=document.createElement("option");townOpt.value="-1";townOpt.textContent="🏛 ĐẠI THÀNH DEMACIA (Khu an toàn)";sel.appendChild(townOpt);
  maps.forEach((m,i)=>{
 
   const o=document.createElement('option');
@@ -1059,7 +1059,7 @@ function drawTownWorld(){
   for(const [x,y,c] of houses){ctx.fillStyle="#4a3329";ctx.fillRect(x-5,y+32,112,70);ctx.fillStyle=c;ctx.fillRect(x,y+25,102,70);ctx.fillStyle="#5b382d";ctx.beginPath();ctx.moveTo(x-10,y+28);ctx.lineTo(x+50,y-15);ctx.lineTo(x+112,y+28);ctx.closePath();ctx.fill();ctx.fillStyle="#f3d18a";ctx.fillRect(x+15,y+45,18,20);ctx.fillRect(x+68,y+45,18,20);ctx.fillStyle="#453329";ctx.fillRect(x+42,y+62,20,33);}
   ctx.fillStyle="#5a5144";ctx.fillRect(377,210,100,48);ctx.fillStyle="#8c9c99";ctx.fillRect(385,215,84,34);ctx.fillStyle="#3e777a";ctx.fillRect(391,221,72,22);ctx.fillStyle="#5a5144";ctx.fillRect(374,204,106,9);
   for(const [x,y] of [[35,185],[820,185],[260,90],[590,90],[260,420],[590,420]]){ctx.fillStyle="#60432f";ctx.fillRect(x-4,y,8,30);ctx.fillStyle="#4c8956";ctx.beginPath();ctx.arc(x,y-3,22,0,Math.PI*2);ctx.fill();ctx.fillStyle="#70a963";ctx.beginPath();ctx.arc(x-7,y-10,10,0,Math.PI*2);ctx.fill();}
-  ctx.fillStyle="#2a211c";ctx.fillRect(332,20,190,48);ctx.fillStyle="#d9bd7a";ctx.fillRect(336,24,182,40);ctx.fillStyle="#382a20";ctx.font="bold 18px monospace";ctx.textAlign="center";ctx.fillText("ABORNE",427,49);ctx.textAlign="left";
+  ctx.fillStyle="#2a211c";ctx.fillRect(332,20,190,48);ctx.fillStyle="#d9bd7a";ctx.fillRect(336,24,182,40);ctx.fillStyle="#382a20";ctx.font="bold 18px monospace";ctx.textAlign="center";ctx.font="bold 14px monospace";ctx.fillText("ĐẠI THÀNH DEMACIA",427,49);ctx.textAlign="left";
   if(npcWalkTarget){ctx.save();const pulse=1+Math.sin(performance.now()/110)*.08;ctx.strokeStyle='#ffe36b';ctx.lineWidth=3;ctx.shadowColor='#ffe36b';ctx.shadowBlur=9;ctx.beginPath();ctx.ellipse(npcWalkTarget.x,npcWalkTarget.y+10,18*pulse,7*pulse,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
   pixelPerson(427,150,"#b58a4c",false);ctx.fillStyle="#fff0b0";ctx.font="bold 12px monospace";ctx.textAlign="center";ctx.fillText("TRƯỞNG TRẤN ALDEN",427,120);
   pixelPerson(230,255,"#8fb7c7",false);ctx.fillStyle="#e5f4ff";ctx.font="bold 11px monospace";ctx.fillText("MỤC SƯ RAFAEL",230,227);
