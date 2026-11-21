@@ -61,6 +61,7 @@ button.active{background:#28684e;border-color:#72e0ad;color:#dffff0}
 .canvas-wrap{position:relative;background:#182b2c;border:3px solid #526c69;border-radius:6px;overflow:hidden}
 
 canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
+.canvas-name-layer{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;font-family:'Spiegel',Arial,sans-serif}.canvas-name-label{position:absolute;transform:translate(-50%,-100%);white-space:nowrap;font-weight:700;line-height:1.15;text-align:center;text-shadow:-1px -1px 0 #08131b,1px -1px 0 #08131b,-1px 1px 0 #08131b,1px 1px 0 #08131b,0 2px 4px #000;font-size:clamp(9px,1.1vw,12px)}.canvas-name-label.npc{font-size:clamp(10px,1.15vw,13px)}.canvas-name-label.mob{font-size:clamp(9px,1vw,11px);color:#f2f6ef}.canvas-name-label.boss{font-size:clamp(11px,1.25vw,14px);color:#ff4141;text-shadow:0 0 5px #ff2424,0 0 12px #ff2424,-1px -1px 0 #08131b,1px 1px 0 #08131b}.canvas-name-label.player{color:#fff1a8}.canvas-name-label.player-title{color:#f3d27b;font-size:clamp(8px,.9vw,10px)}
 
  .death-screen{position:absolute;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:#050b10dd;padding:20px}.death-screen.show{display:flex}.death-card{max-width:310px;width:100%;padding:24px;text-align:center;background:#243744;border:2px solid #ff7777;border-radius:14px;box-shadow:0 0 35px #ff555566}.death-card h2{color:#ff8585;margin:0 0 12px}.death-card button{margin-top:12px;width:100%}
 .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#08131bd9;z-index:4;text-align:center;padding:22px}
@@ -421,7 +422,7 @@ html,body{overscroll-behavior-x:none!important}
 
    <div class="logo">✦ Runeterra: Tái Sinh</div>
 
-   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.2.32</div>
+   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.2.33</div>
 
   </div>
 
@@ -438,6 +439,7 @@ html,body{overscroll-behavior-x:none!important}
    <div class="canvas-wrap">
 
     <canvas id="game" width="854" height="480" aria-label="Game Pixel RPG"></canvas>
+     <div id="canvasNameLayer" class="canvas-name-layer" aria-hidden="true"></div>
     <button id="chatToggle" class="chat-toggle" aria-label="Mở chat" title="Chat">💬</button>
     <div id="chatPanel" class="chat-panel"><div style="font-size:12px;font-weight:bold;color:#ffe29a;margin-bottom:7px">💬 CHAT</div><input id="chatInput" maxlength="120" placeholder="Nhập tin nhắn..." autocomplete="off"><div class="chat-row"><button id="chatSend">Gửi</button><button id="chatClose">Đóng</button></div><div class="chat-hint">Tin nhắn sẽ hiển thị thành bong bóng trên nhân vật.</div></div>
     <div id="mapBanner" class="map-banner" aria-live="polite"></div>
@@ -445,7 +447,7 @@ html,body{overscroll-behavior-x:none!important}
     <div id="inventoryFullToast" class="inventory-full-toast" role="status" aria-live="polite">Túi đồ của bạn đã đầy</div>
     <div id="bossDefeatNotice" class="boss-defeat-notice" role="status" aria-live="assertive"></div>
     <div id="rewardFeed" class="reward-feed" aria-live="polite"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.32</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.33</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px 'Spiegel',Arial,sans-serif;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ KHỞI NGUYÊN HUYỀN THOẠI</h2><div class="intro-story">Không một lời báo trước.
@@ -1067,10 +1069,6 @@ function drawTownWorld(){
   for(const [x,y] of [[35,185],[820,185],[260,90],[590,90],[260,420],[590,420]]){ctx.fillStyle="#60432f";ctx.fillRect(x-4,y,8,30);ctx.fillStyle="#4c8956";ctx.beginPath();ctx.arc(x,y-3,22,0,Math.PI*2);ctx.fill();ctx.fillStyle="#70a963";ctx.beginPath();ctx.arc(x-7,y-10,10,0,Math.PI*2);ctx.fill();}
   ctx.fillStyle="#2a211c";ctx.fillRect(332,20,190,48);ctx.fillStyle="#d9bd7a";ctx.fillRect(336,24,182,40);ctx.fillStyle="#382a20";ctx.font="bold 18px 'Spiegel',Arial,sans-serif";ctx.textAlign="center";ctx.font="bold 14px 'Spiegel',Arial,sans-serif";ctx.fillText("ĐẠI THÀNH DEMACIA",427,49);ctx.textAlign="left";
   if(npcWalkTarget){ctx.save();const pulse=1+Math.sin(performance.now()/110)*.08;ctx.strokeStyle='#ffe36b';ctx.lineWidth=3;ctx.shadowColor='#ffe36b';ctx.shadowBlur=9;ctx.beginPath();ctx.ellipse(npcWalkTarget.x,npcWalkTarget.y+10,18*pulse,7*pulse,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
-  pixelPerson(427,150,"#b58a4c",false);ctx.fillStyle="#fff0b0";ctx.font="bold 12px 'Spiegel',Arial,sans-serif";ctx.textAlign="center";ctx.fillText("Garen",427,120);
-  pixelPerson(230,255,"#8fb7c7",false);ctx.fillStyle="#e5f4ff";ctx.font="bold 11px 'Spiegel',Arial,sans-serif";ctx.fillText("Soraka",230,227);
-  pixelPerson(624,255,"#c68c65",false);ctx.fillStyle="#ffe0b0";ctx.fillText("Twisted Fate",624,227);
-  pixelPerson(624,385,"#b7b7c4",false);ctx.fillStyle="#f0e8ff";ctx.fillText("Ornn",624,357);ctx.textAlign="left";
   const safeElapsed=(performance.now()-townSafeLabelStartedAt)/1000;ctx.globalAlpha=Math.max(0,Math.min(1,safeElapsed/.7,(3.2-safeElapsed)/.8));ctx.fillStyle="#42eaff";ctx.font="bold 15px 'Spiegel',Arial,sans-serif";ctx.textAlign="center";ctx.shadowColor="#00dfff";ctx.shadowBlur=8;ctx.fillText("KHU VỰC AN TOÀN",427,395);ctx.shadowBlur=0;ctx.globalAlpha=1;ctx.textAlign="left";
 }
 
@@ -1101,7 +1099,6 @@ function drawMob(m){
 
  ctx.fillStyle='#e45e67';ctx.fillRect(m.x-19,barY+1,38*Math.max(0,m.hp/m.max),3);
  ctx.restore();
- const mobName=m.name||(m.boss?currentMap().boss:currentMap().mob),label=m.boss?mobName.toUpperCase():mobName;ctx.save();ctx.font=m.boss?'bold 13px \'Spiegel\',Arial,sans-serif':'bold 10px \'Spiegel\',Arial,sans-serif';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#08131b';ctx.shadowBlur=m.boss?13:m.leader?12:m.elite?10:0;ctx.shadowColor=m.boss?'#ff3030':m.leader?'#ffd52e':m.elite?'#b34cff':'transparent';ctx.strokeText(label,m.x,barY-5);ctx.fillStyle=m.boss?'#ff4141':m.leader?'#ffe45c':m.elite?'#d58aff':'#f2f6ef';ctx.fillText(label,m.x,barY-5);ctx.restore();
 }
 
 function particle(x,y,color){
@@ -1217,6 +1214,35 @@ function update(dt){
  if(Date.now()-state.lastSave>10000){save();state.lastSave=Date.now();}
 }
 
+const canvasNameNodes=new Map();
+function updateCanvasNameLabels(){
+ const layer=$('canvasNameLayer');if(!layer)return;
+ for(const node of canvasNameNodes.values())node.hidden=true;
+ const place=(id,label,x,y,kind,color)=>{
+  if(!label)return;
+  let node=canvasNameNodes.get(id);
+  if(!node){node=document.createElement('div');canvasNameNodes.set(id,node);layer.appendChild(node);}
+  node.className='canvas-name-label '+kind;node.textContent=label;node.style.left=(x/W*100)+'%';node.style.top=(y/H*100)+'%';node.style.color=color||'';node.hidden=false;
+ };
+ if(inTown()){
+  place('npc-garen','Garen',427,120,'npc','#fff0b0');
+  place('npc-soraka','Soraka',230,227,'npc','#e5f4ff');
+  place('npc-twisted-fate','Twisted Fate',624,227,'npc','#ffe0b0');
+  place('npc-ornn','Ornn',624,357,'npc','#f0e8ff');
+ }else{
+  state.mobs.forEach((m,i)=>{
+   if(m.dead)return;
+   const name=m.name||(m.boss?currentMap().boss:currentMap().mob),barY=m.y-(m.boss?36:23);
+   place('mob-'+(m.id??i),m.boss?name.toUpperCase():name,m.x,barY-5,m.boss?'boss':'mob',m.boss?'#ff4141':m.leader?'#ffe45c':m.elite?'#d58aff':'#f2f6ef');
+  });
+ }
+ const pname=(settings.playerName||'Wanderer').trim()||'Wanderer';
+ place('player-name',pname,state.player.x,state.player.y-34,'player','#fff1a8');
+ if(typeof collectionMeta!=='undefined'&&collectionMeta.equippedTitle)place('player-title',collectionMeta.equippedTitle,state.player.x,state.player.y-47,'player-title','#f3d27b');
+ const activeBoss=state.mobs.find(m=>m.boss&&!m.dead);
+ if(activeBoss)place('active-boss-title',currentMap().boss.toUpperCase(),W/2,67,'boss','#ff4141');
+}
+
 function draw(){
  drawWorld();
  for(const item of state.groundItems){if(item.type==='gear'&&(item.mapIndex==null||item.mapIndex===state.mapIndex)&&!inTown())drawGroundGear(item);}
@@ -1235,7 +1261,6 @@ function draw(){
  if(state.lastHitSkill){ctx.strokeStyle='#9ef4ff';ctx.lineWidth=8;ctx.shadowColor='#59dfff';ctx.shadowBlur=18;ctx.beginPath();ctx.arc(8,0,35+(1-k)*42,-1.5,1.45);ctx.stroke();ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(8,0,22+(1-k)*28,-1.4,1.35);ctx.stroke();}
  else{ctx.strokeStyle='#fff0a8';ctx.lineWidth=8;ctx.shadowColor='#ffc95e';ctx.shadowBlur=12;ctx.beginPath();ctx.arc(12,0,34,-1.25+(1-k)*.25,.95+(1-k)*.4);ctx.stroke();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(12,0,26,-1.2,.8);ctx.stroke();}
  ctx.restore();}
- const pname=(settings.playerName||'Wanderer').trim()||'Wanderer';ctx.save();ctx.font='bold 12px \'Spiegel\',Arial,sans-serif';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#08131b';ctx.strokeText(pname,state.player.x,state.player.y-34);ctx.fillStyle='#fff1a8';ctx.fillText(pname,state.player.x,state.player.y-34);if(typeof collectionMeta!=='undefined'&&collectionMeta.equippedTitle){ctx.font='bold 9px \'Spiegel\',Arial,sans-serif';ctx.lineWidth=2.5;ctx.strokeStyle='#08131b';ctx.strokeText(collectionMeta.equippedTitle,state.player.x,state.player.y-47);ctx.fillStyle='#f3d27b';ctx.fillText(collectionMeta.equippedTitle,state.player.x,state.player.y-47);}ctx.restore();
  if(state.chatBubble&&Date.now()<state.chatBubbleUntil){ctx.save();const msg=state.chatBubble.slice(0,42),bw=Math.min(220,Math.max(76,ctx.measureText(msg).width+18)),bx=Math.max(4,Math.min(W-bw-4,state.player.x-bw/2)),by=state.player.y-76;ctx.font='11px \'Spiegel\',Arial,sans-serif';ctx.textAlign='center';ctx.fillStyle='#f4f6f3';ctx.strokeStyle='#314650';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(bx,by,bw,26,7);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(state.player.x-5,by+25);ctx.lineTo(state.player.x,by+32);ctx.lineTo(state.player.x+5,by+25);ctx.fill();ctx.fillStyle='#17242a';ctx.fillText(msg,bx+bw/2,by+17);ctx.restore();}
 
  for(const a of state.particles){
@@ -1253,7 +1278,8 @@ function draw(){
  if(settings.fps){ctx.textAlign='right';ctx.fillStyle='#fff';ctx.fillText(fpsValue+' FPS',W-10,18);ctx.textAlign='left';}
 
  const activeBoss=state.mobs.find(m=>m.boss&&!m.dead);
- if(activeBoss){const bossBarX=W/2-135;ctx.save();ctx.textAlign='center';ctx.font='bold 13px \'Spiegel\',Arial,sans-serif';ctx.shadowColor='#ff2424';ctx.shadowBlur=12;ctx.fillStyle='#ff4a4a';ctx.fillText(currentMap().boss.toUpperCase(),W/2,67);ctx.shadowBlur=0;ctx.fillStyle='#251018';ctx.fillRect(bossBarX,73,270,10);ctx.fillStyle='#ff333d';ctx.shadowColor='#ff2222';ctx.shadowBlur=8;ctx.fillRect(bossBarX+2,75,266*Math.max(0,activeBoss.hp/activeBoss.max),6);ctx.restore();}
+  if(activeBoss){const bossBarX=W/2-135;ctx.save();ctx.fillStyle='#251018';ctx.fillRect(bossBarX,73,270,10);ctx.fillStyle='#ff333d';ctx.shadowColor='#ff2222';ctx.shadowBlur=8;ctx.fillRect(bossBarX+2,75,266*Math.max(0,activeBoss.hp/activeBoss.max),6);ctx.restore();}
+  updateCanvasNameLabels();
 }
 
 function questDefinitions(){return MAIN_QUESTS;}
