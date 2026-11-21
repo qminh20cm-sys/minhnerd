@@ -1628,7 +1628,7 @@ function continueFromIntro(){$("introModal").classList.remove("show");drawCreati
 $("introClose").onclick=continueFromIntro;
 document.addEventListener("click",e=>{const c=e.target.closest("[data-create-class]");if(c){creationClass=c.dataset.createClass;drawCreationClasses();}});
 $("creationFinish").onclick=()=>{const name=($("creationName").value||"").trim();if(!name){showRewardToast("Hãy nhập tên nhân vật!");$("creationName").focus();return;}settings.playerName=name.slice(0,18);state.characterClass=creationClass;state.characterCreated=true;saveSettings();$("creationModal").classList.remove("show");renderCharacter();ui();save();$("welcomeModal").classList.add("show");};
-$("welcomeAlden").onclick=()=>{$("welcomeModal").classList.remove("show");openNpcDialog("alden");};
+$("welcomeGaren").onclick=()=>{$("welcomeModal").classList.remove("show");openNpcDialog("alden");};
 
 })();
 </script>
