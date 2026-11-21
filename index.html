@@ -416,7 +416,7 @@ html,body{overscroll-behavior-x:none!important}
 
   <main class="panel gamebox">
 
-   <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Nhiệm vụ" title="Nhiệm vụ">🎯</button><button data-menu="3" aria-label="Kỹ năng" title="Kỹ năng">✨</button><button data-menu="4" aria-label="Túi đồ" title="Túi đồ">🎒</button><button type="button" class="collection-menu" aria-label="Collection" title="Collection">🗃️</button><button data-menu="5" aria-label="Cài đặt" title="Cài đặt">⚙</button><button data-menu="6" aria-label="Achievements" title="Achievements">🏆</button></nav>
+   <nav class="menu-bar" aria-label="Menu game"><button data-menu="0" aria-label="Nhân vật" title="Nhân vật">👤</button><button data-menu="1" aria-label="Bản đồ" title="Bản đồ">🗺️</button><button data-menu="2" aria-label="Nhiệm vụ" title="Nhiệm vụ">🎯</button><button data-menu="3" aria-label="Kỹ năng" title="Kỹ năng">✨</button><button data-menu="4" aria-label="Túi đồ" title="Túi đồ">🎒</button><button type="button" class="collection-menu" aria-label="Collection" title="Collection">🗃️</button><button data-menu="6" aria-label="Achievements" title="Achievements">🏆</button><button data-menu="5" aria-label="Cài đặt" title="Cài đặt">⚙</button></nav>
 
    <div class="canvas-wrap">
 
@@ -1229,7 +1229,7 @@ function draw(){
  if(settings.fps){ctx.textAlign='right';ctx.fillStyle='#fff';ctx.fillText(fpsValue+' FPS',W-10,18);ctx.textAlign='left';}
 
  const activeBoss=state.mobs.find(m=>m.boss&&!m.dead);
- if(activeBoss){ctx.save();ctx.textAlign='center';ctx.font='bold 13px monospace';ctx.shadowColor='#ff2424';ctx.shadowBlur=12;ctx.fillStyle='#ff4a4a';ctx.fillText(currentMap().boss.toUpperCase(),240,21);ctx.shadowBlur=0;ctx.fillStyle='#251018';ctx.fillRect(105,27,270,10);ctx.fillStyle='#ff333d';ctx.shadowColor='#ff2222';ctx.shadowBlur=8;ctx.fillRect(107,29,266*Math.max(0,activeBoss.hp/activeBoss.max),6);ctx.restore();}
+ if(activeBoss){const bossBarX=W/2-135;ctx.save();ctx.textAlign='center';ctx.font='bold 13px monospace';ctx.shadowColor='#ff2424';ctx.shadowBlur=12;ctx.fillStyle='#ff4a4a';ctx.fillText(currentMap().boss.toUpperCase(),W/2,59);ctx.shadowBlur=0;ctx.fillStyle='#251018';ctx.fillRect(bossBarX,65,270,10);ctx.fillStyle='#ff333d';ctx.shadowColor='#ff2222';ctx.shadowBlur=8;ctx.fillRect(bossBarX+2,67,266*Math.max(0,activeBoss.hp/activeBoss.max),6);ctx.restore();}
 }
 
 function questDefinitions(){return MAIN_QUESTS;}
