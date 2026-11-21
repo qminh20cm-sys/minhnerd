@@ -1556,7 +1556,7 @@ function metaRender(){
  }).join('');
  const unlocked=META_ACHIEVEMENTS.filter(a=>collectionMeta.unlocked.includes(a.id));
  const titleOptions='<option value="">Không hiển thị danh hiệu</option>'+unlocked.map(a=>'<option value="'+a.title.replace(/"/g,'&quot;')+'" '+(collectionMeta.equippedTitle===a.title?'selected':'')+'>'+a.title+'</option>').join('');
- panel.innerHTML='<div class="heading">📚 BỘ SƯU TẬP TRANG BỊ</div><div class="meta-summary">Đã khám phá <b>'+discovered.length+'</b> món đồ · '+rows.length+' món trong danh mục</div>'+collectionHtml;
+ panel.innerHTML='<div class="heading">📚 BỘ SƯU TẬP</div><div class="meta-summary">Đã khám phá <b>'+discovered.length+'</b> món đồ · '+rows.length+' món trong danh mục</div>'+collectionHtml;
  // Phần trang bị danh hiệu được tạm ẩn cùng giao diện Achievements.
 }
 function initCollectionAchievements(){
@@ -1565,7 +1565,7 @@ function initCollectionAchievements(){
   const section=document.createElement('section');section.className='panel';section.innerHTML='<div id="collectionPanel"></div>';side.appendChild(section);
  }
  if(!document.getElementById('achievementPanel')){
-  const section=document.createElement('section');section.className='panel';section.id='achievementPanel';section.innerHTML='';side.appendChild(section);
+  const section=document.createElement('section');section.className='panel';section.id='achievementPanel';section.innerHTML='<div class="heading">🏆 THÀNH TỰU</div>';side.appendChild(section);
  }
  if(!document.getElementById('metaStyles')){const css=document.createElement('style');css.id='metaStyles';css.textContent='.meta-summary{font-size:11px;color:#b9ccca;padding:8px;background:#102029;border:1px solid #405a63;border-radius:6px;margin:7px 0}.meta-group{margin:10px 0}.meta-group> b{display:block;color:#e8ce91;font-size:12px;margin-bottom:6px}.meta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.meta-item{min-width:0;padding:7px 5px;border:1px solid #405a63;border-radius:6px;background:#102029;text-align:center;font-size:10px}.meta-item span{display:block;font-size:20px;margin-bottom:3px}.meta-item b{display:block;overflow-wrap:anywhere}.meta-item small{display:block;color:#9fb5b5;margin-top:3px}.meta-item.unknown{opacity:.55}.meta-card{padding:8px;margin:6px 0;background:#102029;border:1px solid #405a63;border-radius:6px}.meta-card-top{display:flex;justify-content:space-between;gap:6px;font-size:11px}.meta-card-top span{color:#e8ce91;font-size:9px;white-space:nowrap}.meta-card>small{display:block;color:#a9bfbd;font-size:10px;margin-top:5px}.meta-progress{height:5px;margin-top:7px;background:#263b43;border-radius:5px;overflow:hidden}.meta-progress i{display:block;height:100%;background:#72e0ad}.meta-title-text{color:#e9ce8d!important}.meta-title-preview{padding:10px;text-align:center;background:#102029;border:1px solid #8a744d;border-radius:7px}.meta-title-preview b,.meta-title-preview span{display:block}.meta-title-preview span{color:#f3d27b;font-size:11px;margin-top:5px}';
   document.head.appendChild(css);
