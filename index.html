@@ -11,8 +11,8 @@
 <title>Runeterra: Reborn</title>
 <script>
 (()=>{
- const languages=navigator.languages?.length?navigator.languages:[navigator.language||'en'];
- const isVietnamese=languages.some(language=>String(language).toLowerCase().startsWith('vi'));
+ const languages=[navigator.language,...(navigator.languages||[])];
+ const isVietnamese=languages.some(language=>String(language||'').toLowerCase().startsWith('vi'));
  document.title=isVietnamese?'Runeterra: Tái Sinh':'Runeterra: Reborn';
 })();
 </script>
