@@ -422,7 +422,7 @@ html,body{overscroll-behavior-x:none!important}
 
    <div class="logo">✦ Runeterra: Tái Sinh</div>
 
-   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.2.34</div>
+   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.2.35</div>
 
   </div>
 
@@ -447,7 +447,7 @@ html,body{overscroll-behavior-x:none!important}
     <div id="inventoryFullToast" class="inventory-full-toast" role="status" aria-live="polite">Túi đồ của bạn đã đầy</div>
     <div id="bossDefeatNotice" class="boss-defeat-notice" role="status" aria-live="assertive"></div>
     <div id="rewardFeed" class="reward-feed" aria-live="polite"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.34</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.35</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px 'Spiegel',Arial,sans-serif;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ KHỞI NGUYÊN HUYỀN THOẠI</h2><div class="intro-story">Không một lời báo trước.
@@ -1061,14 +1061,15 @@ function pixelPerson(x,y,main='#5a9be8',isPlayer=false){
 
 function drawChibiGaren(x,y){
  const frames=[
-  ["......HHHH......",".....HHHHHH.....","....HHHHHHHH....","....HFFFFFHH....","....HFFEEFFH....","...AAFFFFFFAA...","..AAAAAAAGAAAA..","..ABAAAGGAAAAB..","..ABAAAAGAAAAB..","...ABAAAAAAAB...","...CCBBAABBCC...","...CCBBAABBCC...","....DD....DD....","....DD....DD....","...DDD....DDD...","...DD......DD..."],
-  ["......HHHH......",".....HHHHHH.....","....HHHHHHHH....","....HFFFFFHH....","....HFFEEFFH....","...AAFFFFFFAA...","..AAAAAAAGAAAA..","..ABAAAGGAAAAB..","..ABAAAAGAAAAB..","..ABAAAAAAAAB...","..CCBBAABBCCC...","...CCBBAABBCC...","....DD....DD....","....DD....DD....","...DDD....DDD...","...DD......DD..."]
+  ["........HHHH........",".......HHHHHH.......","......HHHHHHHH......",".....HHHFFFFHHH.....",".....HHFFFFFFHH.....","....HHFFFFFFFFHH....","....HFFEEEEEEFFH....","....HFFFFFFFFFFH....",".....FFFFFFFFFF.....","...AAAKKGGGGKKAAA...","..AAAAKKGGGGKKAAAA..","..AABBBBBBBBBBBBAA..","...BBBGGGGGGBBBB....","...BBBKKGGKKBBB.....","...CCBBBBBBBBCC.....","...CCBBBBBBBBCC.....","....CC......CC......","...DDD......DDD.....","...DDD......DDD.....","...DDD......DDD.....","....DDD....DDD......","....DDD....DDD......"],
+  ["........HHHH........",".......HHHHHH.......","......HHHHHHHH......",".....HHHFFFFHHH.....",".....HHFFFFFFHH.....","....HHFFFFFFFFHH....","....HFFEEEEEEFFH....","....HFFFFFFFFFFH....",".....FFFFFFFFFF.....","...AAAKKGGGGKKAAA...","..AAAAKKGGGGKKAAAA..","..AABBBBBBBBBBBBAA..","...BBBGGGGGGBBBB....","...BBBKKGGKKBBB.....","....CCBBBBBBBBCC....","...CCBBBBBBBBCC.....","...CC......CC.......","...DDD......DDD.....","...DDD......DDD.....","...DDD......DDD.....","....DDD....DDD......","....DDD....DDD......"]
  ];
- const frame=Math.floor(performance.now()/420)%2,rows=frames[frame],scale=3;
- const colors={H:"#513324",F:"#f2c39b",E:"#244f9c",A:"#aebbc5",G:"#d9ad52",B:"#244f9c",C:frame?"#173d83":"#1d4d9d",D:"#302b35"};
- ctx.save();ctx.fillStyle="#17232966";ctx.beginPath();ctx.ellipse(x,y+24,19,5,0,0,Math.PI*2);ctx.fill();
- const bob=frame?0:-1;
- for(let ry=0;ry<16;ry++)for(let rx=0;rx<16;rx++){const ch=rows[ry][rx];if(ch===".")continue;ctx.fillStyle=colors[ch];ctx.fillRect(Math.round(x-24+rx*scale),Math.round(y-25+ry*scale+bob),scale,scale);}
+ const frame=Math.floor(performance.now()/520)%2,rows=frames[frame],scale=3;
+ const colors={H:"#493025",F:"#edbd98",E:"#202d42",A:"#c7d0d5",K:"#d7ad59",G:"#b68b42",B:"#17385f",C:"#102b50",D:"#34333a"};
+ ctx.save();ctx.imageSmoothingEnabled=false;
+ ctx.fillStyle="#17232966";ctx.beginPath();ctx.ellipse(x,y+35,20,6,0,0,Math.PI*2);ctx.fill();
+ const bob=frame===0?0:-2,left=Math.round(x-30),top=Math.round(y-34+bob);
+ for(let ry=0;ry<rows.length;ry++)for(let rx=0;rx<20;rx++){const ch=rows[ry][rx];if(ch===".")continue;ctx.fillStyle=colors[ch];ctx.fillRect(left+rx*scale,top+ry*scale,scale,scale);}
  ctx.restore();
 }
 function drawTownWorld(){
