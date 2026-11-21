@@ -1157,7 +1157,6 @@ function attack(skill=false,arrived=false){
 
 function update(dt){
  if(!state.started||state.paused||state.dead)return;
- if(inTown()){state.hp=Math.min(state.maxHp,state.hp+state.maxHp*.035*dt);state.mp=Math.min(state.maxMp,state.mp+state.maxMp*.05*dt);}
  state.elapsed+=dt;state.attackAnim=Math.max(0,state.attackAnim-dt);state.skillFlash=Math.max(0,state.skillFlash-dt);
  state.hitFlash=Math.max(0,state.hitFlash-dt);
  const p=state.player;let dx=joystick.x,dy=joystick.y;
