@@ -632,16 +632,16 @@ document.body.appendChild($('blacksmithModal'));
 document.body.appendChild($('townShopModal'));
 
 const maps=[
-{name:'ĐỒNG CỎ XANH',difficulty:'Dễ',mob:'Slime',hp:100,atk:4,xp:12,gold:4,color:'#477d52',path:'#9b875c',water:'#397c83',boss:'VUA SLIME',bossHp:260,bossAtk:14,bossXp:120,bossGold:80},
-{name:'HANG ĐỘNG',difficulty:'Trung bình',mob:'Thạch quái',hp:62,atk:10,xp:25,gold:9,color:'#4d5966',path:'#8b8175',water:'#344f67',boss:'Cave Golem',bossHp:520,bossAtk:23,bossXp:260,bossGold:180},
-{name:'THUNG LŨNG TÀN TRO',difficulty:'Khó',mob:'Hỏa linh',hp:105,atk:18,xp:45,gold:17,color:'#704b42',path:'#b17b52',water:'#69434b',boss:'Ash Warden',bossHp:900,bossAtk:36,bossXp:520,bossGold:360},
-{name:'MIỆNG NÚI LỬA',difficulty:'Khó',mob:'Quái vật map 4',hp:160,atk:27,xp:70,gold:28,color:'#53634b',path:'#9b875c',water:'#397c83',boss:'Boss map 4',bossHp:1300,bossAtk:48,bossXp:800,bossGold:520},
-{name:'THÀNH LORAND',difficulty:'Rất khó',mob:'Quái vật map 5',hp:230,atk:38,xp:100,gold:40,color:'#5d5368',path:'#887c9c',water:'#465a78',boss:'Boss map 5',bossHp:1900,bossAtk:65,bossXp:1100,bossGold:720},
-{name:'MỎM ĐÁ CỔ NGỮ',difficulty:'Rất khó',mob:'Quái vật map 6',hp:320,atk:52,xp:140,gold:55,color:'#6c5147',path:'#a27c5c',water:'#5b4b62',boss:'Boss map 6',bossHp:2700,bossAtk:85,bossXp:1500,bossGold:950},
-{name:'CỔ MỘ HÀN BĂNG',difficulty:'Ác mộng',mob:'Quái vật map 7',hp:440,atk:70,xp:190,gold:75,color:'#4d526d',path:'#8b829e',water:'#3d5776',boss:'Boss map 7',bossHp:3700,bossAtk:110,bossXp:2000,bossGold:1250},
-{name:'RẠN NỨT TỬ VONG',difficulty:'Ác mộng',mob:'Quái vật map 8',hp:600,atk:92,xp:250,gold:100,color:'#694b58',path:'#a17b7e',water:'#57465e',boss:'Boss map 8',bossHp:5000,bossAtk:145,bossXp:2600,bossGold:1600},
-{name:'NÚI THÁNH',difficulty:'Huyền thoại',mob:'Quái vật map 9',hp:820,atk:120,xp:330,gold:130,color:'#55475c',path:'#9881a5',water:'#4b4c76',boss:'Boss map 9',bossHp:6800,bossAtk:185,bossXp:3400,bossGold:2100},
-{name:'LỤC ĐỊA VĨNH HẰNG',difficulty:'Huyền thoại',mob:'Quái vật map 10',hp:1100,atk:155,xp:430,gold:170,color:'#4a3f54',path:'#987c98',water:'#4a4c70',boss:'Boss map 10',bossHp:9000,bossAtk:235,bossXp:4500,bossGold:2800}
+{name:'DEMACIA',difficulty:'Dễ',mob:'Slime',hp:100,atk:4,xp:12,gold:4,color:'#477d52',path:'#9b875c',water:'#397c83',boss:'VUA SLIME',bossHp:260,bossAtk:14,bossXp:120,bossGold:80},
+{name:'PILTOVER & ZAUN',difficulty:'Trung bình',mob:'Thạch quái',hp:62,atk:10,xp:25,gold:9,color:'#4d5966',path:'#8b8175',water:'#344f67',boss:'Cave Golem',bossHp:520,bossAtk:23,bossXp:260,bossGold:180},
+{name:'IONIA',difficulty:'Khó',mob:'Hỏa linh',hp:105,atk:18,xp:45,gold:17,color:'#704b42',path:'#b17b52',water:'#69434b',boss:'Ash Warden',bossHp:900,bossAtk:36,bossXp:520,bossGold:360},
+{name:'NOXUS',difficulty:'Khó',mob:'Quái vật map 4',hp:160,atk:27,xp:70,gold:28,color:'#53634b',path:'#9b875c',water:'#397c83',boss:'Boss map 4',bossHp:1300,bossAtk:48,bossXp:800,bossGold:520},
+{name:'BILGEWATER',difficulty:'Rất khó',mob:'Quái vật map 5',hp:230,atk:38,xp:100,gold:40,color:'#5d5368',path:'#887c9c',water:'#465a78',boss:'Boss map 5',bossHp:1900,bossAtk:65,bossXp:1100,bossGold:720},
+{name:'FRELJORD',difficulty:'Rất khó',mob:'Quái vật map 6',hp:320,atk:52,xp:140,gold:55,color:'#6c5147',path:'#a27c5c',water:'#5b4b62',boss:'Boss map 6',bossHp:2700,bossAtk:85,bossXp:1500,bossGold:950},
+{name:'SHURIMA',difficulty:'Ác mộng',mob:'Quái vật map 7',hp:440,atk:70,xp:190,gold:75,color:'#4d526d',path:'#8b829e',water:'#3d5776',boss:'Boss map 7',bossHp:3700,bossAtk:110,bossXp:2000,bossGold:1250},
+{name:'TARGON',difficulty:'Ác mộng',mob:'Quái vật map 8',hp:600,atk:92,xp:250,gold:100,color:'#694b58',path:'#a17b7e',water:'#57465e',boss:'Boss map 8',bossHp:5000,bossAtk:145,bossXp:2600,bossGold:1600},
+{name:'QUẦN ĐẢO BÓNG ĐÊM',difficulty:'Huyền thoại',mob:'Quái vật map 9',hp:820,atk:120,xp:330,gold:130,color:'#55475c',path:'#9881a5',water:'#4b4c76',boss:'Boss map 9',bossHp:6800,bossAtk:185,bossXp:3400,bossGold:2100},
+{name:'ICATHIA',difficulty:'Huyền thoại',mob:'Quái vật map 10',hp:1100,atk:155,xp:430,gold:170,color:'#4a3f54',path:'#987c98',water:'#4a4c70',boss:'Boss map 10',bossHp:9000,bossAtk:235,bossXp:4500,bossGold:2800}
 ];
 
 const joystick={x:0,y:0,active:false,pointerId:null};
