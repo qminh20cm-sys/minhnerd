@@ -1080,16 +1080,16 @@ function drawChibiGaren(x,y){
  // Sprite sheet gồm 4 frame nằm ngang; tự lấy kích thước thực từ ảnh.
  const frameWidth=garenIdleSprite.naturalWidth/4;
  const frameHeight=garenIdleSprite.naturalHeight;
- const frame=Math.floor(performance.now()/220)%4;
- // Giữ nguyên tỷ lệ và neo chân ở cùng một đường cơ sở.
+ // Nhịp chậm hơn để idle 4 frame không bị giật.
+ const frame=Math.floor(performance.now()/300)%4;
+ // Giữ nguyên tỷ lệ và neo chân; không cộng thêm bob vì sprite đã có chuyển động riêng.
  const scale=64/Math.max(frameWidth,frameHeight);
  const drawWidth=frameWidth*scale;
  const drawHeight=frameHeight*scale;
- const bob=Math.sin(performance.now()/440)*1;
  const drawX=Math.round(x-drawWidth/2);
- const drawY=Math.round(y+26-drawHeight+bob);
+ const drawY=Math.round(y+26-drawHeight);
  ctx.save();
- ctx.imageSmoothingEnabled=true;
+ ctx.imageSmoothingEnabled=false;
  ctx.fillStyle="#17232966";
  ctx.beginPath();
  ctx.ellipse(x,y+35,17,5,0,0,Math.PI*2);
