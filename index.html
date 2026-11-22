@@ -1073,19 +1073,28 @@ function drawChibiGarenFallback(x,y){
  ctx.restore();
 }
 function drawChibiGaren(x,y){
- if(!garenIdleSprite.complete || garenIdleSprite.naturalWidth < 256){
+ if(!garenIdleSprite.complete || garenIdleSprite.naturalWidth < 4 || garenIdleSprite.naturalHeight < 1){
   drawChibiGarenFallback(x,y);
   return;
  }
+ // Sprite sheet gồm 4 frame nằm ngang; tự lấy kích thước thực từ ảnh.
+ const frameWidth=garenIdleSprite.naturalWidth/4;
+ const frameHeight=garenIdleSprite.naturalHeight;
  const frame=Math.floor(performance.now()/220)%4;
- const bob=Math.round(Math.sin(performance.now()/440)*1);
+ // Giữ nguyên tỷ lệ và neo chân ở cùng một đường cơ sở.
+ const scale=64/Math.max(frameWidth,frameHeight);
+ const drawWidth=frameWidth*scale;
+ const drawHeight=frameHeight*scale;
+ const bob=Math.sin(performance.now()/440)*1;
+ const drawX=Math.round(x-drawWidth/2);
+ const drawY=Math.round(y+26-drawHeight+bob);
  ctx.save();
- ctx.imageSmoothingEnabled=false;
+ ctx.imageSmoothingEnabled=true;
  ctx.fillStyle="#17232966";
  ctx.beginPath();
  ctx.ellipse(x,y+35,17,5,0,0,Math.PI*2);
  ctx.fill();
- ctx.drawImage(garenIdleSprite,frame*64,0,64,64,Math.round(x-32),Math.round(y-38+bob),64,64);
+ ctx.drawImage(garenIdleSprite,frame*frameWidth,0,frameWidth,frameHeight,drawX,drawY,drawWidth,drawHeight);
  ctx.restore();
 }
 function drawTownWorld(){
