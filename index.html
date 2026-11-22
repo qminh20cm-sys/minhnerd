@@ -1063,29 +1063,26 @@ const garenIdleSprite = new Image();
 garenIdleSprite.src = "assets/characters/npcs/garen/idle.png";
 
 function drawChibiGarenFallback(x,y){
- const frames=[["......HHHH......",".....HHHHHH.....","....HHHHHHHH....","...HHHFFFFHHH...","...HHFFFFFFHH...","..HHFFFFFFFFHH..","..HFFEEEEEEFFH..","..HFFFFFFFFFFH..","...FFFFFFFFFF...","..AAAKKGGGGKAA..",".AAAAKKGGGGKAAA.",".AABBBBBBBBBBAA.","..BBBGGGGGGBBB..","..BBBKKGGKBBB...","..CCBBBBBBBBCC..","..CCBBBBBBBBCC..","...CC....CC.....","..DDD....DDD....","..DDD....DDD....","..DDD....DDD....","...DDD..DDD.....","...DDD..DDD....."],["......HHHH......",".....HHHHHH.....","....HHHHHHHH....","...HHHFFFFHHH...","...HHFFFFFFHH...","..HHFFFFFFFFHH..","..HFFEEEEEEFFH..","..HFFFFFFFFFFH..","...FFFFFFFFFF...","..AAAKKGGGGKAA..",".AAAAKKGGGGKAAA.",".AABBBBBBBBBBAA.","..BBBGGGGGGBBB..","..BBBKKGGKBBB...","...CCBBBBBBBBCC.","..CCBBBBBBBBCC..","...CC....CC.....","..DDD....DDD....","..DDD....DDD....","..DDD....DDD....","...DDD..DDD.....","...DDD..DDD....."]];
- const frame=Math.floor(performance.now()/520)%2,rows=frames[frame],scale=3;
+ const rows=["......HHHH......",".....HHHHHH.....","....HHHHHHHH....","...HHHFFFFHHH...","...HHFFFFFFHH...","..HHFFFFFFFFHH..","..HFFEEEEEEFFH..","..HFFFFFFFFFFH..","...FFFFFFFFFF...","..AAAKKGGGGKAA..",".AAAAKKGGGGKAAA.",".AABBBBBBBBBBAA.","..BBBGGGGGGBBB..","..BBBKKGGKBBB...","...CCBBBBBBBBCC.","..CCBBBBBBBBCC..","...CC....CC.....","..DDD....DDD....","..DDD....DDD....","..DDD....DDD....","...DDD..DDD.....","...DDD..DDD....."];
+ const scale=3;
  const colors={H:"#493025",F:"#edbd98",E:"#202d42",A:"#c7d0d5",K:"#d7ad59",G:"#b68b42",B:"#17385f",C:"#102b50",D:"#34333a"};
  ctx.save();ctx.imageSmoothingEnabled=false;
  ctx.fillStyle="#17232966";ctx.beginPath();ctx.ellipse(x,y+35,17,5,0,0,Math.PI*2);ctx.fill();
- const bob=frame===0?0:-2,left=Math.round(x-24),top=Math.round(y-34+bob);
+ const left=Math.round(x-24),top=Math.round(y-34);
  for(let ry=0;ry<rows.length;ry++)for(let rx=0;rx<16;rx++){const ch=rows[ry][rx];if(ch===".")continue;ctx.fillStyle=colors[ch];ctx.fillRect(left+rx*scale,top+ry*scale,scale,scale);}
  ctx.restore();
 }
 function drawChibiGaren(x,y){
- if(!garenIdleSprite.complete || garenIdleSprite.naturalWidth < 4 || garenIdleSprite.naturalHeight < 1){
+ if(!garenIdleSprite.complete || garenIdleSprite.naturalWidth < 1 || garenIdleSprite.naturalHeight < 1){
   drawChibiGarenFallback(x,y);
   return;
  }
- // Sprite sheet gồm 4 frame nằm ngang; tự lấy kích thước thực từ ảnh.
- const frameWidth=garenIdleSprite.naturalWidth/4;
- const frameHeight=garenIdleSprite.naturalHeight;
- // Nhịp chậm hơn để idle 4 frame không bị giật.
- const frame=Math.floor(performance.now()/300)%4;
- // Giữ nguyên tỷ lệ và neo chân; không cộng thêm bob vì sprite đã có chuyển động riêng.
- const scale=64/Math.max(frameWidth,frameHeight);
- const drawWidth=frameWidth*scale;
- const drawHeight=frameHeight*scale;
+ // Garen dùng một ảnh idle tĩnh, không cắt frame và không chạy animation.
+ const imageWidth=garenIdleSprite.naturalWidth;
+ const imageHeight=garenIdleSprite.naturalHeight;
+ const scale=64/Math.max(imageWidth,imageHeight);
+ const drawWidth=imageWidth*scale;
+ const drawHeight=imageHeight*scale;
  const drawX=Math.round(x-drawWidth/2);
  const drawY=Math.round(y+26-drawHeight);
  ctx.save();
@@ -1094,7 +1091,7 @@ function drawChibiGaren(x,y){
  ctx.beginPath();
  ctx.ellipse(x,y+35,17,5,0,0,Math.PI*2);
  ctx.fill();
- ctx.drawImage(garenIdleSprite,frame*frameWidth,0,frameWidth,frameHeight,drawX,drawY,drawWidth,drawHeight);
+ ctx.drawImage(garenIdleSprite,0,0,imageWidth,imageHeight,drawX,drawY,drawWidth,drawHeight);
  ctx.restore();
 }
 function drawTownWorld(){
