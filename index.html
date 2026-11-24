@@ -1871,7 +1871,7 @@ function castChampionSkill(index){
  const mpBefore=state.mp;attack(true);const didCast=state.lastSkill!==oldLast;state.atk=oldAtk;state.magicDamage=oldMagic;
  if(!didCast){state.mp=mpBefore;return;}
  state.mp=Math.max(0,state.mp-Math.max(0,a.mp-baseCost));state.championSkillCooldowns[index]=now+a.cd;
- const applyExtra=(amount,color='#d8b4ff')=>{if(!m.dead&&m.hp>0){const n=Math.min(m.hp,Math.max(1,Math.round(amount)));m.hp-=n;m.hit=.2;floatText(m.x,m.y-28,'-'+n,color);if(m.hp<=0)m.dead=true;}};
+ const applyExtra=(amount,color='#d8b4ff')=>{if(!m.dead&&m.hp>0){const n=Math.min(Math.max(0,m.hp-1),Math.max(1,Math.round(amount)));if(!n)return;m.hp-=n;m.hit=.2;floatText(m.x,m.y-28,'-'+n,color);}};
  if(['heal','spirit','chronobreak'].includes(a.type))restorePlayerHp(Math.max(8,Math.round(a.type==='heal'?(state.maxHp-state.hp)*.22:state.maxHp*(c.id==='ahri'?.12:.2))),'heal');
  if(['slow','charm','arrow','parallel'].includes(a.type)){m.championSlowUntil=now+(a.type==='arrow'?3500:2200);m.championSlowPct=a.type==='arrow'?.55:.3;}
  if(a.type==='mark'){m.championMarkedUntil=now+3500;m.championMarkedPct=.2;}
@@ -1879,7 +1879,7 @@ function castChampionSkill(index){
  if(['foxfire','orb','timewinder','focus','phase','volley','arrow','execute'].includes(a.type))applyExtra((c.id==='ahri'||c.id==='ekko'?state.magicDamage:state.atk)*.35,'#bda0ff');
  if(['parallel','chronobreak'].includes(a.type)){state.championShield=Math.max(state.championShield,state.maxHp*.18);state.championShieldUntil=now+4000;}
  if(['phase','hawk'].includes(a.type)){state.ekkoMoveBuffPct=c.id==='ekko'?35:20;state.ekkoMoveBuffUntil=now+3000;}
- if(a.type==='volley'){for(const other of state.mobs){if(other!==m&&!other.dead&&Math.hypot(other.x-m.x,other.y-m.y)<100){const n=Math.min(other.hp,Math.round(state.atk*.55));other.hp-=n;floatText(other.x,other.y-18,'-'+n,'#9deaff');if(other.hp<=0)other.dead=true;}}}
+ if(a.type==='volley'){for(const other of state.mobs){if(other!==m&&!other.dead&&Math.hypot(other.x-m.x,other.y-m.y)<100){const n=Math.min(Math.max(0,other.hp-1),Math.round(state.atk*.55));other.hp-=n;if(n>0)floatText(other.x,other.y-18,'-'+n,'#9deaff');}}}
  if(a.type==='arrow')m.championSlowPct=.65;
  updateChampionSkillButtons();ui();save();
 }
@@ -1900,8 +1900,8 @@ attack=function(skill=false,arrived=false){
   target.dariusBleeds=Array.isArray(target.dariusBleeds)?target.dariusBleeds:[];target.dariusBleeds.push({expires:now+5000,next:now+1000,damage:tick});if(target.dariusBleeds.length>5)target.dariusBleeds.shift();
  }
  if(dealt>0&&c.id==='ekko'&&!target.dead){
-  target.ekkoHits=Array.isArray(target.ekkoHits)?target.ekkoHits.filter(t=>now-t<4000):[];target.ekkoHits.push(now);
-  if(target.ekkoHits.length>=3){target.ekkoHits=[];let bonus=30+(championLevel()-1)*110/17+state.magicDamage*.9;if(['normal','elite','leader','boss'].includes(target.kind))bonus=Math.min(600,bonus*3);const n=Math.min(target.hp,Math.round(bonus));target.hp-=n;floatText(target.x,target.y-25,'-'+n,'#c58cff');target.ekkoResonanceLock=now+5000;if(target.isChampion||target.kind==='champion'){state.ekkoMoveBuffPct=50+(championLevel()-1)*30/17;state.ekkoMoveBuffUntil=now+2500;}if(target.hp<=0)target.dead=true;}
+  if(target.ekkoResonanceLock>now){target.ekkoHits=[];}else{target.ekkoHits=Array.isArray(target.ekkoHits)?target.ekkoHits.filter(t=>now-t<4000):[];target.ekkoHits.push(now);}
+  if(target.ekkoHits.length>=3&&target.ekkoResonanceLock<=now){target.ekkoHits=[];let bonus=30+(championLevel()-1)*110/17+state.magicDamage*.9;if(['normal','elite','leader','boss'].includes(target.kind))bonus=Math.min(600,bonus*3);const n=Math.min(Math.max(0,target.hp-1),Math.round(bonus));target.hp-=n;if(n>0)floatText(target.x,target.y-25,'-'+n,'#c58cff');target.ekkoResonanceLock=now+5000;if(target.isChampion||target.kind==='champion'){state.ekkoMoveBuffPct=50+(championLevel()-1)*30/17;state.ekkoMoveBuffUntil=now+2500;}if(target.hp<=0)target.dead=true;}
  }
  if(dealt>0&&c.id==='ahri'&&target.dead){
   if(target.isChampion||target.kind==='champion')restorePlayerHp(75+(championLevel()-1)*90/17+state.magicDamage*.3,'heal');
@@ -1916,7 +1916,7 @@ update=function(dt){
  if(state.ekkoMoveBuffUntil>now)state.moveSpeed=oldSpeed*(1+(state.ekkoMoveBuffPct||0)/100);
  for(const m of state.mobs){if(m.dead)continue;if(m.championSlowUntil>now){if(m._championBaseSpeed==null)m._championBaseSpeed=m.spd;m.spd=m._championBaseSpeed*(1-(m.championSlowPct||0));}else if(m._championBaseSpeed!=null){m.spd=m._championBaseSpeed;delete m._championBaseSpeed;}}
  originalChampionUpdate(dt);state.moveSpeed=oldSpeed;
- for(const m of state.mobs){if(m.dead)continue;if(Array.isArray(m.dariusBleeds)){m.dariusBleeds=m.dariusBleeds.filter(b=>b.expires>now);for(const b of m.dariusBleeds){if(now>=b.next){const dmg=Math.min(m.hp,b.damage);m.hp-=dmg;b.next+=1000;if(dmg>0)floatText(m.x,m.y-18,'-'+dmg,'#d84b55');if(m.hp<=0){m.dead=true;break;}}}}}
+ for(const m of state.mobs){if(m.dead)continue;if(Array.isArray(m.dariusBleeds)){m.dariusBleeds=m.dariusBleeds.filter(b=>b.expires>now);for(const b of m.dariusBleeds){if(now>=b.next){const dmg=Math.min(Math.max(0,m.hp-1),b.damage);m.hp-=dmg;b.next+=1000;if(dmg>0)floatText(m.x,m.y-18,'-'+dmg,'#d84b55');}}}}
  if(state.championShieldUntil<now)state.championShield=0;if(state.ekkoMoveBuffUntil<now)state.ekkoMoveBuffPct=0;updateChampionSkillButtons();
 };
 const championSkillStyle=document.createElement('style');championSkillStyle.textContent=".skill-passive-card{padding:11px;margin:7px 0 12px;background:linear-gradient(120deg,#2a2520,#14232d);border:1px solid #a98b58;border-radius:8px}.skill-passive-title{display:flex;justify-content:space-between;gap:8px;align-items:center;color:#ffdf9b;font-size:12px;font-weight:bold}.skill-passive-title span{font-size:8px;color:#72e0ad;border:1px solid #397c61;padding:3px 5px;border-radius:5px;white-space:nowrap}.skill-passive-card p{font-size:10px;line-height:1.55;color:#d5e1dc;margin:8px 0}.skill-passive-card small{display:block;color:#f0cf84;font-size:9px}.skill-learn-button{font-size:9px;padding:6px 7px;max-width:118px;white-space:normal}.skill-learn-button.learned{color:#72e0ad;border-color:#397c61;background:#163d32}.action-controls button[data-skill-slot]{min-width:0;flex:1;font-size:clamp(10px,2.8vw,15px);padding:5px 2px}.action-controls button[data-skill-slot]:disabled{opacity:.48;filter:grayscale(.7)}.action-controls button.skill-ready{border-color:#72e0ad;color:#ffe6a1;box-shadow:0 0 7px #72e0ad55}";document.head.appendChild(championSkillStyle);
