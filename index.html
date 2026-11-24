@@ -471,6 +471,18 @@ html,body{overscroll-behavior-x:none!important}
    aspect-ratio:1/1!important;border-radius:50%!important}
 }
 
+
+/* v1.3.0aa — prevent iOS Safari long-press loupe, callout and accidental zoom on game surface */
+html,body,.wrap,.layout,.gamebox,.canvas-wrap,#game,.canvas-name-layer,.combat-ui,
+.menu-bar,.menu-bar button,.chat-toggle{
+ -webkit-user-select:none!important;user-select:none!important;
+ -webkit-touch-callout:none!important;
+}
+.gamebox,.canvas-wrap,#game,.combat-ui,.menu-bar,.menu-bar button,.chat-toggle{
+ touch-action:none!important;
+}
+#game{ -webkit-tap-highlight-color:transparent!important; }
+
 </style>
 
 </head>
@@ -485,7 +497,7 @@ html,body{overscroll-behavior-x:none!important}
 
    <div class="logo">✦ Runeterra: Tái Sinh</div>
 
-   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.3.0</div>
+   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.3.0a</div>
 
   </div>
 
@@ -510,7 +522,7 @@ html,body{overscroll-behavior-x:none!important}
     <div id="inventoryFullToast" class="inventory-full-toast" role="status" aria-live="polite">Túi đồ của bạn đã đầy</div>
     <div id="bossDefeatNotice" class="boss-defeat-notice" role="status" aria-live="assertive"></div>
     <div id="rewardFeed" class="reward-feed" aria-live="polite"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.0</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.0a</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px 'Spiegel',Arial,sans-serif;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ KHỞI NGUYÊN HUYỀN THOẠI</h2><div class="intro-story">Không một lời báo trước.
@@ -1180,7 +1192,7 @@ function drawTownWorld(){
 }
 
 
-/* v1.3.0 — handmade pixel-chibi models for the remaining Demacia town NPCs */
+/* v1.3.0a — handmade pixel-chibi models for the remaining Demacia town NPCs */
 const TOWN_NPC_SPRITES={
  soraka:{
   colors:{H:"#b8e7ee",h:"#78c6d4",F:"#f2c7a5",E:"#26364d",S:"#f5f0dc",P:"#8b70bd",p:"#66529d",W:"#eee8f4",G:"#d9c17b",D:"#51446f"},
