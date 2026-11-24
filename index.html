@@ -563,7 +563,7 @@ Không còn là những huyền thoại của Runeterra — đây là lúc họ 
 
    
 
-   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label><label><input type="checkbox" id="settingSound"> 🎵 Nhạc nền</label><label>Âm lượng nhạc <input type="range" id="settingMusicVolume" min="0" max="100" value="35"></label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>🎒 LỊCH SỬ NHẶT ĐỒ</b><div id="pickupHistory" class="pickup-history"><div class="muted">Chưa nhặt được vật phẩm nào.</div></div><div id="log" class="log" style="display:none" aria-hidden="true"></div></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
+   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>🎒 LỊCH SỬ NHẶT ĐỒ</b><div id="pickupHistory" class="pickup-history"><div class="muted">Chưa nhặt được vật phẩm nào.</div></div><div id="log" class="log" style="display:none" aria-hidden="true"></div></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
 
   </aside>
 
@@ -1078,21 +1078,25 @@ function drawChibiGaren(x,y){
   drawChibiGarenFallback(x,y);
   return;
  }
- // Garen dùng một ảnh idle tĩnh, không cắt frame và không chạy animation.
- const imageWidth=garenIdleSprite.naturalWidth;
- const imageHeight=garenIdleSprite.naturalHeight;
- const scale=88/Math.max(imageWidth,imageHeight);
- const drawWidth=imageWidth*scale*1.08*0.84;
- const drawHeight=imageHeight*scale;
- const drawX=Math.round(x-drawWidth/2);
- const drawY=Math.round(y+44-drawHeight);
+ // Sprite sheet Garen gồm 4 frame ngang, mỗi frame là một ô vuông.
+ const frameCount=4;
+ const frameWidth=garenIdleSprite.naturalWidth/frameCount;
+ const frameHeight=garenIdleSprite.naturalHeight;
+ if(!Number.isInteger(frameWidth) || frameWidth<1){
+  drawChibiGarenFallback(x,y);
+  return;
+ }
+ const frameIndex=Math.floor(performance.now()/220)%frameCount;
+ const drawSize=88;
+ const drawX=Math.round(x-drawSize/2);
+ const drawY=Math.round(y+44-drawSize);
  ctx.save();
  ctx.imageSmoothingEnabled=false;
  ctx.fillStyle="#17232966";
  ctx.beginPath();
  ctx.ellipse(x,y+35,17,5,0,0,Math.PI*2);
  ctx.fill();
- ctx.drawImage(garenIdleSprite,0,0,imageWidth,imageHeight,drawX,drawY,drawWidth,drawHeight);
+ ctx.drawImage(garenIdleSprite,frameIndex*frameWidth,0,frameWidth,frameHeight,drawX,drawY,drawSize,drawSize);
  ctx.restore();
 }
 function drawTownWorld(){
@@ -1411,86 +1415,13 @@ function rerollGearAffixes(index){const it=state.inventory[index];if(!it||it.loc
 $('itemEquipBtn').onclick=()=>{if(selectedItemIndex!==null)equip(selectedItemIndex)};$('itemDropBtn').onclick=discardItem;$('itemLockBtn').onclick=toggleItemLock;$('itemPotionUseBtn').onclick=()=>{const k=$('itemModal').dataset.potionKind;if(k){useBagPotion(k);closeItem();}};$('townShopClose').onclick=()=> $('townShopModal').classList.remove('show');$('townShopHp').onclick=()=>townBuy('hp');$('townShopMp').onclick=()=>townBuy('mp');$('townShopIronSword').onclick=()=>townBuy('ironSword');document.querySelectorAll('[data-shop-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-shop-tab]').forEach(x=>x.classList.toggle('active',x===b));['potions','gear','sell'].forEach(k=>{$('shop'+k.charAt(0).toUpperCase()+k.slice(1)).hidden=k!==b.dataset.shopTab;});if(b.dataset.shopTab==='sell')renderTownShop();});document.addEventListener('click',e=>{const sellItem=e.target.closest('[data-shop-sell-item]');if(sellItem){sellTownItem(sellItem.dataset.shopSellItem);return;}const sellPotion=e.target.closest('[data-shop-sell-potion]');if(sellPotion){sellTownPotion(sellPotion.dataset.shopSellPotion);return;}});document.addEventListener('click',e=>{const custom=e.target.closest('[data-potential-custom]');if(custom){const k=custom.dataset.potentialCustom,input=document.querySelector('[data-potential-input="'+k+'"]'),amount=Math.floor(Number(input?.value)||0);if(amount>0)spendPoint(k,amount);if(input)input.value='';}const detail=e.target.closest('[data-equipped-item]');if(detail)openEquippedItem(detail.dataset.equippedItem);const rr=e.target.closest('[data-reroll-item]');if(rr)rerollGearAffixes(Number(rr.dataset.rerollItem));const p=e.target.closest('[data-potential]');if(p)spendPoint(p.dataset.potential,Number(p.dataset.amount)||1);const potion=e.target.closest('[data-potion-use]');if(potion){const k=potion.dataset.potionUse;if(inventorySelectMode){if(selectedInventoryPotions.has(k))selectedInventoryPotions.delete(k);else selectedInventoryPotions.add(k);renderInventoryGrid();}else openPotionDetail(k);return;}const q=e.target.closest('[data-item-index]');if(q){const i=Number(q.dataset.itemIndex);if(inventorySelectMode){if(selectedInventoryItems.has(i))selectedInventoryItems.delete(i);else selectedInventoryItems.add(i);q.classList.toggle('inventory-selected',selectedInventoryItems.has(i));$('inventoryActionHint').textContent='Đã chọn '+(selectedInventoryItems.size+selectedInventoryPotions.size)+' loại vật phẩm. Chạm vào ô để chọn hoặc bỏ chọn.';}else openItem(i);return;}const z=e.target.closest('[data-unequip]');if(z)unequip(z.dataset.unequip);const quest=e.target.closest('[data-quest-claim]');if(quest)claimQuest(quest.dataset.questClaim);});
 $('respawnBtn').onclick=()=>{$('deathScreen').classList.remove('show');enterTown();};
 
-// Nhạc nền nguyên bản được tổng hợp bằng Web Audio API, không cần tải file ngoài.
-const MUSIC_TRACKS={
- town:{tempo:76,chords:[[50,57,62,66],[47,54,59,62],[45,52,57,61],[43,50,55,59]],melody:[
- [[0,74],[1,76],[2,78],[3.25,76]],[[0,73],[1.5,74],[2.5,76],[3.25,78]],[[0,72],[1,74],[2,76],[3.25,74]],[[0,71],[1,73],[2,76],[3,74]],
- [[0,69],[1,72],[2,74],[3,76]],[[0,71],[1.5,74],[2.5,76]],[[0,72],[1,74],[2,78],[3.25,76]],[[0,74],[1.5,76],[2.5,78]]
- ]},
- meadow:{tempo:96,chords:[[55,62,67,71],[50,57,62,66],[53,60,65,69],[48,55,60,64]],melody:[
- [[0,79],[0.5,81],[1,83],[2,86],[3,83]],[[0,78],[1,81],[1.5,83],[2.5,86],[3,83]],[[0,77],[0.5,81],[1,84],[2,86],[3,84]],[[0,76],[1,79],[2,84],[2.5,83],[3,79]]
- ]}
-};
-let musicContext=null,musicMaster=null,musicTimer=null,musicZone=null,musicUnlocked=false,musicBar=0;
-function getMusicContext(){
- if(musicContext)return musicContext;
- const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;
- musicContext=new AC();musicMaster=musicContext.createGain();musicMaster.gain.value=0;
- const filter=musicContext.createBiquadFilter();filter.type='lowpass';filter.frequency.value=5200;
- musicMaster.connect(filter);filter.connect(musicContext.destination);return musicContext;
-}
-function musicNote(midi,at,duration,volume,type='triangle'){
- const ac=getMusicContext();if(!ac||!musicMaster)return;
- const freq=440*Math.pow(2,(midi-69)/12),gain=ac.createGain();
- gain.gain.setValueAtTime(.0001,at);gain.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),at+.055);
- gain.gain.setValueAtTime(Math.max(.0002,volume)*.82,at+Math.max(.06,duration*.72));
- gain.gain.exponentialRampToValueAtTime(.0001,at+duration);
- if(type==='flute'){
-  const fundamental=ac.createOscillator(),harmonic=ac.createOscillator(),vibrato=ac.createOscillator(),vibratoGain=ac.createGain(),harmonicGain=ac.createGain();
-  fundamental.type='sine';fundamental.frequency.value=freq;
-  harmonic.type='sine';harmonic.frequency.value=freq*2.01;
-  vibrato.type='sine';vibrato.frequency.value=5.1;vibratoGain.gain.value=2.2;
-  vibrato.connect(vibratoGain);vibratoGain.connect(fundamental.frequency);
-  harmonicGain.gain.value=.16;
-  fundamental.connect(gain);harmonic.connect(harmonicGain);harmonicGain.connect(gain);gain.connect(musicMaster);
-  fundamental.start(at);harmonic.start(at);vibrato.start(at);
-  fundamental.stop(at+duration+.04);harmonic.stop(at+duration+.04);vibrato.stop(at+duration+.04);
- }else{
-  const osc=ac.createOscillator();osc.type=type;osc.frequency.value=freq;osc.connect(gain);gain.connect(musicMaster);osc.start(at);osc.stop(at+duration+.03);
- }
-}
-function musicPad(notes,at,duration){
- const ac=getMusicContext();if(!ac||!musicMaster)return;
- notes.forEach((m,i)=>{const osc=ac.createOscillator(),gain=ac.createGain(),filter=ac.createBiquadFilter();osc.type='sawtooth';osc.frequency.value=440*Math.pow(2,(m-69)/12);osc.detune.value=i%2?4:-4;filter.type='lowpass';filter.frequency.value=720;
- gain.gain.setValueAtTime(.0001,at);gain.gain.linearRampToValueAtTime(.012,at+.65);gain.gain.setValueAtTime(.012,Math.max(at+.66,at+duration-.55));gain.gain.linearRampToValueAtTime(.0001,at+duration);
- osc.connect(filter);filter.connect(gain);gain.connect(musicMaster);osc.start(at);osc.stop(at+duration+.04);});
-}
-function scheduleMusicBar(zone){
- const ac=getMusicContext(),track=MUSIC_TRACKS[zone];if(!ac||!track||!settings.sound)return;
- const beat=60/track.tempo,barStart=ac.currentTime+.08,barDuration=beat*4,chord=track.chords[musicBar%track.chords.length];
- musicPad(chord,barStart,barDuration);
- musicNote(chord[0]-12,barStart,barDuration*.92,.025,'sine');
- const phrase=track.melody[musicBar%track.melody.length];
- phrase.forEach(([b,n],i)=>musicNote(n,barStart+b*beat,Math.min(beat*(i===phrase.length-1?.9:.78),barDuration-b*beat),zone==='town'?.085:.052,zone==='town'?'flute':'triangle'));
- musicBar++;
- musicTimer=setTimeout(()=>scheduleMusicBar(zone),barDuration*1000-35);
-}
-function setMusicVolume(){
- if(!musicMaster)return;
- const level=settings.sound?Math.max(0,Math.min(100,Number(settings.musicVolume??35)))/100:0;
- musicMaster.gain.setTargetAtTime(level*.42,musicContext.currentTime,.18);
-}
-function syncBackgroundMusic(){
- if(!settings.sound)return;
- const zone=state.inTown?'town':(state.mapIndex===0?'meadow':null);
- if(!zone){if(musicTimer)clearTimeout(musicTimer);musicTimer=null;musicZone=null;setMusicVolume();return;}
- if(musicZone===zone&&musicTimer)return;
- if(musicTimer)clearTimeout(musicTimer);
- musicZone=zone;musicBar=0;
- if(musicUnlocked&&getMusicContext()){musicContext.resume().then(()=>{setMusicVolume();scheduleMusicBar(zone);}).catch(()=>{});}
-}
-function activateBackgroundMusic(){
- if(!settings.sound)return;
- const ac=getMusicContext();if(!ac)return;
- musicUnlocked=true;ac.resume().then(()=>{setMusicVolume();syncBackgroundMusic();}).catch(()=>{});
-}
-document.addEventListener('pointerdown',activateBackgroundMusic,{passive:true});
-document.addEventListener('keydown',activateBackgroundMusic);
-const settings={damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,sound:true,musicVolume:35,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'};
+// Nhạc nền đã được gỡ bỏ theo yêu cầu.
+function syncBackgroundMusic(){}
+const settings={damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'};
 function applySettings(){document.documentElement.style.setProperty('--game-font',settings.fontSize+'px');document.documentElement.style.setProperty('--button-font',settings.buttonSize+'px');const j=$('joystick'),st=$('stick');j.style.width=settings.joySize+'px';j.style.height=settings.joySize+'px';j.style.flexBasis=settings.joySize+'px';const z=settings.joySize*.46;st.style.width=z+'px';st.style.height=z+'px';st.style.left=(settings.joySize-z)/2+'px';st.style.top=(settings.joySize-z)/2+'px';}
-function saveSettings(){localStorage.setItem('afkSettings',JSON.stringify(settings));applySettings();setMusicVolume();if(settings.sound)activateBackgroundMusic();else{if(musicTimer)clearTimeout(musicTimer);musicTimer=null;musicZone=null;setMusicVolume();}}
-function loadSettingsUI(){const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingMusicVolume:'musicVolume',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(el){if(el.type==='checkbox')el.checked=!!settings[k];else el.value=settings[k];}}}
-function initSettings(){try{Object.assign(settings,JSON.parse(localStorage.getItem('afkSettings')||'{}'));delete settings.hitRun;}catch{}applySettings();const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingMusicVolume:'musicVolume',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(!el)continue;el.addEventListener('input',()=>{settings[k]=el.type==='checkbox'?el.checked:(el.type==='range'?Number(el.value):el.value);saveSettings();});} $('settingsReset').onclick=()=>{Object.assign(settings,{damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,sound:true,musicVolume:35,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'});saveSettings();loadSettingsUI();};}
+function saveSettings(){localStorage.setItem('afkSettings',JSON.stringify(settings));applySettings();}
+function loadSettingsUI(){const ids={settingHighGraphics:'highGraphics',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(el){if(el.type==='checkbox')el.checked=!!settings[k];else el.value=settings[k];}}}
+function initSettings(){try{Object.assign(settings,JSON.parse(localStorage.getItem('afkSettings')||'{}'));delete settings.hitRun;}catch{}applySettings();const ids={settingHighGraphics:'highGraphics',settingSound:'sound',settingMusicVolume:'musicVolume',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(!el)continue;el.addEventListener('input',()=>{settings[k]=el.type==='checkbox'?el.checked:(el.type==='range'?Number(el.value):el.value);saveSettings();});} $('settingsReset').onclick=()=>{Object.assign(settings,{damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'});saveSettings();loadSettingsUI();};}
 const bindGameControl=(id,action)=>{const el=$(id);el.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();action();});el.addEventListener('click',e=>{if(e.detail===0)action();});};
 bindGameControl('autoBtn',()=>{state.auto=!state.auto;log('Auto Attack '+(state.auto?'đã bật.':'đã tắt.'));ui();});bindGameControl('skillBtn',()=>attack(true));bindGameControl('mobileAttack',()=>attack(false));
 bindGameControl('potionBtn',()=>{if(state.potions>0&&state.hp<state.maxHp){state.potions--;restorePlayerHp(state.maxHp*.05,'heal');save();ui();log('Đã dùng dược phẩm HP.')}else log('Không thể dùng lúc này.')});
