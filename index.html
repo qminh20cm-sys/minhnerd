@@ -5,7 +5,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="game-version" content="1.3.5">
+<meta name="game-version" content="1.3.6">
 <meta name="theme-color" content="#07152f">
 <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.jpg">
 <link rel="icon" type="image/jpeg" sizes="180x180" href="/icons/icon-180.jpg">
@@ -542,7 +542,7 @@ html,body,.wrap,.layout,.gamebox,.canvas-wrap,#game,.canvas-name-layer,.combat-u
 
    <div class="logo">✦ Runeterra: Tái Sinh</div>
 
-   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.3.5</div>
+   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.3.6</div>
 
   </div>
 
@@ -567,7 +567,7 @@ html,body,.wrap,.layout,.gamebox,.canvas-wrap,#game,.canvas-name-layer,.combat-u
     <div id="inventoryFullToast" class="inventory-full-toast" role="status" aria-live="polite">Túi đồ của bạn đã đầy</div>
     <div id="bossDefeatNotice" class="boss-defeat-notice" role="status" aria-live="assertive"></div>
     <div id="rewardFeed" class="reward-feed" aria-live="polite"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.5</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.6</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px 'Spiegel',Arial,sans-serif;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ KHỞI NGUYÊN HUYỀN THOẠI</h2><div class="intro-story">Không một lời báo trước.
@@ -617,7 +617,10 @@ Không còn là những huyền thoại của Runeterra — đây là lúc họ 
 
     <button id="autoBtn" class="active" title="Tự động đánh" aria-label="Tự động đánh">⚡</button>
 
-    <button id="skillBtn" title="Sử dụng kỹ năng (10 MP)" aria-label="Sử dụng kỹ năng">✨</button>
+    <button id="skillBtn" data-skill-slot="0" title="Kỹ năng 1" aria-label="Kỹ năng 1">Q</button>
+    <button id="skillBtn2" data-skill-slot="1" title="Kỹ năng 2" aria-label="Kỹ năng 2">W</button>
+    <button id="skillBtn3" data-skill-slot="2" title="Kỹ năng 3" aria-label="Kỹ năng 3">E</button>
+    <button id="skillBtn4" data-skill-slot="3" title="Kỹ năng 4" aria-label="Kỹ năng 4">R</button>
 
     <button id="potionBtn" title="Dùng bình HP" aria-label="Dùng bình HP">❤️</button>
 
@@ -659,19 +662,7 @@ Không còn là những huyền thoại của Runeterra — đây là lúc họ 
 
    <section class="panel"><div class="heading">🎯 NHIỆM VỤ</div><div id="questList" class="inventory-list"></div><div class="muted" style="font-size:10px;line-height:1.5;margin-top:8px">Hoàn thành mục tiêu để nhận EXP và vàng. Tiến độ được lưu cùng dữ liệu nhân vật.</div></section>
 
-   <section class="panel">
-
-    <div class="heading">✨ KỸ NĂNG NHÂN VẬT</div>
-    <div class="muted" style="font-size:10px;line-height:1.5;margin-bottom:10px">Khám phá và học các kỹ năng mới để mở rộng phong cách chiến đấu. Cây kỹ năng sẽ được cập nhật thêm.</div>
-    <div class="skill-learning-list">
-     <div class="skill-learning-card"><span class="skill-learning-icon">⚔️</span><div><b>Kiếm khí</b><small>Kỹ năng tấn công cận chiến</small></div><span class="skill-learning-status">SẮP RA MẮT</span></div>
-     <div class="skill-learning-card"><span class="skill-learning-icon">🔥</span><div><b>Hỏa cầu</b><small>Ma pháp gây sát thương</small></div><span class="skill-learning-status">SẮP RA MẮT</span></div>
-     <div class="skill-learning-card"><span class="skill-learning-icon">🏹</span><div><b>Phá tiễn</b><small>Kỹ năng tấn công tầm xa</small></div><span class="skill-learning-status">SẮP RA MẮT</span></div>
-     <div class="skill-learning-card"><span class="skill-learning-icon">🗡️</span><div><b>Ảnh kích</b><small>Đòn đánh nhanh và chí mạng</small></div><span class="skill-learning-status">SẮP RA MẮT</span></div>
-     <div class="skill-learning-card"><span class="skill-learning-icon">🛡️</span><div><b>Hộ thể</b><small>Tăng khả năng phòng thủ</small></div><span class="skill-learning-status">SẮP RA MẮT</span></div>
-     <div class="skill-learning-card"><span class="skill-learning-icon">💚</span><div><b>Sinh lực</b><small>Hỗ trợ hồi phục và sinh tồn</small></div><span class="skill-learning-status">SẮP RA MẮT</span></div>
-    </div>
-   </section>
+   <section class="panel"><div id="championSkillPanel"></div></section>
 
    <section class="panel">
 
@@ -683,7 +674,7 @@ Không còn là những huyền thoại của Runeterra — đây là lúc họ 
 
    
 
-   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>🎒 LỊCH SỬ NHẶT ĐỒ</b><div id="pickupHistory" class="pickup-history"><div class="muted">Chưa nhặt được vật phẩm nào.</div></div><div id="log" class="log" style="display:none" aria-hidden="true"></div></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><div class="settings-group"><b>🔄 Cập nhật game</b><div style="font-size:11px;color:#b9ccca">Phiên bản hiện tại: <strong>v1.3.5</strong></div><button type="button" id="gameUpdateBtn" class="small">🔄 Kiểm tra và cập nhật</button><small id="gameUpdateStatus" role="status" aria-live="polite">Bấm để kiểm tra phiên bản mới. Tiến trình chơi được giữ nguyên.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
+   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>🎒 LỊCH SỬ NHẶT ĐỒ</b><div id="pickupHistory" class="pickup-history"><div class="muted">Chưa nhặt được vật phẩm nào.</div></div><div id="log" class="log" style="display:none" aria-hidden="true"></div></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><div class="settings-group"><b>🔄 Cập nhật game</b><div style="font-size:11px;color:#b9ccca">Phiên bản hiện tại: <strong>v1.3.6</strong></div><button type="button" id="gameUpdateBtn" class="small">🔄 Kiểm tra và cập nhật</button><small id="gameUpdateStatus" role="status" aria-live="polite">Bấm để kiểm tra phiên bản mới. Tiến trình chơi được giữ nguyên.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
 
   </aside>
 
@@ -1596,7 +1587,7 @@ function loadSettingsUI(){const ids={settingHighGraphics:'highGraphics',settingD
 async function checkAndUpdateGame(){const button=$('gameUpdateBtn'),status=$('gameUpdateStatus');if(!button||!status)return;button.disabled=true;status.textContent='Đang kiểm tra phiên bản mới...';try{const checkUrl=new URL(location.pathname,location.origin);checkUrl.searchParams.set('update-check',String(Date.now()));const response=await fetch(checkUrl.href,{cache:'no-store',headers:{'Cache-Control':'no-cache','Pragma':'no-cache'}});if(!response.ok)throw new Error('Không thể kết nối máy chủ ('+response.status+').');const html=await response.text();const match=html.match(/<meta\s+name=[\"']game-version[\"']\s+content=[\"']([^\"']+)[\"']/i);if(!match)throw new Error('Không đọc được thông tin phiên bản.');const latest=match[1],current=document.querySelector('meta[name=\"game-version\"]')?.content||'1.3.2';if(latest===current){status.textContent='Game đã là phiên bản mới nhất ('+current+').';button.disabled=false;return;}status.textContent='Đã tìm thấy v'+latest+'. Đang tải phiên bản mới...';const nextUrl=new URL(location.href);nextUrl.searchParams.set('v',latest);nextUrl.searchParams.set('refresh',String(Date.now()));location.replace(nextUrl.href);}catch(error){status.textContent='Cập nhật chưa thành công: '+(error&&error.message?error.message:'Lỗi kết nối')+'. Hãy thử lại khi có mạng.';button.disabled=false;}}
 function initSettings(){try{Object.assign(settings,JSON.parse(localStorage.getItem('afkSettings')||'{}'));delete settings.hitRun;}catch{}applySettings();const ids={settingHighGraphics:'highGraphics',settingDamage:'damage',settingCombatNames:'combatNames',settingFps:'fps',settingEffects:'effects',settingJoySize:'joySize',settingButtonSize:'buttonSize',settingFontSize:'fontSize',playerName:'playerName'};for(const [id,k] of Object.entries(ids)){const el=$(id);if(!el)continue;el.addEventListener('input',()=>{settings[k]=el.type==='checkbox'?el.checked:(el.type==='range'?Number(el.value):el.value);saveSettings();});} $('settingsReset').onclick=()=>{Object.assign(settings,{damage:true,combatNames:true,fps:false,effects:true,highGraphics:true,joySize:78,buttonSize:10,fontSize:12,playerName:'Wanderer'});saveSettings();loadSettingsUI();};const updateButton=$('gameUpdateBtn');if(updateButton)updateButton.addEventListener('click',checkAndUpdateGame);}
 const bindGameControl=(id,action)=>{const el=$(id);el.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();action();});el.addEventListener('click',e=>{if(e.detail===0)action();});};
-bindGameControl('autoBtn',()=>{state.auto=!state.auto;log('Auto Attack '+(state.auto?'đã bật.':'đã tắt.'));ui();});bindGameControl('skillBtn',()=>attack(true));bindGameControl('mobileAttack',()=>attack(false));
+bindGameControl('autoBtn',()=>{state.auto=!state.auto;log('Auto Attack '+(state.auto?'đã bật.':'đã tắt.'));ui();});bindGameControl('skillBtn',()=>castChampionSkill(0));bindGameControl('mobileAttack',()=>attack(false));
 bindGameControl('potionBtn',()=>{if(state.potions>0&&state.hp<state.maxHp){state.potions--;restorePlayerHp(state.maxHp*.05,'heal');save();ui();log('Đã dùng dược phẩm HP.')}else log('Không thể dùng lúc này.')});
 
 
@@ -1808,6 +1799,132 @@ $("introClose").onclick=continueFromIntro;
 document.addEventListener("click",e=>{const c=e.target.closest("[data-create-character]");if(c){creationCharacter=c.dataset.createCharacter;drawCreationCharacters();}});
 $("creationFinish").onclick=()=>{const name=($("creationName").value||"").trim();if(!name){showRewardToast("Hãy nhập tên nhân vật!");$("creationName").focus();return;}settings.playerName=name.slice(0,18);state.characterId=creationCharacter;state.characterCreated=true;saveSettings();$("creationModal").classList.remove("show");renderCharacter();ui();save();$("welcomeModal").classList.add("show");};
 $("welcomeGaren").onclick=()=>{$("welcomeModal").classList.remove("show");openNpcDialog("alden");};
+
+
+/* v1.3.6 — Champion passives and four learnable abilities */
+const CHAMPION_ABILITIES={
+darius:[
+{name:'Tàn Sát',icon:'🪓',desc:'Vung rìu gây sát thương vật lý mạnh và hồi lại một phần máu đã mất.',cost:100,mp:10,cd:4500,type:'heal',scale:1.35},
+{name:'Đánh Thọt',icon:'⚔️',desc:'Đòn đánh cường hóa gây sát thương và làm chậm mục tiêu.',cost:350,mp:12,cd:6000,type:'slow',scale:1.65},
+{name:'Bắt Giữ',icon:'⛓️',desc:'Khiến mục tiêu nhận thêm sát thương trong thời gian ngắn.',cost:900,mp:14,cd:8000,type:'mark',scale:1.45},
+{name:'Máy Chém Noxus',icon:'☠️',desc:'Tung đòn kết liễu bằng sát thương vật lý cực lớn.',cost:2000,mp:20,cd:14000,type:'execute',scale:2.8}],
+ahri:[
+{name:'Quả Cầu Ma Thuật',icon:'🔮',desc:'Phóng quả cầu ma thuật gây sát thương phép.',cost:100,mp:8,cd:4500,type:'orb',scale:1.8},
+{name:'Lửa Hồ Ly',icon:'🔥',desc:'Triệu hồi hồ hỏa gây thêm sát thương phép.',cost:350,mp:12,cd:6000,type:'foxfire',scale:1.55},
+{name:'Hôn Gió',icon:'💗',desc:'Gây sát thương phép và làm chậm mục tiêu.',cost:900,mp:14,cd:8500,type:'charm',scale:1.35},
+{name:'Phi Hồ',icon:'🦊',desc:'Lướt đi cùng linh hồ, gây sát thương và hồi phục.',cost:2000,mp:20,cd:14000,type:'spirit',scale:2.25}],
+ekko:[
+{name:'Dây Cót Thời Gian',icon:'⏱️',desc:'Ném thiết bị thời gian gây sát thương phép.',cost:100,mp:10,cd:4500,type:'timewinder',scale:1.75},
+{name:'Lưỡng Giới Đồng Quy',icon:'🟣',desc:'Tạo vùng năng lượng, nhận lá chắn và làm chậm mục tiêu.',cost:350,mp:12,cd:7000,type:'parallel',scale:1.35},
+{name:'Biến Chuyển Pha',icon:'💫',desc:'Tung đòn đánh cường hóa và tăng tốc di chuyển.',cost:900,mp:14,cd:8000,type:'phase',scale:1.9},
+{name:'Đột Phá Thời Gian',icon:'🌀',desc:'Gây sát thương lớn và hồi phục sinh lực.',cost:2000,mp:20,cd:15000,type:'chronobreak',scale:2.7}],
+ashe:[
+{name:'Chú Tâm Tiễn',icon:'🏹',desc:'Bắn một mũi tên cường hóa.',cost:100,mp:10,cd:4500,type:'focus',scale:1.65},
+{name:'Tán Xạ Tiễn',icon:'❄️',desc:'Bắn loạt tên gây sát thương lên mục tiêu và kẻ địch lân cận.',cost:350,mp:12,cd:6500,type:'volley',scale:1.35},
+{name:'Ưng Tiễn',icon:'🦅',desc:'Triệu hồi linh ưng, tăng tốc độ di chuyển.',cost:900,mp:14,cd:9000,type:'hawk',scale:1.25},
+{name:'Đại Băng Tiễn',icon:'🌨️',desc:'Bắn đại băng tiễn gây sát thương lớn và làm chậm mạnh.',cost:2000,mp:20,cd:15000,type:'arrow',scale:2.6}]
+};
+const CHAMPION_PASSIVES={
+darius:{name:'Xuất Huyết',icon:'🩸',desc:'Đòn đánh và kỹ năng gây sát thương tạo cộng dồn Xuất Huyết trong 5 giây, tối đa 5 cộng dồn. Mỗi cộng dồn gây 13–30 (+30% SMCK cộng thêm) sát thương vật lý mỗi giây. Sức Mạnh Noxus chỉ kích hoạt khi đạt 5 cộng dồn hoặc kết liễu bằng Máy Chém Noxus trên tướng địch; không kích hoạt trên quái.'},
+ahri:{name:'Hút Hồn',icon:'💚',desc:'Hạ gục 9 lính hoặc quái sẽ tiêu thụ Mảnh Hồn để hồi 35–95 (+20% SMPT) máu. Tham gia hạ gục tướng địch trong vòng 3 giây sau khi gây sát thương hồi 75–165 (+30% SMPT) máu.'},
+ekko:{name:'Động Cơ Z Cộng Hưởng',icon:'⚡',desc:'Mỗi đòn đánh hoặc kỹ năng thứ ba lên cùng mục tiêu trong 4 giây gây thêm 30–140 (+90% SMPT) sát thương phép. Với quái, sát thương cộng hưởng tăng 300%, tối đa 600. Nếu mục tiêu là tướng, Ekko nhận 50–80% tốc độ di chuyển.'},
+ashe:{name:'Băng Tiễn',icon:'❄️',desc:'Đòn đánh và kỹ năng làm chậm mục tiêu 20–30% trong 2 giây. Đánh vào mục tiêu đang bị làm chậm gây thêm sát thương bằng 120% tổng SMCK. Chí mạng không tăng sát thương trực tiếp mà nhân đôi hiệu lực làm chậm.'}
+};
+function championLevel(){return Math.max(1,Math.min(18,1+Math.floor((Number(state.totalExp)||0)/50000)));}
+function championData(){return CHARACTER_DATA.find(c=>c.id===state.characterId)||CHARACTER_DATA[0];}
+function ensureChampionProgress(){
+ state.learnedChampionSkills=state.learnedChampionSkills&&typeof state.learnedChampionSkills==='object'?state.learnedChampionSkills:{};
+ for(const c of CHARACTER_DATA)if(!Array.isArray(state.learnedChampionSkills[c.id]))state.learnedChampionSkills[c.id]=[];
+ state.championSkillCooldowns=Array.isArray(state.championSkillCooldowns)?state.championSkillCooldowns:[0,0,0,0];state.championSkillCooldowns.length=4;
+ state.dariusSoulStacks=Number(state.dariusSoulStacks)||0;state.ahriSoulShards=Number(state.ahriSoulShards)||0;
+ state.ekkoMoveBuffUntil=Number(state.ekkoMoveBuffUntil)||0;state.ekkoMoveBuffPct=Number(state.ekkoMoveBuffPct)||0;
+ state.championShield=Number(state.championShield)||0;state.championShieldUntil=Number(state.championShieldUntil)||0;
+}
+function learnChampionSkill(index){
+ ensureChampionProgress();const ability=CHAMPION_ABILITIES[state.characterId]?.[index];
+ if(!ability||state.learnedChampionSkills[state.characterId].includes(index))return;
+ if((Number(state.gold)||0)<ability.cost){showRewardToast('Cần '+ability.cost.toLocaleString('vi-VN')+' vàng để học '+ability.name+'.');return;}
+ state.gold-=ability.cost;state.learnedChampionSkills[state.characterId].push(index);
+ showRewardToast('Đã học kỹ năng '+ability.name+'!');log('Đã học '+ability.name+'.');renderChampionSkills();ui();save();
+}
+function renderChampionSkills(){
+ const el=$('championSkillPanel');if(!el)return;ensureChampionProgress();
+ const c=championData(),passive=CHAMPION_PASSIVES[c.id],abilities=CHAMPION_ABILITIES[c.id],learned=state.learnedChampionSkills[c.id];
+ let progress=c.id==='ahri'?'Mảnh Hồn: '+state.ahriSoulShards+'/9':c.id==='darius'?'Xuất Huyết được theo dõi riêng trên từng mục tiêu.':c.id==='ekko'?'Đòn đánh/kỹ năng thứ ba lên cùng mục tiêu kích hoạt cộng hưởng.':'Làm chậm cơ bản: '+(20+Math.round((championLevel()-1)*10/17))+'% · thời gian 2 giây';
+ el.innerHTML='<div class="heading">✨ KỸ NĂNG — '+c.name.toUpperCase()+'</div><div class="skill-passive-card"><div class="skill-passive-title">'+passive.icon+' NỘI TẠI: '+passive.name+' <span>SẴN CÓ</span></div><p>'+passive.desc+'</p><small>'+progress+'</small></div><div class="heading" style="margin-top:14px">📘 BỐN KỸ NĂNG CẦN HỌC</div><div class="muted" style="font-size:10px;margin:-5px 0 9px">Học bằng vàng. Kỹ năng đã học được lưu cùng nhân vật và mở khóa nút tương ứng trên HUD.</div><div class="skill-learning-list">'+abilities.map((a,i)=>{const done=learned.includes(i);return '<div class="skill-learning-card"><span class="skill-learning-icon">'+a.icon+'</span><div><b>'+(i+1)+'. '+a.name+'</b><small>'+a.desc+' · '+a.mp+' MP · Hồi chiêu '+(a.cd/1000)+' giây</small></div><button class="skill-learn-button '+(done?'learned':'')+'" data-learn-skill="'+i+'" '+(done?'disabled':'')+'>'+(done?'ĐÃ HỌC':'HỌC · '+a.cost.toLocaleString('vi-VN')+' vàng')+'</button></div>';}).join('')+'</div>';
+ el.querySelectorAll('[data-learn-skill]').forEach(b=>b.addEventListener('click',()=>learnChampionSkill(Number(b.dataset.learnSkill))));updateChampionSkillButtons();
+}
+function updateChampionSkillButtons(){
+ ensureChampionProgress();const c=championData(),learned=state.learnedChampionSkills[c.id],abilities=CHAMPION_ABILITIES[c.id];
+ for(let i=0;i<4;i++){const b=$('skillBtn'+(i||''));if(!b)continue;const a=abilities[i],done=learned.includes(i),left=Math.max(0,(state.championSkillCooldowns[i]||0)-Date.now());b.disabled=!done||left>0||inTown()||state.dead;b.textContent=!done?['Q','W','E','R'][i]:left>0?Math.ceil(left/1000)+'s':a.icon;b.title=done?a.name+' · '+a.mp+' MP':'Chưa học: '+a.name;b.setAttribute('aria-label',b.title);b.classList.toggle('skill-ready',done&&left===0);}
+}
+function castChampionSkill(index){
+ ensureChampionProgress();const c=championData(),a=CHAMPION_ABILITIES[c.id]?.[index];
+ if(!a||!state.learnedChampionSkills[c.id].includes(index)){showRewardToast('Hãy vào mục Kỹ năng để học chiêu này.');return;}
+ if(inTown()||state.dead||!state.started||state.paused)return;
+ const now=Date.now();if((state.championSkillCooldowns[index]||0)>now)return;
+ const m=(state.target&&!state.target.dead&&state.mobs.includes(state.target))?state.target:nearest();
+ if(!m||m.dead){log('Hãy chọn mục tiêu trước khi dùng kỹ năng.');return;}
+ if(state.mp<a.mp){showRewardToast('Không đủ MP để sử dụng '+a.name+'.');return;}
+ const oldAtk=state.atk,oldMagic=state.magicDamage,oldLast=state.lastSkill,baseCost=c.id==='ahri'?8:10;
+ if(c.id==='ahri'||c.id==='ekko')state.magicDamage=Math.round(state.magicDamage*a.scale);else state.atk=Math.round(state.atk*a.scale);
+ const mpBefore=state.mp;attack(true);const didCast=state.lastSkill!==oldLast;state.atk=oldAtk;state.magicDamage=oldMagic;
+ if(!didCast){state.mp=mpBefore;return;}
+ state.mp=Math.max(0,state.mp-Math.max(0,a.mp-baseCost));state.championSkillCooldowns[index]=now+a.cd;
+ const applyExtra=(amount,color='#d8b4ff')=>{if(!m.dead&&m.hp>0){const n=Math.min(m.hp,Math.max(1,Math.round(amount)));m.hp-=n;m.hit=.2;floatText(m.x,m.y-28,'-'+n,color);if(m.hp<=0)m.dead=true;}};
+ if(['heal','spirit','chronobreak'].includes(a.type))restorePlayerHp(Math.max(8,Math.round(a.type==='heal'?(state.maxHp-state.hp)*.22:state.maxHp*(c.id==='ahri'?.12:.2))),'heal');
+ if(['slow','charm','arrow','parallel'].includes(a.type)){m.championSlowUntil=now+(a.type==='arrow'?3500:2200);m.championSlowPct=a.type==='arrow'?.55:.3;}
+ if(a.type==='mark'){m.championMarkedUntil=now+3500;m.championMarkedPct=.2;}
+ if(a.type==='execute'&&m.hp>0&&m.hp/m.max<.2)applyExtra(m.hp,'#ff4c59');
+ if(['foxfire','orb','timewinder','focus','phase','volley','arrow','execute'].includes(a.type))applyExtra((c.id==='ahri'||c.id==='ekko'?state.magicDamage:state.atk)*.35,'#bda0ff');
+ if(['parallel','chronobreak'].includes(a.type)){state.championShield=Math.max(state.championShield,state.maxHp*.18);state.championShieldUntil=now+4000;}
+ if(['phase','hawk'].includes(a.type)){state.ekkoMoveBuffPct=c.id==='ekko'?35:20;state.ekkoMoveBuffUntil=now+3000;}
+ if(a.type==='volley'){for(const other of state.mobs){if(other!==m&&!other.dead&&Math.hypot(other.x-m.x,other.y-m.y)<100){const n=Math.min(other.hp,Math.round(state.atk*.55));other.hp-=n;floatText(other.x,other.y-18,'-'+n,'#9deaff');if(other.hp<=0)other.dead=true;}}}
+ if(a.type==='arrow')m.championSlowPct=.65;
+ updateChampionSkillButtons();ui();save();
+}
+const originalChampionAttack=attack;
+attack=function(skill=false,arrived=false){
+ const target=(state.target&&!state.target.dead&&state.mobs.includes(state.target))?state.target:nearest(),c=championData(),before=target?target.hp:0,now=Date.now();
+ let oldAtk=null,oldCrit=null,criticalSlow=false;
+ if(target&&c.id==='ashe'&&!target.dead){
+  criticalSlow=Math.random()*100<(state.critChance||0);target.championSlowUntil=now+2000;target.championSlowPct=Math.max(target.championSlowPct||0,(20+Math.round((championLevel()-1)*10/17))/100);
+  oldAtk=state.atk;oldCrit=state.critChance;state.atk=Math.round(state.atk*2.2);state.critChance=0;
+ }
+ if(target&&c.id==='darius'&&(target.isChampion||target.kind==='champion')&&state.dariusNoxusUntil>Date.now()){oldAtk=oldAtk===null?state.atk:oldAtk;state.atk+=30+(championLevel()-1)*200/17;}
+ originalChampionAttack(skill,arrived);
+ if(oldAtk!==null)state.atk=oldAtk;if(oldCrit!==null)state.critChance=oldCrit;
+ if(!target)return;const dealt=Math.max(0,before-target.hp);
+ if(dealt>0&&c.id==='darius'&&!target.dead){
+  const tick=Math.round(13+(championLevel()-1)+Math.max(0,(state.atk-(state.baseAtk||12)))*.3);
+  target.dariusBleeds=Array.isArray(target.dariusBleeds)?target.dariusBleeds:[];target.dariusBleeds.push({expires:now+5000,next:now+1000,damage:tick});if(target.dariusBleeds.length>5)target.dariusBleeds.shift();
+ }
+ if(dealt>0&&c.id==='ekko'&&!target.dead){
+  target.ekkoHits=Array.isArray(target.ekkoHits)?target.ekkoHits.filter(t=>now-t<4000):[];target.ekkoHits.push(now);
+  if(target.ekkoHits.length>=3){target.ekkoHits=[];let bonus=30+(championLevel()-1)*110/17+state.magicDamage*.9;if(['normal','elite','leader','boss'].includes(target.kind))bonus=Math.min(600,bonus*3);const n=Math.min(target.hp,Math.round(bonus));target.hp-=n;floatText(target.x,target.y-25,'-'+n,'#c58cff');target.ekkoResonanceLock=now+5000;if(target.isChampion||target.kind==='champion'){state.ekkoMoveBuffPct=50+(championLevel()-1)*30/17;state.ekkoMoveBuffUntil=now+2500;}if(target.hp<=0)target.dead=true;}
+ }
+ if(dealt>0&&c.id==='ahri'&&target.dead){
+  if(target.isChampion||target.kind==='champion')restorePlayerHp(75+(championLevel()-1)*90/17+state.magicDamage*.3,'heal');
+  else{state.ahriSoulShards=(state.ahriSoulShards||0)+1;if(state.ahriSoulShards>=9){state.ahriSoulShards-=9;restorePlayerHp(35+(championLevel()-1)*60/17+state.magicDamage*.2,'heal');showRewardToast('💚 Hút Hồn: hồi phục nhờ 9 Mảnh Hồn!');}}
+ }
+ if(dealt>0&&c.id==='darius'&&target.dead&&(target.isChampion||target.kind==='champion')&&skill)state.dariusNoxusUntil=now+5000;
+ if(dealt>0&&c.id==='ashe'&&criticalSlow&&!target.dead){target.championSlowPct=Math.min(.6,(target.championSlowPct||.2)*2);target.championSlowUntil=now+2000;}
+};
+const originalChampionUpdate=update;
+update=function(dt){
+ const now=Date.now();let oldSpeed=state.moveSpeed;
+ if(state.ekkoMoveBuffUntil>now)state.moveSpeed=oldSpeed*(1+(state.ekkoMoveBuffPct||0)/100);
+ for(const m of state.mobs){if(m.dead)continue;if(m.championSlowUntil>now){if(m._championBaseSpeed==null)m._championBaseSpeed=m.spd;m.spd=m._championBaseSpeed*(1-(m.championSlowPct||0));}else if(m._championBaseSpeed!=null){m.spd=m._championBaseSpeed;delete m._championBaseSpeed;}}
+ originalChampionUpdate(dt);state.moveSpeed=oldSpeed;
+ for(const m of state.mobs){if(m.dead)continue;if(Array.isArray(m.dariusBleeds)){m.dariusBleeds=m.dariusBleeds.filter(b=>b.expires>now);for(const b of m.dariusBleeds){if(now>=b.next){const dmg=Math.min(m.hp,b.damage);m.hp-=dmg;b.next+=1000;if(dmg>0)floatText(m.x,m.y-18,'-'+dmg,'#d84b55');if(m.hp<=0){m.dead=true;break;}}}}}
+ if(state.championShieldUntil<now)state.championShield=0;if(state.ekkoMoveBuffUntil<now)state.ekkoMoveBuffPct=0;updateChampionSkillButtons();
+};
+const championSkillStyle=document.createElement('style');championSkillStyle.textContent=".skill-passive-card{padding:11px;margin:7px 0 12px;background:linear-gradient(120deg,#2a2520,#14232d);border:1px solid #a98b58;border-radius:8px}.skill-passive-title{display:flex;justify-content:space-between;gap:8px;align-items:center;color:#ffdf9b;font-size:12px;font-weight:bold}.skill-passive-title span{font-size:8px;color:#72e0ad;border:1px solid #397c61;padding:3px 5px;border-radius:5px;white-space:nowrap}.skill-passive-card p{font-size:10px;line-height:1.55;color:#d5e1dc;margin:8px 0}.skill-passive-card small{display:block;color:#f0cf84;font-size:9px}.skill-learn-button{font-size:9px;padding:6px 7px;max-width:118px;white-space:normal}.skill-learn-button.learned{color:#72e0ad;border-color:#397c61;background:#163d32}.action-controls button[data-skill-slot]{min-width:0;flex:1;font-size:clamp(10px,2.8vw,15px);padding:5px 2px}.action-controls button[data-skill-slot]:disabled{opacity:.48;filter:grayscale(.7)}.action-controls button.skill-ready{border-color:#72e0ad;color:#ffe6a1;box-shadow:0 0 7px #72e0ad55}";document.head.appendChild(championSkillStyle);
+ensureChampionProgress();renderChampionSkills();
+document.querySelectorAll('[data-menu="3"]').forEach(btn=>btn.addEventListener('click',renderChampionSkills));
+['skillBtn2','skillBtn3','skillBtn4'].forEach((id,i)=>bindGameControl(id,()=>castChampionSkill(i+1)));
+renderChampionSkills();
+
 
 })();
 </script>
