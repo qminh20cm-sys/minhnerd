@@ -485,7 +485,7 @@ html,body{overscroll-behavior-x:none!important}
 
    <div class="logo">✦ Runeterra: Tái Sinh</div>
 
-   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.2.35</div>
+   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.3.0</div>
 
   </div>
 
@@ -510,7 +510,7 @@ html,body{overscroll-behavior-x:none!important}
     <div id="inventoryFullToast" class="inventory-full-toast" role="status" aria-live="polite">Túi đồ của bạn đã đầy</div>
     <div id="bossDefeatNotice" class="boss-defeat-notice" role="status" aria-live="assertive"></div>
     <div id="rewardFeed" class="reward-feed" aria-live="polite"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.2.35</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.0</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px 'Spiegel',Arial,sans-serif;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ KHỞI NGUYÊN HUYỀN THOẠI</h2><div class="intro-story">Không một lời báo trước.
@@ -1172,8 +1172,49 @@ function drawTownWorld(){
   for(const [x,y] of [[35,185],[820,185],[260,90],[590,90],[260,420],[590,420]]){ctx.fillStyle="#60432f";ctx.fillRect(x-4,y,8,30);ctx.fillStyle="#4c8956";ctx.beginPath();ctx.arc(x,y-3,22,0,Math.PI*2);ctx.fill();ctx.fillStyle="#70a963";ctx.beginPath();ctx.arc(x-7,y-10,10,0,Math.PI*2);ctx.fill();}
   ctx.fillStyle="#2a211c";ctx.fillRect(332,20,190,48);ctx.fillStyle="#d9bd7a";ctx.fillRect(336,24,182,40);ctx.fillStyle="#382a20";ctx.font="bold 18px 'Spiegel',Arial,sans-serif";ctx.textAlign="center";ctx.font="bold 14px 'Spiegel',Arial,sans-serif";ctx.fillText("ĐẠI THÀNH DEMACIA",427,49);ctx.textAlign="left";
   drawChibiGaren(427,160);
+  drawTownNpcSprite('soraka',230,255);
+  drawTownNpcSprite('merchant',624,255);
+  drawTownNpcSprite('ornn',624,385);
   if(selectedTownNpc){ctx.save();const pulse=1+Math.sin(performance.now()/180)*.035,offset=selectedTownNpc.id==='alden'?45:10;ctx.strokeStyle='#ffe36b';ctx.lineWidth=2.2;ctx.shadowColor='#ffe36b';ctx.shadowBlur=12;ctx.beginPath();ctx.ellipse(selectedTownNpc.x,selectedTownNpc.y+offset,selectedTownNpc.id==='alden'?19*pulse:18*pulse,6*pulse,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
   const safeElapsed=(performance.now()-townSafeLabelStartedAt)/1000;ctx.globalAlpha=Math.max(0,Math.min(1,safeElapsed/.7,(3.2-safeElapsed)/.8));ctx.fillStyle="#42eaff";ctx.font="bold 15px 'Spiegel',Arial,sans-serif";ctx.textAlign="center";ctx.shadowColor="#00dfff";ctx.shadowBlur=8;ctx.fillText("KHU VỰC AN TOÀN",427,395);ctx.shadowBlur=0;ctx.globalAlpha=1;ctx.textAlign="left";
+}
+
+
+/* v1.3.0 — handmade pixel-chibi models for the remaining Demacia town NPCs */
+const TOWN_NPC_SPRITES={
+ soraka:{
+  colors:{H:"#b8e7ee",h:"#78c6d4",F:"#f2c7a5",E:"#26364d",S:"#f5f0dc",P:"#8b70bd",p:"#66529d",W:"#eee8f4",G:"#d9c17b",D:"#51446f"},
+  rows:[
+   "......HHHH......",".....HHHHHH.....","....HHHHHHHH....","...HHHHHHHHHH...","...HHHFFFFHHH...","..HHHFFFFFFHHH..","..HHFFFFFFFFHH..","..HHFEEFFFFEEHH..","..HHFFFFFFFFHH..","...HHFFFFFFHH...","....SSSSSSSS....","...PPWWWWWWPP...","..PPWWGGGGWWPP..","..PPWWWWWWWWPP..","...PPWWWWWWPP...","....WWWWWWWW....","....WWWWWWWW....","...DD......DD...","...DD......DD...","...DD......DD...","..DDD......DDD..","..DDD......DDD.."
+  ]
+ },
+ merchant:{
+  colors:{T:"#49372d",t:"#806044",H:"#583b2d",F:"#edbd98",E:"#202d42",C:"#273c58",c:"#17283f",V:"#b64d45",G:"#d8b65f",B:"#30425b",D:"#332b2a",R:"#e6bd45"},
+  rows:[
+   "....TTTTTTTT....","...TTTTTTTTTT...","..TTTTTTTTTTTT..","....tttttttt....","......HHHH......",".....HHHHHH.....","....HHHFFFFHHH..","...HHHFFFFFFHH..","...HHFEEFFFFEHH.","...HHFFFFFFFFHH.","....HHFFFFFFHH..",".....CCCCCCCC...","....CCGGVVGGCC..","...CCCVVVVVVCCC.","...CCCBBBBBBCCC.","....CCBBBBBBCC..","....DD......DD..","...DDD......DDD.","...DDD......DDD.","...DDD......DDD.","..DDDD......DDDD","..DDDD......DDDD"
+  ]
+ },
+ ornn:{
+  colors:{O:"#d9a45d",o:"#9c653e",H:"#5b3426",F:"#e7b58e",E:"#342a24",G:"#bd6b36",g:"#e59a42",A:"#9b5940",a:"#663d32",B:"#4c3934",D:"#332b2a",Y:"#e7bd62"},
+  rows:[
+   "...OO......OO...","..OOO........OO..",".OOO..........OO.","...HHHHHHHHHH....","..HHHHHHHHHHHH...","..HHHFFFFFFHHH...","..HHFFFFFFFFHH...","..HHFEEFFFFEEHH..","..HHFFFFFFFFHH...","...GGGGGGGGGG....","...GGGGGGGGGG....","..GGGYYYYYYGGG...","..AAABBBBBBAAA...","..AAAABBBBBAAAA..","...AAAABBBBAAA...","....BBBBBBBB....","...BBBDDDDBBB....","...DDD....DDD....","...DDD....DDD....","...DDD....DDD....","..DDDD....DDDD...","..DDDD....DDDD..."
+  ]
+ }
+};
+function drawTownNpcSprite(id,x,y){
+ const sprite=TOWN_NPC_SPRITES[id];if(!sprite)return;
+ const scale=4,rows=sprite.rows,w=16*scale,h=22*scale;
+ ctx.save();ctx.imageSmoothingEnabled=false;
+ ctx.fillStyle="#17232977";ctx.beginPath();ctx.ellipse(x,y+35,19,6,0,0,Math.PI*2);ctx.fill();
+ const left=Math.round(x-w/2),top=Math.round(y+35-h);
+ for(let ry=0;ry<rows.length;ry++){
+  const row=rows[ry];
+  for(let rx=0;rx<row.length;rx++){
+   const color=sprite.colors[row[rx]];if(!color)continue;
+   ctx.fillStyle=color;ctx.fillRect(left+rx*scale,top+ry*scale,scale,scale);
+  }
+ }
+ ctx.restore();
 }
 
 function drawMob(m){
