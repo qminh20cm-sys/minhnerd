@@ -472,7 +472,7 @@ html,body{overscroll-behavior-x:none!important}
 }
 
 
-/* v1.3.0aa — prevent iOS Safari long-press loupe, callout and accidental zoom on game surface */
+/* v1.3.1 — prevent iOS Safari long-press loupe, callout and accidental zoom on game surface */
 html,body,.wrap,.layout,.gamebox,.canvas-wrap,#game,.canvas-name-layer,.combat-ui,
 .menu-bar,.menu-bar button,.chat-toggle{
  -webkit-user-select:none!important;user-select:none!important;
@@ -482,6 +482,46 @@ html,body,.wrap,.layout,.gamebox,.canvas-wrap,#game,.canvas-name-layer,.combat-u
  touch-action:none!important;
 }
 #game{ -webkit-tap-highlight-color:transparent!important; }
+
+
+/* v1.3.1 — dedicated desktop HUD; mobile keeps touch-first controls */
+@media screen and (min-width:900px) and (hover:hover) and (pointer:fine){
+ .canvas-wrap>.combat-ui{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;display:block!important;pointer-events:none!important;z-index:24!important}
+ .canvas-wrap>.combat-ui>.hud{position:absolute!important;left:18px!important;top:18px!important;right:auto!important;bottom:auto!important;
+   display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;
+   width:190px!important;padding:10px 12px!important;background:#10232ddd!important;border:1px solid #718c91!important;
+   border-radius:10px!important;box-shadow:0 4px 16px #0008!important;pointer-events:none!important}
+ .canvas-wrap>.combat-ui>.hud .stat{display:grid!important;grid-template-columns:38px 1fr!important;align-items:center!important;
+   gap:5px!important;font-size:11px!important;color:#e7eeee!important}
+ .canvas-wrap>.combat-ui>.hud .stat b{display:block!important;font-size:10px!important;text-align:right!important}
+ .canvas-wrap>.combat-ui>.hud .bar{grid-column:1/-1!important;width:100%!important;height:7px!important;margin:0!important}
+ .canvas-wrap>.combat-ui>.combat-bottom{position:absolute!important;left:auto!important;right:20px!important;top:auto!important;bottom:18px!important;
+   display:flex!important;justify-content:flex-end!important;align-items:flex-end!important;width:auto!important;
+   pointer-events:none!important}
+ .canvas-wrap>.combat-ui .mobile-controls{display:none!important}
+ .canvas-wrap>.combat-ui>.combat-bottom>.action-controls{position:static!important;display:flex!important;flex-direction:row!important;
+   flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-end!important;gap:10px!important;
+   width:auto!important;max-width:none!important;margin:0!important;padding:10px!important;
+   background:#10232ddd!important;border:1px solid #718c91!important;border-radius:14px!important;
+   box-shadow:0 4px 16px #0008!important;pointer-events:auto!important}
+ .canvas-wrap>.combat-ui .action-controls button{display:flex!important;align-items:center!important;justify-content:center!important;
+   flex:0 0 54px!important;width:54px!important;height:54px!important;min-width:54px!important;min-height:54px!important;
+   max-width:54px!important;max-height:54px!important;aspect-ratio:1/1!important;border-radius:12px!important;
+   padding:0!important;font-size:25px!important;line-height:1!important;cursor:pointer!important}
+ .canvas-wrap>.combat-ui .action-controls button:hover{filter:brightness(1.2);transform:translateY(-2px)}
+ .canvas-wrap>.combat-ui #chatToggle{pointer-events:auto!important}
+ .menu-bar{position:absolute!important;left:50%!important;top:14px!important;transform:translateX(-50%)!important;
+   width:auto!important;max-width:60%!important;display:flex!important;flex-wrap:nowrap!important;gap:7px!important;
+   margin:0!important;padding:7px!important;background:#10232ddd!important;border:1px solid #718c91!important;
+   border-radius:12px!important;box-shadow:0 4px 16px #0008!important;z-index:35!important}
+ .menu-bar button{flex:0 0 48px!important;width:48px!important;height:48px!important;min-width:48px!important;
+   min-height:48px!important;aspect-ratio:1/1!important;font-size:23px!important;padding:0!important}
+}
+/* Touch devices always use the dedicated mobile HUD, including tablets */
+@media (hover:none), (pointer:coarse), (max-width:899px){
+ .canvas-wrap>.combat-ui .mobile-controls{display:flex!important}
+ .canvas-wrap>.combat-ui>.combat-bottom>.action-controls button{touch-action:none!important}
+}
 
 </style>
 
@@ -497,7 +537,7 @@ html,body,.wrap,.layout,.gamebox,.canvas-wrap,#game,.canvas-name-layer,.combat-u
 
    <div class="logo">✦ Runeterra: Tái Sinh</div>
 
-   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.3.0a</div>
+   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.3.1</div>
 
   </div>
 
@@ -522,7 +562,7 @@ html,body,.wrap,.layout,.gamebox,.canvas-wrap,#game,.canvas-name-layer,.combat-u
     <div id="inventoryFullToast" class="inventory-full-toast" role="status" aria-live="polite">Túi đồ của bạn đã đầy</div>
     <div id="bossDefeatNotice" class="boss-defeat-notice" role="status" aria-live="assertive"></div>
     <div id="rewardFeed" class="reward-feed" aria-live="polite"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.0a</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.1</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px 'Spiegel',Arial,sans-serif;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ KHỞI NGUYÊN HUYỀN THOẠI</h2><div class="intro-story">Không một lời báo trước.
@@ -1192,7 +1232,7 @@ function drawTownWorld(){
 }
 
 
-/* v1.3.0a — handmade pixel-chibi models for the remaining Demacia town NPCs */
+/* v1.3.1 — handmade pixel-chibi models for the remaining Demacia town NPCs */
 const TOWN_NPC_SPRITES={
  soraka:{
   colors:{H:"#b8e7ee",h:"#78c6d4",F:"#f2c7a5",E:"#26364d",S:"#f5f0dc",P:"#8b70bd",p:"#66529d",W:"#eee8f4",G:"#d9c17b",D:"#51446f"},
