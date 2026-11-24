@@ -5,7 +5,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="game-version" content="1.3.6">
+<meta name="game-version" content="1.3.7">
 <meta name="theme-color" content="#07152f">
 <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.jpg">
 <link rel="icon" type="image/jpeg" sizes="180x180" href="/icons/icon-180.jpg">
@@ -86,6 +86,7 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 .bar{height:9px;background:#0b141a;border:1px solid #52616a;border-radius:10px;overflow:hidden;margin-top:4px;width:130px}
 
 .fill{height:100%;width:100%;transition:width .2s}
+.hp-status-effects{display:flex;flex-wrap:wrap;gap:3px;align-items:center;max-width:min(260px,78vw);margin-top:4px;min-height:0}.hp-status-effects:empty{display:none}.hp-status-icon{width:21px;height:21px;min-width:21px;padding:0;border:1px solid #78919a;border-bottom-width:2px;border-radius:4px;background:#172a3eef;font-size:12px;line-height:1;display:grid;place-items:center;touch-action:manipulation}.hp-status-icon.buff{border-color:#69cda0;box-shadow:inset 0 0 5px #42bd8055}.hp-status-icon.debuff{border-color:#e4777e;box-shadow:inset 0 0 5px #d94e5b55}.hp-status-tooltip{position:relative;z-index:25;max-width:260px;margin-top:5px;padding:7px 9px;border:1px solid #8b9ca0;border-radius:6px;background:#09151ff2;color:#eaf3ed;font-size:10px;line-height:1.45;box-shadow:0 4px 12px #0008}.hp-status-tooltip[hidden]{display:none}.hp-status-tooltip b{display:block;color:#ffdf9b;font-size:10px;margin-bottom:2px}.hp-status-tooltip small{display:block;color:#9fb6ba;margin-top:3px}
 
 .hp{background:#e35e66}.mp{background:#58aee8}.xp{background:#e9bd4c}
 
@@ -542,7 +543,7 @@ html,body,.wrap,.layout,.gamebox,.canvas-wrap,#game,.canvas-name-layer,.combat-u
 
    <div class="logo">✦ Runeterra: Tái Sinh</div>
 
-   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.3.6</div>
+   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.3.7</div>
 
   </div>
 
@@ -567,7 +568,7 @@ html,body,.wrap,.layout,.gamebox,.canvas-wrap,#game,.canvas-name-layer,.combat-u
     <div id="inventoryFullToast" class="inventory-full-toast" role="status" aria-live="polite">Túi đồ của bạn đã đầy</div>
     <div id="bossDefeatNotice" class="boss-defeat-notice" role="status" aria-live="assertive"></div>
     <div id="rewardFeed" class="reward-feed" aria-live="polite"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.6</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.7</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px 'Spiegel',Arial,sans-serif;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ KHỞI NGUYÊN HUYỀN THOẠI</h2><div class="intro-story">Không một lời báo trước.
@@ -590,7 +591,7 @@ Không còn là những huyền thoại của Runeterra — đây là lúc họ 
    <div class="combat-ui">
     <div class="hud">
 
-    <div class="stat" id="hpStat">❤️ HP <b id="hpText">100/100</b><div class="bar"><div class="fill hp" id="hpBar"></div></div></div>
+    <div class="stat" id="hpStat">❤️ HP <b id="hpText">100/100</b><div class="bar"><div class="fill hp" id="hpBar"></div></div><div id="hpStatusEffects" class="hp-status-effects" aria-label="Hiệu ứng đang có"></div><div id="hpStatusTooltip" class="hp-status-tooltip" role="tooltip" hidden></div></div>
 
     <div class="stat" id="mpStat">💧 MP <b id="mpText">40/40</b><div class="bar"><div class="fill mp" id="mpBar"></div></div></div>
 
@@ -674,7 +675,7 @@ Không còn là những huyền thoại của Runeterra — đây là lúc họ 
 
    
 
-   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>🎒 LỊCH SỬ NHẶT ĐỒ</b><div id="pickupHistory" class="pickup-history"><div class="muted">Chưa nhặt được vật phẩm nào.</div></div><div id="log" class="log" style="display:none" aria-hidden="true"></div></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><div class="settings-group"><b>🔄 Cập nhật game</b><div style="font-size:11px;color:#b9ccca">Phiên bản hiện tại: <strong>v1.3.6</strong></div><button type="button" id="gameUpdateBtn" class="small">🔄 Kiểm tra và cập nhật</button><small id="gameUpdateStatus" role="status" aria-live="polite">Bấm để kiểm tra phiên bản mới. Tiến trình chơi được giữ nguyên.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
+   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>🎒 LỊCH SỬ NHẶT ĐỒ</b><div id="pickupHistory" class="pickup-history"><div class="muted">Chưa nhặt được vật phẩm nào.</div></div><div id="log" class="log" style="display:none" aria-hidden="true"></div></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><div class="settings-group"><b>🔄 Cập nhật game</b><div style="font-size:11px;color:#b9ccca">Phiên bản hiện tại: <strong>v1.3.7</strong></div><button type="button" id="gameUpdateBtn" class="small">🔄 Kiểm tra và cập nhật</button><small id="gameUpdateStatus" role="status" aria-live="polite">Bấm để kiểm tra phiên bản mới. Tiến trình chơi được giữ nguyên.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
 
   </aside>
 
@@ -802,7 +803,7 @@ function inTown(){return !!state.inTown;}
 const MAP_EXP_REQUIREMENTS=[0,50000,350000,1000000,7500000,20000000,60000000,150000000,750000000,1500000000];
 function requiredMapExp(i){return MAP_EXP_REQUIREMENTS[i]??Infinity;}
 function canEnterMap(i){return Number.isInteger(i)&&i>=0&&i<maps.length&&Number(state.totalExp||0)>=requiredMapExp(i);}
-const CHARACTER_DATA=[{id:'darius',name:'Darius',legacyClass:'Chiến binh',icon:'⚔️',desc:'Phong cách Đấu Sĩ: cận chiến, công kích và phòng thủ bền bỉ.'},{id:'ahri',name:'Ahri',legacyClass:'Pháp sư',icon:'🔮',desc:'Phong cách Pháp Sư: tập trung vào sát thương phép và kỹ năng.'},{id:'ekko',name:'Ekko',legacyClass:'Sát thủ',icon:'🗡️',desc:'Phong cách Sát Thủ: tốc đánh và tỉ lệ chí mạng cao.'},{id:'ashe',name:'Ashe',legacyClass:'Cung thủ',icon:'🏹',desc:'Phong cách Xạ Thủ: tầm đánh xa và di chuyển linh hoạt.'}];
+const CHARACTER_DATA=[{id:'darius',name:'Darius',legacyClass:'Chiến binh',icon:'⚔️',desc:'Cận chiến mạnh mẽ, càn lướt tuyến đầu và gây sát thương duy trì lớn.'},{id:'ahri',name:'Ahri',legacyClass:'Pháp sư',icon:'🔮',desc:'Cơ động cao, khống chế đơn mục tiêu và dồn sát thương phép từ tầm trung.'},{id:'ekko',name:'Ekko',legacyClass:'Sát thủ',icon:'🗡️',desc:'Áp sát nhanh, dồn sát thương chớp nhoáng và dùng thời gian để thoát thân.'},{id:'ashe',name:'Ashe',legacyClass:'Cung thủ',icon:'🏹',desc:'Tấn công tầm xa liên tục, làm chậm kẻ địch và mở giao tranh toàn bản đồ.'}];
 function showGarenWorldInfo(){ $('npcLine').textContent='Đây là một thế giới song song, tách biệt với Runeterra mà cậu từng biết. Đại Thành Demacia là nơi trú chân an toàn; bên ngoài thành phố là những vùng đất xa lạ và hiểm nguy. Ta sẽ chỉ dẫn cậu từng bước.'; $('npcChoices').innerHTML=''; [['Tôi muốn nhận nhiệm vụ',()=>{closeNpcDialog();storyAction();}],['Tôi sẽ quay lại sau',closeNpcDialog]].forEach(([label,action])=>{const b=document.createElement('button');b.textContent=label;b.onclick=action;$('npcChoices').appendChild(b);});}
 function openTownShop(tab='potions'){if(!inTown())return;renderTownShop();document.querySelectorAll('[data-shop-tab]').forEach(b=>b.classList.toggle('active',b.dataset.shopTab===tab));['potions','gear','sell'].forEach(k=>{$('shop'+k.charAt(0).toUpperCase()+k.slice(1)).hidden=k!==tab;});$('townShopModal').classList.add('show');}
 function openNpcDialog(id){const data={alden:{name:'Garen — Sức Mạnh Của Demacia',icon:'🛡️',line:'Ta là Garen — Sức Mạnh Của Demacia. Cậu cần ta giúp gì?',choices:[['Tôi muốn tìm hiểu về thế giới này',showGarenWorldInfo],['Tôi muốn nhận nhiệm vụ',()=>{closeNpcDialog();storyAction();}],['Tôi sẽ quay lại sau',closeNpcDialog]]},healer:{name:'Soraka — Tinh Nữ',icon:'🌟',line:'Chào cậu. Tôi là Soraka. Nếu cậu cần chữa trị hay hồi phục sức lực, tôi luôn sẵn lòng giúp đỡ.',choices:[['Tôi muốn hồi phục HP và MP',()=>{closeNpcDialog();townHeal();}],['Cảm ơn cô, tôi ổn',closeNpcDialog]]},merchant:{name:'Twisted Fate — Thần Bài',icon:'🃏',line:'Ồ, rất vui được gặp cậu! Ta là Twisted Fate — Thần Bài. Cậu đang tìm kiếm chút may mắn, hay muốn đổi vài đồng vàng lấy món hàng hữu ích?',choices:[['Tôi muốn xem cửa hàng',()=>{closeNpcDialog();openTownShop('potions');}],['Tôi muốn bán vật phẩm',()=>{closeNpcDialog();openTownShop('sell');}],['Được rồi, để dịp khác vậy',closeNpcDialog]]},blacksmith:{name:'Ornn — Ngọn Lửa Khởi Nguyên',icon:'⚒️',line:'Hừm. Ta là Ornn. Nếu cậu muốn nâng cấp trang bị hay chế tạo thứ gì đó tốt hơn, cứ nói. Ta không thích phí thời gian vào những chuyện vô ích.',choices:[['Tôi muốn sử dụng lò rèn',()=>{closeNpcDialog();openBlacksmith();}],['Không có chuyện gì, tôi đi đây',closeNpcDialog]]}}[id];if(!data)return;$('npcTitle').textContent=data.name;$('npcPortrait').textContent=data.icon;$('npcLine').textContent=data.line;$('npcChoices').innerHTML='';data.choices.forEach(([label,action])=>{const b=document.createElement('button');b.textContent=label;b.onclick=action;$('npcChoices').appendChild(b);});$('npcDialog').classList.add('show');}
@@ -1497,6 +1498,7 @@ function renderQuests(){const el=$('questList');if(!el)return;const i=state.main
 function ui(){
  $('hpText').textContent=Math.ceil(state.hp)+'/'+state.maxHp;$('characterClassText').textContent=CHARACTER_DATA.find(c=>c.id===state.characterId)?.name||'Darius';$('characterExp').textContent=(Number(state.totalExp)||0).toLocaleString('vi-VN')+' EXP';$('gems').textContent=state.gems||0;$('zone').textContent=inTown()?TOWN.name:currentMap().name;if(document.activeElement!==$('characterNameInput'))$('characterNameInput').value=settings.playerName||'Wanderer';
  $('hpBar').style.width=state.hp/state.maxHp*100+'%';
+  renderHpStatusEffects();
 
  $('mpText').textContent=Math.floor(state.mp)+'/'+state.maxMp;
  $('mpBar').style.width=state.mp/state.maxMp*100+'%';
@@ -1830,6 +1832,22 @@ ahri:{name:'Hút Hồn',icon:'💚',desc:'Hạ gục 9 lính hoặc quái sẽ t
 ekko:{name:'Động Cơ Z Cộng Hưởng',icon:'⚡',desc:'Mỗi đòn đánh hoặc kỹ năng thứ ba lên cùng mục tiêu trong 4 giây gây thêm 30–140 (+90% SMPT) sát thương phép. Với quái, sát thương cộng hưởng tăng 300%, tối đa 600. Nếu mục tiêu là tướng, Ekko nhận 50–80% tốc độ di chuyển.'},
 ashe:{name:'Băng Tiễn',icon:'❄️',desc:'Đòn đánh và kỹ năng làm chậm mục tiêu 20–30% trong 2 giây. Đánh vào mục tiêu đang bị làm chậm gây thêm sát thương bằng 120% tổng SMCK. Chí mạng không tăng sát thương trực tiếp mà nhân đôi hiệu lực làm chậm.'}
 };
+function renderHpStatusEffects(){
+ const host=$('hpStatusEffects'),tip=$('hpStatusTooltip');if(!host||!tip)return;const now=Date.now(),effects=[];
+ const add=(id,icon,name,desc,expires,type='buff')=>{if(expires>now)effects.push({id,icon,name,desc,expires,type});};
+ add('shield','🛡️','Lá Chắn','Nhận lá chắn bằng một phần máu tối đa, hấp thụ sát thương trong thời gian còn lại.',state.championShieldUntil);
+ add('ekko-haste','⚡','Tăng Tốc','Tăng tốc độ di chuyển trong thời gian hiệu lực.',state.ekkoMoveBuffUntil);
+ add('noxus-might','🩸','Sức Mạnh Noxus','Darius nhận thêm sức mạnh công kích sau khi kích hoạt nội tại trên tướng địch.',state.dariusNoxusUntil);
+ if(Array.isArray(state.playerDebuffs))for(const d of state.playerDebuffs){if(d&&Number(d.expires)>now)effects.push({id:'debuff-'+String(d.id||d.name||effects.length),icon:d.icon||'⛓️',name:d.name||'Hiệu ứng bất lợi',desc:d.desc||'Bạn đang chịu một hiệu ứng bất lợi.',expires:Number(d.expires),type:'debuff'});}
+ host.innerHTML=effects.map(e=>'<button type="button" class="hp-status-icon '+e.type+'" data-hp-effect="'+e.id+'" aria-label="'+e.name+'" title="'+e.name+'">'+e.icon+'</button>').join('');
+ const activeId=tip.dataset.effectId;if(activeId){const e=effects.find(x=>x.id===activeId);if(e){tip.innerHTML='<b>'+e.icon+' '+e.name+'</b>'+e.desc+'<small>Còn '+Math.max(1,Math.ceil((e.expires-now)/1000))+' giây</small>';tip.hidden=false;}else{tip.hidden=true;tip.dataset.effectId='';}}
+}
+function showHpStatusEffect(button){
+ const tip=$('hpStatusTooltip');if(!tip||!button)return;const now=Date.now(),id=button.dataset.hpEffect;
+ const effects=[{id:'shield',icon:'🛡️',name:'Lá Chắn',desc:'Nhận lá chắn bằng một phần máu tối đa, hấp thụ sát thương trong thời gian còn lại.',expires:state.championShieldUntil},{id:'ekko-haste',icon:'⚡',name:'Tăng Tốc',desc:'Tăng tốc độ di chuyển trong thời gian hiệu lực.',expires:state.ekkoMoveBuffUntil},{id:'noxus-might',icon:'🩸',name:'Sức Mạnh Noxus',desc:'Darius nhận thêm sức mạnh công kích sau khi kích hoạt nội tại trên tướng địch.',expires:state.dariusNoxusUntil}];
+ if(Array.isArray(state.playerDebuffs))for(const d of state.playerDebuffs)if(d&&Number(d.expires)>now)effects.push({id:'debuff-'+String(d.id||d.name||''),icon:d.icon||'⛓️',name:d.name||'Hiệu ứng bất lợi',desc:d.desc||'Bạn đang chịu một hiệu ứng bất lợi.',expires:Number(d.expires)});
+ const e=effects.find(x=>x.id===id&&x.expires>now);if(!e)return;tip.dataset.effectId=e.id;tip.innerHTML='<b>'+e.icon+' '+e.name+'</b>'+e.desc+'<small>Còn '+Math.max(1,Math.ceil((e.expires-now)/1000))+' giây</small>';tip.hidden=false;
+}
 function championLevel(){return Math.max(1,Math.min(18,1+Math.floor((Number(state.totalExp)||0)/50000)));}
 function championData(){return CHARACTER_DATA.find(c=>c.id===state.characterId)||CHARACTER_DATA[0];}
 function ensureChampionProgress(){
@@ -1921,6 +1939,9 @@ update=function(dt){
 };
 const championSkillStyle=document.createElement('style');championSkillStyle.textContent=".skill-passive-card{padding:11px;margin:7px 0 12px;background:linear-gradient(120deg,#2a2520,#14232d);border:1px solid #a98b58;border-radius:8px}.skill-passive-title{display:flex;justify-content:space-between;gap:8px;align-items:center;color:#ffdf9b;font-size:12px;font-weight:bold}.skill-passive-title span{font-size:8px;color:#72e0ad;border:1px solid #397c61;padding:3px 5px;border-radius:5px;white-space:nowrap}.skill-passive-card p{font-size:10px;line-height:1.55;color:#d5e1dc;margin:8px 0}.skill-passive-card small{display:block;color:#f0cf84;font-size:9px}.skill-learn-button{font-size:9px;padding:6px 7px;max-width:118px;white-space:normal}.skill-learn-button.learned{color:#72e0ad;border-color:#397c61;background:#163d32}.action-controls button[data-skill-slot]{min-width:0;flex:1;font-size:clamp(10px,2.8vw,15px);padding:5px 2px}.action-controls button[data-skill-slot]:disabled{opacity:.48;filter:grayscale(.7)}.action-controls button.skill-ready{border-color:#72e0ad;color:#ffe6a1;box-shadow:0 0 7px #72e0ad55}";document.head.appendChild(championSkillStyle);
 ensureChampionProgress();renderChampionSkills();
+document.addEventListener('click',e=>{const b=e.target.closest('[data-hp-effect]');if(b){const tip=$('hpStatusTooltip');if(tip.dataset.effectId===b.dataset.hpEffect&&!tip.hidden){tip.hidden=true;tip.dataset.effectId='';}else showHpStatusEffect(b);return;}if(!e.target.closest('#hpStatusTooltip')){const tip=$('hpStatusTooltip');if(tip){tip.hidden=true;tip.dataset.effectId='';}}});
+document.addEventListener('pointerover',e=>{const b=e.target.closest('[data-hp-effect]');if(b&&e.pointerType==='mouse')showHpStatusEffect(b);});
+document.addEventListener('focusin',e=>{const b=e.target.closest('[data-hp-effect]');if(b)showHpStatusEffect(b);});
 document.querySelectorAll('[data-menu="3"]').forEach(btn=>btn.addEventListener('click',renderChampionSkills));
 ['skillBtn2','skillBtn3','skillBtn4'].forEach((id,i)=>bindGameControl(id,()=>castChampionSkill(i+1)));
 renderChampionSkills();
