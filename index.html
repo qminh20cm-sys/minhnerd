@@ -1223,11 +1223,22 @@ function drawTownWorld(){
   ctx.fillStyle="#5a5144";ctx.fillRect(377,210,100,48);ctx.fillStyle="#8c9c99";ctx.fillRect(385,215,84,34);ctx.fillStyle="#3e777a";ctx.fillRect(391,221,72,22);ctx.fillStyle="#5a5144";ctx.fillRect(374,204,106,9);
   for(const [x,y] of [[35,185],[820,185],[260,90],[590,90],[260,420],[590,420]]){ctx.fillStyle="#60432f";ctx.fillRect(x-4,y,8,30);ctx.fillStyle="#4c8956";ctx.beginPath();ctx.arc(x,y-3,22,0,Math.PI*2);ctx.fill();ctx.fillStyle="#70a963";ctx.beginPath();ctx.arc(x-7,y-10,10,0,Math.PI*2);ctx.fill();}
   ctx.fillStyle="#2a211c";ctx.fillRect(332,20,190,48);ctx.fillStyle="#d9bd7a";ctx.fillRect(336,24,182,40);ctx.fillStyle="#382a20";ctx.font="bold 18px 'Spiegel',Arial,sans-serif";ctx.textAlign="center";ctx.font="bold 14px 'Spiegel',Arial,sans-serif";ctx.fillText("ĐẠI THÀNH DEMACIA",427,49);ctx.textAlign="left";
+  // Draw the selection ring first so each NPC's feet and ground shadow render over it.
+  if(selectedTownNpc){
+   ctx.save();
+   const pulse=1+Math.sin(performance.now()/180)*.035;
+   const groundOffset=selectedTownNpc.id==='alden'?45:35;
+   const ringX=selectedTownNpc.x;
+   const ringY=selectedTownNpc.y+groundOffset;
+   ctx.strokeStyle='#ffe36b';ctx.lineWidth=2.2;
+   ctx.shadowColor='#ffe36b';ctx.shadowBlur=10;
+   ctx.beginPath();ctx.ellipse(ringX,ringY,selectedTownNpc.id==='alden'?19*pulse:18*pulse,5.5*pulse,0,0,Math.PI*2);
+   ctx.stroke();ctx.restore();
+  }
   drawChibiGaren(427,160);
   drawTownNpcSprite('soraka',230,255);
   drawTownNpcSprite('merchant',624,255);
   drawTownNpcSprite('ornn',624,385);
-  if(selectedTownNpc){ctx.save();const pulse=1+Math.sin(performance.now()/180)*.035,offset=selectedTownNpc.id==='alden'?45:10;ctx.strokeStyle='#ffe36b';ctx.lineWidth=2.2;ctx.shadowColor='#ffe36b';ctx.shadowBlur=12;ctx.beginPath();ctx.ellipse(selectedTownNpc.x,selectedTownNpc.y+offset,selectedTownNpc.id==='alden'?19*pulse:18*pulse,6*pulse,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
   const safeElapsed=(performance.now()-townSafeLabelStartedAt)/1000;ctx.globalAlpha=Math.max(0,Math.min(1,safeElapsed/.7,(3.2-safeElapsed)/.8));ctx.fillStyle="#42eaff";ctx.font="bold 15px 'Spiegel',Arial,sans-serif";ctx.textAlign="center";ctx.shadowColor="#00dfff";ctx.shadowBlur=8;ctx.fillText("KHU VỰC AN TOÀN",427,395);ctx.shadowBlur=0;ctx.globalAlpha=1;ctx.textAlign="left";
 }
 
