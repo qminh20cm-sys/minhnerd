@@ -1,0 +1,18 @@
+{
+  "name": "Runeterra: Tái Sinh",
+  "short_name": "Runeterra",
+  "description": "Runeterra: Reborn — Pixel RPG",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#07152f",
+  "theme_color": "#07152f",
+  "icons": [
+    {
+      "src": "/icons/icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
