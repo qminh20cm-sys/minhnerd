@@ -1369,7 +1369,7 @@ function update(dt){
  if(!state.started||state.paused||state.dead)return;
  state.elapsed+=dt;state.attackAnim=Math.max(0,state.attackAnim-dt);state.skillFlash=Math.max(0,state.skillFlash-dt);
  state.hitFlash=Math.max(0,state.hitFlash-dt);
- const p=state.player;let dx=joystick.x,dy=joystick.y;state.regenTimer=(state.regenTimer||0)+dt;if(state.regenTimer>=5){const ticks=Math.floor(state.regenTimer/5);state.regenTimer-=ticks*5;restorePlayerHp((state.healthRegen||0)*ticks,'heal');restorePlayerMp((state.manaRegen||0)*ticks);}
+ const p=state.player;let dx=joystick.x,dy=joystick.y;state.regenTimer=(state.regenTimer||0)+dt;if(state.regenTimer>=5){const ticks=Math.floor(state.regenTimer/5);state.regenTimer-=ticks*5;restorePlayerHp((state.healthRegen||0)*ticks,'heal');restorePlayerMp((state.manaRegen||0)*ticks);}state.regenTimer=(state.regenTimer||0)+dt;if(state.regenTimer>=5){const ticks=Math.floor(state.regenTimer/5);state.regenTimer-=ticks*5;restorePlayerHp((state.healthRegen||0)*ticks,'heal');restorePlayerMp((state.manaRegen||0)*ticks);}
  if(keys.KeyA||keys.ArrowLeft)dx--;if(keys.KeyD||keys.ArrowRight)dx++;if(keys.KeyW||keys.ArrowUp)dy--;if(keys.KeyS||keys.ArrowDown)dy++;
  dx=Math.max(-1,Math.min(1,dx));dy=Math.max(-1,Math.min(1,dy));let moving=false;
  if(dx||dy){npcWalkTarget=null;pickupWalkTarget=null;state.moveTarget=null;state.moveAttackTarget=null;if(state.auto){state.auto=false;log('Đã dừng Auto vì bạn điều khiển di chuyển.');}const l=Math.hypot(dx,dy);p.x+=dx/l*(state.moveSpeed||150)*dt;p.y+=dy/l*(state.moveSpeed||150)*dt;p.face=dx<0?-1:dx>0?1:p.face;moving=true;}else if(state.moveTarget){const t=state.moveTarget,d=Math.hypot(t.x-p.x,t.y-p.y);if(d<=5)state.moveTarget=null;else{const step=Math.min(d,(state.moveSpeed||150)*dt);p.x+=(t.x-p.x)/d*step;p.y+=(t.y-p.y)/d*step;p.face=t.x<p.x?-1:1;moving=true;}}
@@ -1862,18 +1862,13 @@ function ensureChampionProgress(){
  state.ekkoMoveBuffUntil=Number(state.ekkoMoveBuffUntil)||0;state.ekkoMoveBuffPct=Number(state.ekkoMoveBuffPct)||0;
  state.championShield=Number(state.championShield)||0;state.championShieldUntil=Number(state.championShieldUntil)||0;
 }
-function learnChampionSkill(index){
- ensureChampionProgress();const ability=CHAMPION_ABILITIES[state.characterId]?.[index];
- if(!ability||state.learnedChampionSkills[state.characterId].includes(index))return;
- if((Number(state.gold)||0)<ability.cost){showRewardToast('Cần '+ability.cost.toLocaleString('vi-VN')+' vàng để học '+ability.name+'.');return;}
- state.gold-=ability.cost;state.learnedChampionSkills[state.characterId].push(index);
- showRewardToast('Đã học kỹ năng '+ability.name+'!');log('Đã học '+ability.name+'.');renderChampionSkills();ui();save();
-}
+function championSkillRequiredLevel(index){return [1,3,5,6][index]??18;}
+function learnChampionSkill(index){ensureChampionProgress();const a=CHAMPION_ABILITIES[state.characterId]?.[index];if(!a||championLevel()<championSkillRequiredLevel(index))return false;if(!state.learnedChampionSkills[state.characterId].includes(index))state.learnedChampionSkills[state.characterId].push(index);return true;}
 function renderChampionSkills(){
  const el=$('championSkillPanel');if(!el)return;ensureChampionProgress();
- const c=championData(),passive=CHAMPION_PASSIVES[c.id],abilities=CHAMPION_ABILITIES[c.id],learned=state.learnedChampionSkills[c.id];
+ const c=championData(),passive=CHAMPION_PASSIVES[c.id],abilities=CHAMPION_ABILITIES[c.id],learned=state.learnedChampionSkills[c.id];for(let i=0;i<4;i++)if(championLevel()>=championSkillRequiredLevel(i)&&!learned.includes(i))learned.push(i);
  let progress=c.id==='ahri'?'Mảnh Hồn: '+state.ahriSoulShards+'/9':c.id==='darius'?'Xuất Huyết được theo dõi riêng trên từng mục tiêu.':c.id==='ekko'?'Đòn đánh/kỹ năng thứ ba lên cùng mục tiêu kích hoạt cộng hưởng.':'Làm chậm cơ bản: '+(20+Math.round((championLevel()-1)*10/17))+'% · thời gian 2 giây';
- el.innerHTML='<div class="heading">✨ KỸ NĂNG — '+c.name.toUpperCase()+'</div><div class="skill-passive-card"><div class="skill-passive-title">'+passive.icon+' NỘI TẠI: '+passive.name+' <span>SẴN CÓ</span></div><p>'+passive.desc+'</p><small>'+progress+'</small></div><div class="heading" style="margin-top:14px">📘 BỐN KỸ NĂNG CẦN HỌC</div><div class="muted" style="font-size:10px;margin:-5px 0 9px">Học bằng vàng. Kỹ năng đã học được lưu cùng nhân vật và mở khóa nút tương ứng trên HUD.</div><div class="skill-learning-list">'+abilities.map((a,i)=>{const done=learned.includes(i);return '<div class="skill-learning-card"><span class="skill-learning-icon">'+a.icon+'</span><div><b>'+(i+1)+'. '+a.name+'</b><small>'+a.desc+' · '+a.mp+' MP · Hồi chiêu '+(a.cd/1000)+' giây</small></div><button class="skill-learn-button '+(done?'learned':'')+'" data-learn-skill="'+i+'" '+(done?'disabled':'')+'>'+(done?'ĐÃ HỌC':'HỌC · '+a.cost.toLocaleString('vi-VN')+' vàng')+'</button></div>';}).join('')+'</div>';
+ el.innerHTML='<div class="heading">✨ KỸ NĂNG — '+c.name.toUpperCase()+'</div><div class="skill-passive-card"><div class="skill-passive-title">'+passive.icon+' NỘI TẠI: '+passive.name+' <span>SẴN CÓ</span></div><p>'+passive.desc+'</p><small>'+progress+'</small></div><div class="heading" style="margin-top:14px">📘 KỸ NĂNG MỞ KHÓA THEO CẤP</div><div class="muted" style="font-size:10px;margin:-5px 0 9px">Kỹ năng tự động mở khóa khi nhân vật đạt cấp yêu cầu.</div><div class="skill-learning-list">'+abilities.map((a,i)=>{const done=learned.includes(i);return '<div class="skill-learning-card"><span class="skill-learning-icon">'+a.icon+'</span><div><b>'+(i+1)+'. '+a.name+'</b><small>'+a.desc+' · '+a.mp+' MP · Hồi chiêu '+(a.cd/1000)+' giây</small></div><button class="skill-learn-button '+(done?'learned':'')+'" data-learn-skill="'+i+'" '+(done?'disabled':'')+'>'+(done?'ĐÃ MỞ KHÓA':'MỞ Ở CẤP '+championSkillRequiredLevel(i))+'</button></div>';}).join('')+'</div>';
  el.querySelectorAll('[data-learn-skill]').forEach(b=>b.addEventListener('click',()=>learnChampionSkill(Number(b.dataset.learnSkill))));updateChampionSkillButtons();
 }
 function updateChampionSkillButtons(){
@@ -1882,7 +1877,7 @@ function updateChampionSkillButtons(){
 }
 function castChampionSkill(index){
  ensureChampionProgress();const c=championData(),a=CHAMPION_ABILITIES[c.id]?.[index];
- if(!a||!state.learnedChampionSkills[c.id].includes(index)){showRewardToast('Hãy vào mục Kỹ năng để học chiêu này.');return;}
+ if(!a||championLevel()<championSkillRequiredLevel(index)){showRewardToast('Kỹ năng mở khóa ở cấp '+championSkillRequiredLevel(index)+'.');return;}learnChampionSkill(index);
  if(inTown()||state.dead||!state.started||state.paused)return;
  const now=Date.now();if((state.championSkillCooldowns[index]||0)>now)return;
  const m=(state.target&&!state.target.dead&&state.mobs.includes(state.target))?state.target:nearest();
