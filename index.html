@@ -833,28 +833,10 @@ function derive(){norm();const b={atk:0,atkPct:0,magic:0,magicPct:0,hp:0,hpPct:0
 
 // Tính chiến lực độc lập trên một bộ trang bị giả lập, không thay đổi trạng thái nhân vật.
 function calculateCombatPower(equipment=state.equipped){
- const p=state.potentialStats||{attack:0,defense:0,agility:0,intelligence:0};
- const b={atk:0,atkPct:0,magic:0,magicPct:0,hp:0,hpPct:0,mp:0,mpPct:0,armor:0,armorPct:0,magicArmor:0,magicArmorPct:0,attackSpeed:0,crit:0,critDamage:0,moveSpeed:0,moveSpeedPct:0,lifesteal:0,omnivamp:0,range:0,cooldownReduction:0};
+ const b={atk:0,atkPct:0,magic:0,magicPct:0,hp:0,armor:0,magicArmor:0,magicResist:0,attackSpeed:0,crit:0,moveSpeed:0,lifesteal:0,omnivamp:0,abilityHaste:0};
  Object.values(equipment||{}).forEach(it=>{if(it&&it.stats)Object.keys(b).forEach(k=>b[k]+=Number(it.stats[k])||0);});
- const cls=state.characterId||'Chiến binh';
- const atk=Math.floor((state.baseAtk+p.attack*.2+b.atk)*(1+b.atkPct/100)*(cls==='darius'?1.12:cls==='ekko'?1.04:cls==='ashe'?1.03:1));
- const magic=Math.floor((state.baseMagic+p.attack*.2+b.magic)*(1+b.magicPct/100)*(cls==='ahri'?1.25:1));
- const hp=Math.floor((state.baseMaxHp+p.defense*2+b.hp)*(1+b.hpPct/100));
- const def=Math.floor((state.baseDef+p.defense*.1+b.armor)*(1+b.armorPct/100)*(cls==='darius'?1.12:1));
- const magicArmor=Math.floor((state.baseMagicArmor+p.defense+b.magicArmor)*(1+b.magicArmorPct/100));
- const speed=1+p.agility*.001+b.attackSpeed+(cls==='ekko'?.18:cls==='ashe'?.08:0);
- const crit=Math.min(100,5+p.agility*.02+b.crit+(cls==='ekko'?8:cls==='ashe'?3:0)),critDamage=150+b.critDamage;
- const moveSpeed=Math.floor((state.baseMoveSpeed+b.moveSpeed)*(1+b.moveSpeedPct/100));
- const lifesteal=b.lifesteal,omnivamp=b.omnivamp;
- const range=({'Chiến binh':42,'Sát thủ':42,'Pháp sư':150,'Cung thủ':175}[cls]||42)+b.range;
- const cdr=Math.min(.5,p.intelligence*.001+b.cooldownReduction);
- const mp=Math.floor((state.baseMaxMp+p.intelligence*.2+b.mp)*(1+b.mpPct/100));
- const mainDamage=cls==='ahri'?magic:atk;
- const critFactor=1+(crit/100)*Math.max(0,critDamage/100-1);
- const dps=mainDamage*speed*critFactor;
- const effectiveHp=hp*(1+(def+magicArmor)*.02);
- const score=dps*2.5+effectiveHp*.10+(lifesteal+omnivamp)*dps*.06+cdr*mainDamage*.25+moveSpeed*.08+range*.1+mp*.025;
- return Math.max(0,Math.round(score));
+ const ad=(state.atk+b.atk)*(1+b.atkPct/100),ap=(state.magicDamage+b.magic)*(1+b.magicPct/100),as=state.attackSpeed+b.attackSpeed,crit=Math.min(100,state.critChance+b.crit),dps=Math.max(ad,ap)*as*(1+crit*.0075),hp=state.maxHp+b.hp,armor=state.def+b.armor,mr=state.magicArmor+b.magicArmor+b.magicResist,haste=state.abilityHaste+b.abilityHaste,ehp=hp*(1+(armor+mr)/200);
+ return Math.max(0,Math.round(dps*2.2+ehp*.12+(b.lifesteal+b.omnivamp)*dps*.06+haste*Math.max(ad,ap)*.12+(state.moveSpeed+b.moveSpeed)*.08+championLevel()*20));
 }
 function compareItemPower(it){
  const before=calculateCombatPower(state.equipped);
