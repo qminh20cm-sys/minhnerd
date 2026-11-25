@@ -5,7 +5,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="game-version" content="1.3.7">
+<meta name="game-version" content="1.3.8">
 <meta name="theme-color" content="#07152f">
 <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.jpg">
 <link rel="icon" type="image/jpeg" sizes="180x180" href="/icons/icon-180.jpg">
@@ -135,7 +135,7 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 .menu-bar button{flex:1;min-width:42px;font-size:22px;padding:5px 6px;line-height:1.2}
 .side{display:none}
 .side.open{display:flex;position:fixed;z-index:20;left:10px;right:10px;top:12%;max-height:76svh;overflow:auto;padding:10px;background:#101d26;border:2px solid #64818a;border-radius:12px;box-shadow:0 12px 50px #000c}
- .side section{display:none}.side section.menu-active{display:block}.side .settings-panel{display:none}.side .settings-panel.menu-active{display:block}.settings-group{display:grid;gap:7px;padding:9px;margin:7px 0;background:#102029;border:1px solid #344d56;border-radius:7px;font-size:12px}.settings-group label{display:flex;align-items:center;justify-content:space-between;gap:10px}.settings-group input[type=range]{max-width:48%}.settings-group input:not([type=checkbox]){max-width:55%;background:#172b35;color:#fff;border:1px solid #58717a;border-radius:5px;padding:6px}.settings-group small{color:#9bb0b4;font-size:10px}
+ .side section{display:none}.side section.menu-active{display:block;flex:1 1 100%;width:100%;min-width:0;box-sizing:border-box}.side .settings-panel{display:none}.side .settings-panel.menu-active{display:block}.settings-group{display:grid;gap:7px;padding:9px;margin:7px 0;background:#102029;border:1px solid #344d56;border-radius:7px;font-size:12px}.settings-group label{display:flex;align-items:center;justify-content:space-between;gap:10px}.settings-group input[type=range]{max-width:48%}.settings-group input:not([type=checkbox]){max-width:55%;background:#172b35;color:#fff;border:1px solid #58717a;border-radius:5px;padding:6px}.settings-group small{color:#9bb0b4;font-size:10px}
 .menu-close{position:sticky;top:0;align-self:flex-end;z-index:2;background:#743f49;border-color:#b96c75}
  .layout{display:flex;flex:1;min-height:0}.gamebox{width:100%;padding:5px;display:flex;flex-direction:column;min-height:0;gap:4px}
   .canvas-wrap{position:relative;height:auto;min-height:150px;max-height:42dvh;flex:1;display:flex;align-items:center;justify-content:center;touch-action:manipulation;min-width:0}
@@ -543,7 +543,7 @@ html,body,.wrap,.layout,.gamebox,.canvas-wrap,#game,.canvas-name-layer,.combat-u
 
    <div class="logo">✦ Runeterra: Tái Sinh</div>
 
-   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.3.7</div>
+   <div class="sub">Runeterra: Reborn • Pixel RPG • v1.3.8</div>
 
   </div>
 
@@ -568,7 +568,7 @@ html,body,.wrap,.layout,.gamebox,.canvas-wrap,#game,.canvas-name-layer,.combat-u
     <div id="inventoryFullToast" class="inventory-full-toast" role="status" aria-live="polite">Túi đồ của bạn đã đầy</div>
     <div id="bossDefeatNotice" class="boss-defeat-notice" role="status" aria-live="assertive"></div>
     <div id="rewardFeed" class="reward-feed" aria-live="polite"></div>
-    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.7</div>
+    <div id="gameVersion" class="game-version" aria-label="Phiên bản game">v1.3.8</div>
     <div id="runtimeError" role="status" style="display:none;position:absolute;z-index:60;top:50%;left:8px;right:8px;padding:12px;background:#260d12ee;color:#fff;border:2px solid #ff7373;border-radius:8px;font:12px 'Spiegel',Arial,sans-serif;white-space:pre-wrap;pointer-events:auto"></div>
 
     <div class="intro-modal" id="introModal"><div class="intro-card"><button class="intro-close" id="introClose" aria-label="Đóng giới thiệu">×</button><h2>✦ KHỞI NGUYÊN HUYỀN THOẠI</h2><div class="intro-story">Không một lời báo trước.
@@ -675,7 +675,7 @@ Không còn là những huyền thoại của Runeterra — đây là lúc họ 
 
    
 
-   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>🎒 LỊCH SỬ NHẶT ĐỒ</b><div id="pickupHistory" class="pickup-history"><div class="muted">Chưa nhặt được vật phẩm nào.</div></div><div id="log" class="log" style="display:none" aria-hidden="true"></div></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><div class="settings-group"><b>🔄 Cập nhật game</b><div style="font-size:11px;color:#b9ccca">Phiên bản hiện tại: <strong>v1.3.7</strong></div><button type="button" id="gameUpdateBtn" class="small">🔄 Kiểm tra và cập nhật</button><small id="gameUpdateStatus" role="status" aria-live="polite">Bấm để kiểm tra phiên bản mới. Tiến trình chơi được giữ nguyên.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
+   <section class="panel wide settings-panel"><div class="heading">⚙️ CÀI ĐẶT</div><div class="settings-group"><b>🎨 Giao diện</b><label><input type="checkbox" id="settingHighGraphics" checked> Đồ họa chi tiết</label></div><div class="settings-group"><b>⚔️ Chiến đấu</b><label><input type="checkbox" id="settingDamage" checked> Hiện số sát thương</label><label><input type="checkbox" id="settingCombatNames" checked> Hiện tên vật phẩm rơi</label></div><div class="settings-group"><b>🖥️ Hiển thị</b><label><input type="checkbox" id="settingFps"> Hiện FPS</label><label><input type="checkbox" id="settingEffects" checked> Hiệu ứng môi trường</label></div><div class="settings-group"><b>🎮 Điều khiển</b><label>Cỡ joystick <input type="range" id="settingJoySize" min="70" max="150" value="78"></label><label>Cỡ nút <input type="range" id="settingButtonSize" min="9" max="18" value="10"></label><label>Cỡ chữ <input type="range" id="settingFontSize" min="10" max="18" value="12"></label></div><div class="settings-group"><b>🎒 LỊCH SỬ NHẶT ĐỒ</b><div id="pickupHistory" class="pickup-history"><div class="muted">Chưa nhặt được vật phẩm nào.</div></div><div id="log" class="log" style="display:none" aria-hidden="true"></div></div><div class="settings-group"><b>👤 Tài khoản</b><label>Tên người chơi <input id="playerName" maxlength="18" placeholder="Wanderer"></label><small>Hồ sơ hiện lưu trên thiết bị này, chưa có đăng nhập hoặc đồng bộ tài khoản.</small></div><div class="settings-group"><b>🔄 Cập nhật game</b><div style="font-size:11px;color:#b9ccca">Phiên bản hiện tại: <strong>v1.3.8</strong></div><button type="button" id="gameUpdateBtn" class="small">🔄 Kiểm tra và cập nhật</button><small id="gameUpdateStatus" role="status" aria-live="polite">Bấm để kiểm tra phiên bản mới. Tiến trình chơi được giữ nguyên.</small></div><button id="settingsReset" class="small">Khôi phục mặc định</button></section>
 
   </aside>
 
